@@ -68,7 +68,7 @@ Skills declare which Claude model they need. Creative work that directly impacts
 
 | Tier | Model | Skills | Rationale |
 |------|-------|--------|-----------|
-| Creative | Opus 4.6 | 6 | Lyrics, Suno prompts, album concepts, legal/verification research — output quality defines the music |
+| Creative | Opus 4.7 | 6 | Lyrics, Suno prompts, album concepts, legal/verification research — output quality defines the music |
 | Reasoning | Sonnet 4.6 | 29 | Research coordination, pronunciation analysis, most workflows |
 | Mechanical | Haiku 4.5 | 18 | Imports, validation, clipboard, help — speed over creativity |
 

@@ -4,7 +4,7 @@ All notable changes to claude-ai-music-skills.
 
 This project uses [Conventional Commits](https://conventionalcommits.org/) and [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.91.0] - 2026-05-08
 
 ### Changed (BREAKING)
 - **ADM validation is now per-album opt-in via README frontmatter**
