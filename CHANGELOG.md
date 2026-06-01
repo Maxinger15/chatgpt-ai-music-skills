@@ -6,6 +6,8 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 
 ## [Unreleased]
 
+## [0.92.0] - 2026-06-01
+
 ### Changed
 - **Skills now use model tier aliases** (`opus`/`sonnet`/`haiku`) in `model:`
   frontmatter instead of pinned IDs. Aliases auto-track the frontier model of each
