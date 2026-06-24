@@ -1,5 +1,4 @@
 {
-  "description": "Maxinger15 Music Codex plugin hooks for quality enforcement",
   "hooks": {
     "PostToolUse": [
       {

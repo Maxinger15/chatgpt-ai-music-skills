@@ -6,6 +6,14 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 
 ## [Unreleased]
 
+## [0.92.1] - 2026-06-24
+
+### Fixed
+- Removed invalid `description` field from `hooks/hooks.json` root object. Codex's
+  plugin hooks schema permits only a top-level `hooks` key; the extra `description`
+  field caused Codex to fail parsing the hooks config at startup, blocking all
+  plugin hooks from loading.
+
 ## [0.92.0] - 2026-06-01
 
 ### Changed

@@ -1,7 +1,7 @@
 {
   "name": "maxinger15-music",
   "description": "AI music generation workflow for Suno: album concepts, lyrics, prompts, mastering, and release prep.",
-  "version": "0.92.0",
+  "version": "0.92.1",
   "author": {
     "name": "maxinger15-music"
   },
