@@ -1,6 +1,6 @@
 # Clipboard Skill - Usage Examples
 
-Platform-specific examples and troubleshooting for the `/bitwize-music:clipboard` skill.
+Platform-specific examples and troubleshooting for the `$maxinger15-music:clipboard` skill.
 
 ---
 
@@ -22,7 +22,7 @@ The skill auto-detects your platform and uses the appropriate clipboard utility:
 ### Copy Lyrics to Paste into Suno
 
 ```bash
-/bitwize-music:clipboard lyrics my-album 03
+$maxinger15-music:clipboard lyrics my-album 03
 ```
 
 Copies the Suno Lyrics Box content for track 03. Paste directly into Suno's lyrics field.
@@ -30,7 +30,7 @@ Copies the Suno Lyrics Box content for track 03. Paste directly into Suno's lyri
 ### Copy Style Prompt for Suno
 
 ```bash
-/bitwize-music:clipboard style my-album 05
+$maxinger15-music:clipboard style my-album 05
 ```
 
 Copies the Suno Style Box content. Paste into Suno's style/genre field.
@@ -38,7 +38,7 @@ Copies the Suno Style Box content. Paste into Suno's style/genre field.
 ### Copy Both for Quick Generation
 
 ```bash
-/bitwize-music:clipboard all my-album 01
+$maxinger15-music:clipboard all my-album 01
 ```
 
 Copies Style Box + separator + Lyrics Box. Useful when setting up a new generation.
@@ -46,7 +46,7 @@ Copies Style Box + separator + Lyrics Box. Useful when setting up a new generati
 ### Copy Streaming Lyrics for Distributors
 
 ```bash
-/bitwize-music:clipboard streaming-lyrics my-album 02
+$maxinger15-music:clipboard streaming-lyrics my-album 02
 ```
 
 Copies clean lyrics (no section tags) formatted for DistroKid, TuneCore, etc.
@@ -113,7 +113,7 @@ sudo pacman -S xclip    # Arch
 Check your track number and album name:
 ```bash
 # List available tracks
-ls ~/music-projects/artists/bitwize/albums/*/my-album/tracks/
+ls ~/music-projects/artists/maxinger15/albums/*/my-album/tracks/
 ```
 
 Track numbers are zero-padded: use `03` not `3`.
@@ -144,4 +144,4 @@ Very long lyrics may hit shell limits. The skill handles this internally, but if
 ## See Also
 
 - [SKILL.md](SKILL.md) - Full skill documentation
-- [${CLAUDE_PLUGIN_ROOT}/reference/suno/v5-best-practices.md](${CLAUDE_PLUGIN_ROOT}/reference/suno/v5-best-practices.md) - Suno prompting guide
+- [{plugin_root}/reference/suno/v5-best-practices.md]({plugin_root}/reference/suno/v5-best-practices.md) - Suno prompting guide

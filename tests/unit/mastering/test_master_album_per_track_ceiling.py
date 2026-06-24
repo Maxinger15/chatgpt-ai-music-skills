@@ -18,7 +18,7 @@ import numpy as np
 import pytest
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-SERVER_DIR = PROJECT_ROOT / "servers" / "bitwize-music-server"
+SERVER_DIR = PROJECT_ROOT / "servers" / "maxinger15-music-server"
 for p in (str(PROJECT_ROOT), str(SERVER_DIR)):
     if p not in sys.path:
         sys.path.insert(0, p)

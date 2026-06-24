@@ -82,7 +82,7 @@ If user wants to create a songbook, call `get_python_command()` to verify the ve
 ```
 Songbook dependencies missing. Install with:
 
-  ~/.bitwize-music/venv/bin/pip install pypdf reportlab
+  ~/.maxinger15-music/venv/bin/pip install pypdf reportlab
 
 These are only needed for songbook creation (optional).
 ```
@@ -250,7 +250,7 @@ create_songbook(album_slug, title="{album_title} Songbook", page_size="letter")
 ```
 
 **Detect page size from config:**
-- Read `~/.bitwize-music/config.yaml` → `sheet_music.page_size`
+- Read `~/.maxinger15-music/config.yaml` → `sheet_music.page_size`
 - Default: `letter`
 
 **Detect cover art:**
@@ -297,7 +297,7 @@ Next steps:
   4. [Optional] Share on social media
 
 See publishing guide for distribution instructions:
-  ${CLAUDE_PLUGIN_ROOT}/skills/sheet-music-publisher/publishing-guide.md
+  {plugin_root}/skills/sheet-music-publisher/publishing-guide.md
 ```
 
 ## Error Handling
@@ -351,7 +351,7 @@ Check:
   2. Audio files in correct location?
   3. Files are .wav format (not .mp3)?
 
-Use /bitwize-music:import-audio to move files if needed.
+Use $maxinger15-music:import-audio to move files if needed.
 ```
 
 ### Python Dependencies Missing
@@ -475,7 +475,7 @@ Generate → Master → [Sheet Music] → Release
 
 **Always read config first:**
 ```bash
-cat ~/.bitwize-music/config.yaml
+cat ~/.maxinger15-music/config.yaml
 ```
 
 **Extract values:**

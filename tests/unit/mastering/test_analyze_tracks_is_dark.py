@@ -69,7 +69,7 @@ def test_stage_analysis_populates_dark_tracks(tmp_path: Path) -> None:
     is_dark field."""
     import asyncio
 
-    SERVER_DIR = PROJECT_ROOT / "servers" / "bitwize-music-server"
+    SERVER_DIR = PROJECT_ROOT / "servers" / "maxinger15-music-server"
     if str(SERVER_DIR) not in sys.path:
         sys.path.insert(0, str(SERVER_DIR))
 

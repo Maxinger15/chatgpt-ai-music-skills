@@ -51,7 +51,7 @@ def embed_wav_metadata(
         track_number:   Track number (TRCK). Optional.
         year:           Recording year (TDRC). Optional.
         genre:          Genre / content type (TCON). Optional.
-        copyright_text: Copyright notice, e.g. "2026 bitwize" (TCOP).
+        copyright_text: Copyright notice, e.g. "2026 maxinger15" (TCOP).
         label:          Label/publisher (TPUB).
         isrc:           Per-track ISRC code (TSRC). Optional.
         upc:            Album UPC/EAN barcode (TXXX:UPC). Optional.

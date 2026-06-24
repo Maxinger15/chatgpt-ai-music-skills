@@ -1,4 +1,4 @@
-"""Tests for reference documentation: Suno refs, mastering docs, CLAUDE.md refs."""
+"""Tests for reference documentation: Suno refs, mastering docs, AGENTS.md refs."""
 
 import re
 
@@ -39,13 +39,13 @@ class TestMasteringDocs:
         assert mastering_doc.exists(), "reference/mastering/mastering-workflow.md missing"
 
 
-class TestClaudeMdRefs:
-    """References mentioned in CLAUDE.md must exist."""
+class TestAgentsMdRefs:
+    """References mentioned in AGENTS.md must exist."""
 
-    def test_referenced_docs_exist(self, reference_dir, claude_md_content):
-        ref_paths = re.findall(r'/reference/([a-zA-Z0-9_/-]+\.md)', claude_md_content)
+    def test_referenced_docs_exist(self, reference_dir, agents_md_content):
+        ref_paths = re.findall(r'/reference/([a-zA-Z0-9_/-]+\.md)', agents_md_content)
         missing = [
             ref for ref in set(ref_paths)
             if not (reference_dir / ref).exists()
         ]
-        assert not missing, f"Referenced in CLAUDE.md but missing: {missing}"
+        assert not missing, f"Referenced in AGENTS.md but missing: {missing}"

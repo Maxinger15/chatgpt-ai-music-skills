@@ -1,6 +1,6 @@
 # Userscripts
 
-Browser userscripts that integrate with the bitwize-music workflow.
+Browser userscripts that integrate with the maxinger15-music workflow.
 
 ## Suno Auto-Fill (`suno-autofill.user.js`)
 

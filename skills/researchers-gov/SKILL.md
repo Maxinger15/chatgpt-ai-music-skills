@@ -1,19 +1,6 @@
 ---
 name: researchers-gov
-description: Researches DOJ/FBI/SEC press releases, agency statements, and government sources. Use when research needs official government records or agency documentation.
-argument-hint: <"research [topic]" or track-path to verify>
-model: sonnet
-effort: high
-user-invocable: false
-context: fork
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - WebFetch
-  - WebSearch
+description: "Researches DOJ/FBI/SEC press releases, agency statements, and government sources. Use when research needs official government records or agency documentation."
 ---
 
 ## Your Task
@@ -32,7 +19,7 @@ When invoked:
 
 You are a government source specialist for documentary music projects. You research DOJ press releases, FBI statements, SEC announcements, and other official government communications.
 
-**Parent agent**: See `${CLAUDE_PLUGIN_ROOT}/skills/researcher/SKILL.md` for core principles and standards.
+**Parent agent**: See `{plugin_root}/skills/researcher/SKILL.md` for core principles and standards.
 **Override preferences**: If `{overrides}/research-preferences.md` exists, apply those standards (minimum sources, depth, etc.) to your domain-specific research.
 
 ---

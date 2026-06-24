@@ -1,0 +1,621 @@
+skills:
+  about:
+    complexity_tier: haiku
+  album-art-director:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <album-path or "create art concept for [album]">
+    complexity_effort: medium
+    complexity_tier: sonnet
+  album-conceptualizer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <"plan album about [topic]" or album-path>
+    complexity_effort: max
+    complexity_tier: opus
+    prerequisites:
+    - new-album
+  album-dashboard:
+    allowed_tools:
+    - Read
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint: <album-name>
+    complexity_tier: haiku
+    prerequisites:
+    - resume
+  album-ideas:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <"list" or "add [title]" or "remove [title]" or "status [title]
+      [status]">
+    complexity_effort: medium
+    complexity_tier: sonnet
+  clipboard:
+    allowed_tools:
+    - Read
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <content-type> <album-name> <track-number>
+    complexity_tier: haiku
+  cloud-uploader:
+    allowed_tools:
+    - Read
+    - Bash
+    - Glob
+    complexity_effort: low
+    complexity_tier: sonnet
+    prerequisites:
+    - promo-director
+    requirements:
+      python:
+      - boto3
+  configure:
+    allowed_tools:
+    - Read
+    - Write
+    - Bash
+    - AskUserQuestion
+    - Glob
+    argument_hint:
+    - setup | edit | show | validate | reset
+    complexity_effort: low
+    complexity_tier: sonnet
+  document-hunter:
+    allowed_tools:
+    - Bash
+    - Write
+    - Read
+    - Glob
+    - WebSearch
+    - maxinger15-music-mcp
+    argument_hint: <case-name or "auto-search [album-path]">
+    complexity_effort: low
+    complexity_tier: sonnet
+    context: fork
+    requirements:
+      external:
+      - install: playwright install chromium
+        name: Chromium
+        purpose: Browser for Playwright automation
+      python:
+      - playwright
+  explicit-checker:
+    allowed_tools:
+    - Read
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint: <album-path or track-path>
+    complexity_effort: medium
+    complexity_tier: sonnet
+  genre-creator:
+    argument_hint: <genre-name e.g. "Math Rock" or "Nu-Metal">
+    complexity_effort: medium
+    complexity_tier: sonnet
+  health-check:
+    allowed_tools:
+    - ToolSearch
+    - maxinger15-music-mcp
+    complexity_tier: haiku
+  help:
+    allowed_tools: []
+    complexity_tier: haiku
+  import-art:
+    allowed_tools:
+    - Read
+    - Bash
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <file-path> <album-name>
+    complexity_tier: haiku
+  import-audio:
+    allowed_tools:
+    - Read
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <file-path> <album-name> [track-slug]
+    complexity_tier: haiku
+  import-track:
+    allowed_tools:
+    - Read
+    - Bash
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <file-path> <album-name> [track-number]
+    complexity_tier: haiku
+  lyric-refiner:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <album-name | track-path> [--passes N]
+    complexity_effort: max
+    complexity_tier: opus
+    prerequisites:
+    - lyric-writer
+  lyric-reviewer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint: <track-path | album-path | --fix>
+    complexity_effort: max
+    complexity_tier: opus
+    prerequisites:
+    - lyric-writer
+    - pronunciation-specialist
+  lyric-writer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <track-file-path or "write lyrics for [concept]">
+    complexity_effort: max
+    complexity_tier: opus
+  mastering-engineer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <folder-path or "master for [platform]">
+    complexity_effort: low
+    complexity_tier: sonnet
+    prerequisites:
+    - import-audio
+    requirements:
+      python:
+      - matchering
+      - pyloudnorm
+      - scipy
+      - numpy
+      - soundfile
+  mix-engineer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <album-name or "polish for [genre]">
+    complexity_effort: low
+    complexity_tier: sonnet
+    prerequisites:
+    - import-audio
+    requirements:
+      python:
+      - noisereduce
+      - scipy
+      - numpy
+      - soundfile
+  new-album:
+    allowed_tools:
+    - Read
+    - Bash
+    - Write
+    - maxinger15-music-mcp
+    argument_hint: <album-name> <genre>
+    complexity_tier: haiku
+  next-step:
+    allowed_tools:
+    - Read
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint:
+    - album-name
+    complexity_tier: haiku
+    prerequisites:
+    - resume
+  plagiarism-checker:
+    allowed_tools:
+    - Read
+    - Glob
+    - Grep
+    - WebSearch
+    - WebFetch
+    - maxinger15-music-mcp
+    argument_hint: <album-name> [track-slug]
+    complexity_effort: high
+    complexity_tier: sonnet
+  pre-generation-check:
+    allowed_tools:
+    - Read
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint: <album-name or track-path>
+    complexity_tier: haiku
+    prerequisites:
+    - lyric-writer
+    - lyric-reviewer
+    - pronunciation-specialist
+  promo-director:
+    allowed_tools:
+    - Read
+    - Bash
+    - Glob
+    - maxinger15-music-mcp
+    complexity_effort: low
+    complexity_tier: sonnet
+    prerequisites:
+    - mastering-engineer
+    - album-art-director
+    requirements:
+      external:
+      - install: brew install ffmpeg (macOS) or apt install ffmpeg (Linux)
+        name: ffmpeg
+        notes: Requires showwaves, showfreqs, drawtext, gblur filters
+        purpose: Video generation and audio visualization
+      python:
+      - pillow
+      - librosa
+      - pyyaml
+  promo-reviewer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint: <album-name> [platform]
+    complexity_effort: medium
+    complexity_tier: sonnet
+  promo-writer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint: <album-name> [platform]
+    complexity_effort: high
+    complexity_tier: sonnet
+    prerequisites:
+    - lyric-writer
+  promote-idea:
+    allowed_tools:
+    - Read
+    - maxinger15-music-mcp
+    argument_hint: <"idea title"> [album-slug-override]
+    complexity_tier: haiku
+  pronunciation-specialist:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - maxinger15-music-mcp
+    argument_hint: <track-file-path or paste lyrics to scan>
+    complexity_effort: medium
+    complexity_tier: sonnet
+    prerequisites:
+    - lyric-writer
+  release-director:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <album-path or "release [album]">
+    complexity_effort: medium
+    complexity_tier: sonnet
+    prerequisites:
+    - mastering-engineer
+  rename:
+    allowed_tools:
+    - Read
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <album|track> <current-name> <new-name>
+    complexity_tier: haiku
+  researcher:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    - maxinger15-music-mcp
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    prerequisites:
+    - album-conceptualizer
+  researchers-biographical:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-financial:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-gov:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-historical:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-journalism:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-legal:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: opus
+    context: fork
+    user_invocable: false
+  researchers-primary-source:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-security:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-tech:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: sonnet
+    context: fork
+    user_invocable: false
+  researchers-verifier:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - WebFetch
+    - WebSearch
+    argument_hint: <"research [topic]" or track-path to verify>
+    complexity_effort: high
+    complexity_tier: opus
+    context: fork
+    user_invocable: false
+  resume:
+    allowed_tools:
+    - Read
+    - Glob
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <album-name>
+    complexity_effort: low
+    complexity_tier: sonnet
+  session-start:
+    allowed_tools:
+    - Read
+    - Bash
+    - Glob
+    - Grep
+    - WebSearch
+    - WebFetch
+    - maxinger15-music-mcp
+    complexity_effort: low
+    complexity_tier: sonnet
+  setup:
+    allowed_tools:
+    - Bash
+    argument_hint: <blank for full check | "mcp" | "mastering" | "document-hunter">
+    complexity_tier: haiku
+  sheet-music-publisher:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <album-name or /path/to/track.wav>
+    complexity_effort: low
+    complexity_tier: sonnet
+    requirements:
+      external:
+      - cost: $42 (Professional edition recommended)
+        name: AnthemScore
+        notes: 'Free trial available: 30 seconds per song, 100 total transcriptions'
+        purpose: Audio to sheet music transcription
+        url: https://www.lunaverus.com/
+      - cost: Free (open source)
+        name: MuseScore
+        notes: Required for title cleanup and manual polishing
+        purpose: Sheet music editing and PDF export
+        url: https://musescore.org/
+      python:
+      - pypdf
+      - reportlab
+      - pyyaml
+  suno-engineer:
+    allowed_tools:
+    - Read
+    - Edit
+    - Write
+    - Grep
+    - Glob
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <track-file-path or "create prompt for [concept]">
+    complexity_effort: max
+    complexity_tier: opus
+    prerequisites:
+    - lyric-writer
+  test:
+    allowed_tools:
+    - Read
+    - Grep
+    - Glob
+    - Bash
+    argument_hint:
+    - all | config | skills | templates | workflow | suno | research | mastering |
+      sheet-music | release | consistency | terminology | behavior | quality | quick
+    complexity_tier: haiku
+    context: fork
+  tutorial:
+    allowed_tools:
+    - Read
+    - Write
+    - Edit
+    - Glob
+    - Grep
+    - Bash
+    - AskUserQuestion
+    - maxinger15-music-mcp
+    argument_hint: <new-album | resume | help>
+    complexity_effort: low
+    complexity_tier: sonnet
+  validate-album:
+    allowed_tools:
+    - Read
+    - Bash
+    - Glob
+    - Grep
+    - maxinger15-music-mcp
+    argument_hint: <album-name>
+    complexity_tier: haiku
+    context: fork
+  verify-sources:
+    allowed_tools:
+    - Read
+    - Edit
+    - Glob
+    - Grep
+    - Bash
+    - maxinger15-music-mcp
+    argument_hint: <album-name>
+    complexity_effort: low
+    complexity_tier: sonnet
+  voice-checker:
+    allowed_tools:
+    - Read
+    - Glob
+    - Grep
+    argument_hint: <track-path | album-path | prose-path> [--lyrics-only | --prose-only]
+    complexity_effort: high
+    complexity_tier: sonnet

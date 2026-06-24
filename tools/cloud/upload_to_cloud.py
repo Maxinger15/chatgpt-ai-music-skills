@@ -7,11 +7,11 @@ Both use S3-compatible API via boto3.
 
 Requirements:
     - boto3, pyyaml (use venv: see below)
-    - Cloud credentials configured in ~/.bitwize-music/config.yaml
+    - Cloud credentials configured in ~/.maxinger15-music/config.yaml
 
 Setup:
-    python3 -m venv ~/.bitwize-music/venv
-    source ~/.bitwize-music/venv/bin/activate
+    python3 -m venv ~/.maxinger15-music/venv
+    source ~/.maxinger15-music/venv/bin/activate
     pip install boto3 pyyaml
 
 Usage:
@@ -46,8 +46,8 @@ try:
 except ImportError:
     print("Error: pyyaml not installed.")
     print("Set up venv:")
-    print("  python3 -m venv ~/.bitwize-music/venv")
-    print("  source ~/.bitwize-music/venv/bin/activate")
+    print("  python3 -m venv ~/.maxinger15-music/venv")
+    print("  source ~/.maxinger15-music/venv/bin/activate")
     print("  pip install boto3 pyyaml")
     sys.exit(1)
 
@@ -57,8 +57,8 @@ try:
 except ImportError:
     print("Error: boto3 not installed.")
     print("Set up venv:")
-    print("  python3 -m venv ~/.bitwize-music/venv")
-    print("  source ~/.bitwize-music/venv/bin/activate")
+    print("  python3 -m venv ~/.maxinger15-music/venv")
+    print("  source ~/.maxinger15-music/venv/bin/activate")
     print("  pip install boto3 pyyaml")
     sys.exit(1)
 
@@ -77,7 +77,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_config() -> dict[str, Any]:
-    """Load bitwize-music config file (required)."""
+    """Load maxinger15-music config file (required)."""
     config = _load_config(required=True)
     assert config is not None  # required=True ensures this
     return config
@@ -95,7 +95,7 @@ def get_s3_client(config: dict[str, Any]) -> Any:
         secret_key = r2_config.get("secret_access_key")
 
         if not all([account_id, access_key, secret_key]):
-            logger.error("R2 credentials not configured in ~/.bitwize-music/config.yaml")
+            logger.error("R2 credentials not configured in ~/.maxinger15-music/config.yaml")
             logger.error("Required fields: cloud.r2.account_id, cloud.r2.access_key_id, cloud.r2.secret_access_key")
             sys.exit(1)
 
@@ -115,7 +115,7 @@ def get_s3_client(config: dict[str, Any]) -> Any:
         secret_key = s3_config.get("secret_access_key")
 
         if not all([access_key, secret_key]):
-            logger.error("S3 credentials not configured in ~/.bitwize-music/config.yaml")
+            logger.error("S3 credentials not configured in ~/.maxinger15-music/config.yaml")
             logger.error("Required fields: cloud.s3.access_key_id, cloud.s3.secret_access_key")
             sys.exit(1)
 
@@ -387,7 +387,7 @@ Examples:
     cloud_config = config.get("cloud", {})
     if not cloud_config.get("enabled", False):
         logger.error("Cloud uploads not enabled in config.")
-        logger.error("Add 'cloud.enabled: true' to ~/.bitwize-music/config.yaml")
+        logger.error("Add 'cloud.enabled: true' to ~/.maxinger15-music/config.yaml")
         logger.error("See /reference/cloud/setup-guide.md for setup instructions.")
         sys.exit(1)
 
@@ -421,7 +421,7 @@ Examples:
             logger.error("  - %s/promo_videos/*.mp4", album_path)
         if args.type in ("sampler", "all"):
             logger.error("  - %s/album_sampler.mp4", album_path)
-        logger.error("Generate videos with: /bitwize-music:promo-director %s", args.album)
+        logger.error("Generate videos with: $maxinger15-music:promo-director %s", args.album)
         sys.exit(1)
 
     print(f"Found {len(files)} file(s) to upload:")

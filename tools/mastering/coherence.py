@@ -2,7 +2,7 @@
 
 Pure-Python module — no I/O, no MCP coupling. Consumed by the
 ``album_coherence_check`` / ``album_coherence_correct`` handlers in
-``servers/bitwize-music-server/handlers/processing/audio.py``.
+``servers/maxinger15-music-server/handlers/processing/audio.py``.
 
 Depends only on phase 3a's ``album_signature.AGGREGATE_KEYS`` /
 ``compute_anchor_deltas`` output shape and the phase 1b analyzer fields.

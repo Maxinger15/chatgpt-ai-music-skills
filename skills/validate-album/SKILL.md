@@ -1,15 +1,6 @@
 ---
 name: validate-album
-description: Validates album directory structure, file locations, and content integrity. Use before release or whenever the user wants to check an album's structural health.
-argument-hint: <album-name>
-model: haiku
-context: fork
-allowed-tools:
-  - Read
-  - Bash
-  - Glob
-  - Grep
-  - bitwize-music-mcp
+description: "Validates album directory structure, file locations, and content integrity. Use before release or whenever the user wants to check an album's structural health."
 ---
 
 # Album Validator Agent
@@ -27,7 +18,7 @@ Validate that an album has all required files in the correct locations, catching
 1. Call `get_config()` — returns paths (`content_root`, `audio_root`, `documents_root`) and `artist.name`
    - If config missing, STOP and report:
      ```
-     [FAIL] Config file missing: ~/.bitwize-music/config.yaml
+     [FAIL] Config file missing: ~/.maxinger15-music/config.yaml
             Run /configure to set up the plugin.
      ```
 
@@ -187,13 +178,13 @@ ALBUM VALIDATION: sample-album
 CONFIG
 ──────
 [PASS] Config file exists
-[PASS] content_root: ~/bitwize-music
-[PASS] audio_root: ~/bitwize-music/audio
-[PASS] artist: bitwize
+[PASS] content_root: ~/maxinger15-music
+[PASS] audio_root: ~/maxinger15-music/audio
+[PASS] artist: maxinger15
 
 ALBUM STRUCTURE
 ───────────────
-[PASS] Album directory: ~/bitwize-music/artists/bitwize/albums/electronic/sample-album/
+[PASS] Album directory: ~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/
 [PASS] README.md exists
 [PASS] tracks/ directory exists
 [PASS] 5 track files found
@@ -201,9 +192,9 @@ ALBUM STRUCTURE
 AUDIO FILES
 ───────────
 [FAIL] Audio directory in wrong location
-       → Expected: ~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/
-       → Found at: ~/bitwize-music/audio/sample-album/
-       → Fix: mv ~/bitwize-music/audio/sample-album/ ~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/
+       → Expected: ~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/
+       → Found at: ~/maxinger15-music/audio/sample-album/
+       → Fix: mv ~/maxinger15-music/audio/sample-album/ ~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/
 
 ALBUM ART
 ─────────
@@ -221,7 +212,7 @@ SUMMARY: 8 passed, 1 failed, 1 warning, 1 skipped
 
 ISSUES TO FIX:
 1. Move audio folder to include artist:
-   mv ~/bitwize-music/audio/sample-album/ ~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/
+   mv ~/maxinger15-music/audio/sample-album/ ~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/
 ```
 
 ---

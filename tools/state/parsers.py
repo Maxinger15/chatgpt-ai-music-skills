@@ -522,34 +522,38 @@ def _extract_bold_field(text: str, key: str) -> str | None:
 # Skill file parsing
 # =============================================================================
 
-# Known model tier keywords in order of precedence
-_MODEL_TIER_KEYWORDS = ['opus', 'sonnet', 'haiku']
+# Known advisory complexity tier keywords in order of precedence.
+_COMPLEXITY_TIER_KEYWORDS = ['opus', 'sonnet', 'haiku']
 
 
-def _derive_model_tier(model: str) -> str:
-    """Derive model tier (opus/sonnet/haiku) from a model alias or ID string.
+def _derive_complexity_tier(complexity: str) -> str:
+    """Derive advisory complexity tier from a tier alias or legacy model ID.
 
     Args:
-        model: Model alias ("opus"/"sonnet"/"haiku") or full ID (e.g. "claude-opus-4-8").
+        complexity: Tier alias ("opus"/"sonnet"/"haiku") or legacy full ID.
 
     Returns:
         Lowercase tier string ("opus", "sonnet", "haiku") or "unknown".
     """
-    if not model or not isinstance(model, str):
+    if not complexity or not isinstance(complexity, str):
         return 'unknown'
-    lower = model.lower()
-    for tier in _MODEL_TIER_KEYWORDS:
+    lower = complexity.lower()
+    for tier in _COMPLEXITY_TIER_KEYWORDS:
         if tier in lower:
             return tier
     return 'unknown'
 
 
-def parse_skill_file(path: Path) -> dict[str, Any]:
+def _derive_model_tier(model: str) -> str:
+    """Backward-compatible alias for older tests and callers."""
+    return _derive_complexity_tier(model)
+
+
+def parse_skill_file(path: Path, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
     """Parse a SKILL.md file into structured metadata.
 
-    Extracts YAML frontmatter and normalizes field names (hyphens to
-    underscores). Validates that required fields (name, description, model)
-    are present.
+    Extracts Codex skill frontmatter and combines it with advisory metadata
+    from skills/metadata.yaml when supplied.
 
     Args:
         path: Path to SKILL.md file.
@@ -557,9 +561,8 @@ def parse_skill_file(path: Path) -> dict[str, Any]:
     Returns:
         Dict with skill metadata. On error, includes '_error' key.
         Fields returned:
-            name, description, model, model_tier, argument_hint,
-            allowed_tools, prerequisites, requirements, user_invocable,
-            context, path, mtime
+            name, description, complexity_tier, argument_hint, allowed_tools,
+            prerequisites, requirements, user_invocable, context, path, mtime
     """
     try:
         text = path.read_text(encoding='utf-8')
@@ -585,8 +588,17 @@ def parse_skill_file(path: Path) -> dict[str, Any]:
     if missing:
         return {'_error': f"Missing required fields: {', '.join(missing)}"}
 
-    # Extract model (default to empty string if missing)
-    model = normalized.get('model', '')
+    metadata = metadata or {}
+    skill_metadata = metadata.get(str(normalized['name']), {})
+    if not isinstance(skill_metadata, dict):
+        skill_metadata = {}
+
+    complexity = (
+        skill_metadata.get('complexity_tier')
+        or normalized.get('complexity_tier')
+        or normalized.get('model')
+        or ''
+    )
 
     # Build result
     try:
@@ -597,14 +609,15 @@ def parse_skill_file(path: Path) -> dict[str, Any]:
     return {
         'name': normalized['name'],
         'description': normalized['description'],
-        'model': model,
-        'model_tier': _derive_model_tier(model),
-        'argument_hint': normalized.get('argument_hint'),
-        'allowed_tools': normalized.get('allowed_tools', []),
-        'prerequisites': normalized.get('prerequisites', []),
-        'requirements': normalized.get('requirements', {}),
-        'user_invocable': normalized.get('user_invocable', True),
-        'context': normalized.get('context'),
+        'complexity_tier': _derive_complexity_tier(complexity),
+        'complexity_label': complexity or '',
+        'complexity_effort': skill_metadata.get('complexity_effort'),
+        'argument_hint': skill_metadata.get('argument_hint', normalized.get('argument_hint')),
+        'allowed_tools': skill_metadata.get('allowed_tools', normalized.get('allowed_tools', [])),
+        'prerequisites': skill_metadata.get('prerequisites', normalized.get('prerequisites', [])),
+        'requirements': skill_metadata.get('requirements', normalized.get('requirements', {})),
+        'user_invocable': skill_metadata.get('user_invocable', normalized.get('user_invocable', True)),
+        'context': skill_metadata.get('context', normalized.get('context')),
         'path': str(path),
         'mtime': mtime,
     }

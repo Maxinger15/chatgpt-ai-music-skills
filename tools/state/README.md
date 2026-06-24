@@ -1,6 +1,6 @@
 # State Cache Indexer
 
-Scans all markdown files and produces a JSON state cache at `~/.bitwize-music/cache/state.json`.
+Scans all markdown files and produces a JSON state cache at `~/.maxinger15-music/cache/state.json`.
 
 Markdown files remain the source of truth. State is a **cache** that can always be rebuilt.
 
@@ -27,7 +27,7 @@ python -m tools.state.indexer show -v    # Include track details
 
 ## Cache Location
 
-Always at `~/.bitwize-music/cache/state.json` (not configurable).
+Always at `~/.maxinger15-music/cache/state.json` (not configurable).
 
 ## Schema
 

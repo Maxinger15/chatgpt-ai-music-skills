@@ -566,7 +566,7 @@ python3 tools/sheet-music/create_songbook.py /path/to/sheet-music/ \
   --title "Album Name" \
   --artist "Artist Name" \
   --cover /path/to/album.png \
-  --website "bitwizemusic.com" \
+  --website "your-artist-site.com" \
   --page-size letter \
   --year 2025
 ```

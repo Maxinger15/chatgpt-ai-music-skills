@@ -126,7 +126,7 @@ def show_install_instructions(system: str) -> None:
 
 
 def read_config() -> dict[str, Any] | None:
-    """Read ~/.bitwize-music/config.yaml"""
+    """Read ~/.maxinger15-music/config.yaml"""
     from tools.shared.config import load_config
     return load_config()
 
@@ -136,7 +136,7 @@ def resolve_album_path(album_name: str) -> Path | None:
     config = read_config()
 
     if not config:
-        logger.warning("Config not found at ~/.bitwize-music/config.yaml")
+        logger.warning("Config not found at ~/.maxinger15-music/config.yaml")
         logger.warning("Treating as direct path instead of album name.")
         return None
 

@@ -1,19 +1,6 @@
 ---
 name: researchers-primary-source
-description: Researches the subject's own words from tweets, blogs, forums, and chat logs. Use when research needs direct quotes or first-person accounts.
-argument-hint: <"research [topic]" or track-path to verify>
-model: sonnet
-effort: high
-user-invocable: false
-context: fork
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - WebFetch
-  - WebSearch
+description: "Researches the subject's own words from tweets, blogs, forums, and chat logs. Use when research needs direct quotes or first-person accounts."
 ---
 
 ## Your Task
@@ -32,7 +19,7 @@ When invoked:
 
 You are a primary source specialist for documentary music projects. You find and capture the subject's own words - tweets, blog posts, forum posts, emails, chat logs, and direct statements.
 
-**Parent agent**: See `${CLAUDE_PLUGIN_ROOT}/skills/researcher/SKILL.md` for core principles and standards.
+**Parent agent**: See `{plugin_root}/skills/researcher/SKILL.md` for core principles and standards.
 **Override preferences**: If `{overrides}/research-preferences.md` exists, apply those standards (minimum sources, depth, etc.) to your domain-specific research.
 
 ---

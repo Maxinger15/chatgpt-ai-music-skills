@@ -1,6 +1,6 @@
 # State Cache Schema (v1.2.0)
 
-The state cache at `~/.bitwize-music/cache/state.json` is a JSON file built from markdown source files. It is a **disposable cache** — markdown files remain the source of truth and state can always be rebuilt with `python3 tools/state/indexer.py rebuild`.
+The state cache at `~/.maxinger15-music/cache/state.json` is a JSON file built from markdown source files. It is a **disposable cache** — markdown files remain the source of truth and state can always be rebuilt with `python3 tools/state/indexer.py rebuild`.
 
 ---
 
@@ -10,7 +10,7 @@ The state cache at `~/.bitwize-music/cache/state.json` is a JSON file built from
 |-------|------|----------|-------------|
 | `version` | string | Yes | Schema version (currently `"1.2.0"`) |
 | `generated_at` | string | Yes | ISO 8601 UTC timestamp of last build/update |
-| `plugin_version` | string\|null | Yes | Plugin version from `.claude-plugin/plugin.json`, or `null` if unreadable |
+| `plugin_version` | string\|null | Yes | Plugin version from `.codex-plugin/plugin.json`, or `null` if unreadable |
 | `config` | object | Yes | Resolved configuration snapshot |
 | `albums` | object | Yes | Map of album slug → album data |
 | `ideas` | object | Yes | Album ideas from IDEAS.md |
@@ -21,7 +21,7 @@ The state cache at `~/.bitwize-music/cache/state.json` is a JSON file built from
 
 ## `config` Object
 
-Snapshot of resolved paths and artist info from `~/.bitwize-music/config.yaml`.
+Snapshot of resolved paths and artist info from `~/.maxinger15-music/config.yaml`.
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -113,7 +113,7 @@ Indexed metadata from `skills/*/SKILL.md` files in the plugin directory. Queryab
 | `skills_root` | string | Absolute path to the skills/ directory |
 | `skills_root_mtime` | float | Last modification time of skills/ directory |
 | `count` | integer | Total number of indexed skills |
-| `model_counts` | object | Map of model tier → count (e.g., `{"opus": 6, "sonnet": 24, "haiku": 14}`) |
+| `complexity_counts` | object | Map of advisory complexity tier → count (e.g., `{"opus": 6, "sonnet": 24, "haiku": 14}`) |
 | `items` | object | Map of skill name → skill data |
 
 ### Skill Data
@@ -122,8 +122,9 @@ Indexed metadata from `skills/*/SKILL.md` files in the plugin directory. Queryab
 |-------|------|-------------|
 | `name` | string | Skill identifier (kebab-case, e.g., `"lyric-writer"`) |
 | `description` | string | One-line description of the skill's purpose |
-| `model` | string | Model from frontmatter — tier alias (e.g., `"opus"`) or a pinned ID (e.g., `"claude-opus-4-8"`) |
-| `model_tier` | string | Derived tier: `"opus"`, `"sonnet"`, `"haiku"`, or `"unknown"` |
+| `complexity_tier` | string | Advisory tier: `"opus"`, `"sonnet"`, `"haiku"`, or `"unknown"` |
+| `complexity_label` | string | Human-readable complexity label derived from the tier |
+| `complexity_effort` | string\|null | Optional advisory effort hint such as `"low"`, `"medium"`, `"high"`, `"xhigh"`, or `"max"` |
 | `argument_hint` | string\|null | Expected input format hint |
 | `allowed_tools` | array | List of tool names the skill can access |
 | `prerequisites` | array | List of skill names that should run first |

@@ -1,13 +1,6 @@
 ---
 name: new-album
-description: Creates a new album with the correct directory structure and templates. Use IMMEDIATELY when the user says 'make a new album' or similar, before any discussion.
-argument-hint: <album-name> <genre>
-model: haiku
-allowed-tools:
-  - Read
-  - Bash
-  - Write
-  - bitwize-music-mcp
+description: "Creates a new album with the correct directory structure and templates. Use IMMEDIATELY when the user says 'make a new album' or similar, before any discussion."
 ---
 
 ## Your Task
@@ -34,9 +27,9 @@ Examples:
 - `protest-songs folk`
 - `the-heist documentary hip-hop`
 
-Valid genres: Any genre that has a directory under `${CLAUDE_PLUGIN_ROOT}/genres/`. Use the slug form (lowercase, hyphenated) — e.g. `deep-house`, `crust-punk`, `k-pop`, `hip-hop`.
+Valid genres: Any genre that has a directory under `{plugin_root}/genres/`. Use the slug form (lowercase, hyphenated) — e.g. `deep-house`, `crust-punk`, `k-pop`, `hip-hop`.
 
-To check if a genre is valid, verify `${CLAUDE_PLUGIN_ROOT}/genres/{genre}/README.md` exists.
+To check if a genre is valid, verify `{plugin_root}/genres/{genre}/README.md` exists.
 
 **Parsing logic:**
 1. If 3 arguments and second is `documentary`: album = arg1, genre = arg3, documentary = true
@@ -86,7 +79,7 @@ Files created:
 
 Next steps:
   Option 1 - Interactive (Recommended):
-    Run /bitwize-music:album-conceptualizer to design your album concept
+    Run $maxinger15-music:album-conceptualizer to design your album concept
     through the 7 Planning Phases.
 
   Option 2 - Manual:
@@ -97,14 +90,14 @@ Tip: For OST/soundtrack albums with a mix of vocal and instrumental
 tracks, the album-conceptualizer will ask about the vocal/instrumental
 split per track. Set `instrumental: true` in track frontmatter for
 instrumental tracks — they skip the lyrics workflow and go directly
-to /bitwize-music:suno-engineer.
+to $maxinger15-music:suno-engineer.
 ```
 
 ## Error Handling
 
 **Config file missing:**
 ```
-Error: Config not found at ~/.bitwize-music/config.yaml
+Error: Config not found at ~/.maxinger15-music/config.yaml
 Run /configure to set up.
 ```
 
@@ -124,7 +117,7 @@ Error: Album already exists at {album_path}
 **Templates not found:**
 ```
 Error: Templates not found. Is the plugin installed correctly?
-Expected at: ${CLAUDE_PLUGIN_ROOT}/templates/
+Expected at: {plugin_root}/templates/
 ```
 
 ---
@@ -138,15 +131,15 @@ Expected at: ${CLAUDE_PLUGIN_ROOT}/templates/
 Config has:
 ```yaml
 paths:
-  content_root: ~/bitwize-music
+  content_root: ~/maxinger15-music
 artist:
-  name: bitwize
+  name: maxinger15
 ```
 
 Result:
 ```
 Created album: sample-album
-Location: ~/bitwize-music/artists/bitwize/albums/electronic/sample-album/
+Location: ~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/
 
 Files created:
 - README.md (album template)
@@ -154,7 +147,7 @@ Files created:
 
 Next steps:
   Option 1 - Interactive (Recommended):
-    Run /bitwize-music:album-conceptualizer to design your album concept
+    Run $maxinger15-music:album-conceptualizer to design your album concept
     through the 7 Planning Phases.
 
   Option 2 - Manual:
@@ -177,7 +170,7 @@ The `create_album_structure(album_slug, genre, documentary=true)` call automatic
 Report:
 ```
 Created album: the-heist (documentary)
-Location: ~/bitwize-music/artists/bitwize/albums/hip-hop/the-heist/
+Location: ~/maxinger15-music/artists/maxinger15/albums/hip-hop/the-heist/
 
 Files created:
 - README.md (album template)
@@ -195,8 +188,8 @@ Files created:
 **Wrong:**
 ```bash
 # Manual mkdir, config reading, template copying
-cat ~/.bitwize-music/config.yaml
-mkdir -p ~/music-projects/artists/bitwize/albums/...
+cat ~/.maxinger15-music/config.yaml
+mkdir -p ~/music-projects/artists/maxinger15/albums/...
 cp templates/album.md ...
 ```
 

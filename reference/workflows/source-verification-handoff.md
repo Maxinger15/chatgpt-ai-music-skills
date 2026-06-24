@@ -89,6 +89,6 @@ Once user confirms verification:
 
 ## Track Status Workflow
 
-1. Claude adds sources → Status: `❌ Pending`
+1. Codex adds sources → Status: `❌ Pending`
 2. Human verifies → Status: `✅ Verified (DATE)`
 3. Only after verification → Status: `In Progress`

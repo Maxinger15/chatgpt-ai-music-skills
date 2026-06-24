@@ -1,6 +1,6 @@
 # Promotion Preferences
 
-Customize how `/bitwize-music:promo-writer` generates social media copy for your releases.
+Customize how `$maxinger15-music:promo-writer` generates social media copy for your releases.
 
 ## Tone & Voice
 
@@ -9,7 +9,7 @@ Customize how `/bitwize-music:promo-writer` generates social media copy for your
 - **Emoji usage**: minimal
   <!-- Options: none, minimal, moderate, heavy -->
 - **Point of view**: first-person
-  <!-- Options: first-person ("I made..."), third-person ("bitwize releases..."), collective ("We made...") -->
+  <!-- Options: first-person ("I made..."), third-person ("maxinger15 releases..."), collective ("We made...") -->
 
 ## Platform Priorities
 

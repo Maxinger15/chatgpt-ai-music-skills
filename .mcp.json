@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "bitwize-music-mcp": {
+    "maxinger15-music-mcp": {
       "type": "stdio",
-      "command": "${HOME}/.bitwize-music/venv/bin/python3",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/bitwize-music-server/run.py"]
+      "command": "${HOME}/.maxinger15-music/venv/bin/python3",
+      "args": ["servers/maxinger15-music-server/run.py"]
     }
   }
 }

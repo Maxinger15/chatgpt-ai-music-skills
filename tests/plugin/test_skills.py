@@ -1,36 +1,17 @@
-"""Tests for skill definitions: frontmatter, model refs, prerequisites, sections."""
+"""Tests for Codex skill definitions, metadata, and sections."""
 
 import re
 
 import pytest
+import yaml
 
 pytestmark = pytest.mark.plugin
 
 # Required frontmatter fields
-REQUIRED_SKILL_FIELDS = {'name', 'description', 'model'}
+REQUIRED_SKILL_FIELDS = {'name', 'description'}
 
-# Valid model values: tier aliases (auto-track the frontier model of that tier) or
-# the special values inherit/default. Pinned model IDs are intentionally rejected —
-# skills must use an alias so new model releases need no file edits.
-MODEL_PATTERN = re.compile(r'^(opus|sonnet|haiku|inherit|default)$')
-
-# Valid values for the `effort:` frontmatter field. Availability is
-# model-dependent (e.g. xhigh is unsupported on Sonnet 4.6); Claude Code falls
-# back to the highest supported level at or below the one set.
+VALID_COMPLEXITY_TIERS = {'opus', 'sonnet', 'haiku'}
 VALID_EFFORT = {'low', 'medium', 'high', 'xhigh', 'max'}
-
-# Model tiers that honor the `effort:` setting. Haiku does NOT support effort,
-# so setting it there is a no-op and we keep it off those skills.
-EFFORT_CAPABLE_TIERS = {'opus', 'sonnet'}
-
-
-def _model_tier(model: str) -> str:
-    """Derive tier (opus/sonnet/haiku) from a model alias or pinned ID."""
-    lowered = (model or '').lower()
-    for tier in ('opus', 'sonnet', 'haiku'):
-        if tier in lowered:
-            return tier
-    return 'unknown'
 
 # Skills that require external dependencies
 SKILLS_WITH_REQUIREMENTS = {
@@ -109,58 +90,57 @@ class TestFrontmatter:
         assert not missing, f"Missing required fields: {missing}"
 
 
-class TestModelReferences:
-    """All model references must match the valid pattern."""
+class TestCodexMetadata:
+    """Codex skills use minimal frontmatter plus advisory metadata."""
 
-    def test_model_format(self, all_skill_frontmatter):
+    def test_no_legacy_frontmatter_fields(self, all_skill_frontmatter):
+        legacy = {'model', 'effort', 'allowed-tools', 'argument-hint', 'context'}
         invalid = {}
         for name, fm in all_skill_frontmatter.items():
-            if '_error' in fm:
-                continue
-            model = fm.get('model', '')
-            if model and not MODEL_PATTERN.match(model):
-                invalid[name] = model
-        assert not invalid, f"Invalid model references: {invalid}"
+            present = legacy & set(fm.keys())
+            if present:
+                invalid[name] = present
+        assert not invalid, f"Legacy execution frontmatter remains: {invalid}"
 
+    def test_metadata_yaml_exists_and_matches_skills(self, project_root, all_skill_frontmatter):
+        metadata_path = project_root / "skills" / "metadata.yaml"
+        assert metadata_path.exists(), "skills/metadata.yaml missing"
+        data = yaml.safe_load(metadata_path.read_text()) or {}
+        metadata = data.get("skills", {})
+        assert set(metadata) == set(all_skill_frontmatter), (
+            "skills/metadata.yaml must include exactly the on-disk skills"
+        )
 
-class TestEffortLevels:
-    """The `effort:` field must be valid and present on effort-capable skills."""
-
-    def test_effort_value_valid(self, all_skill_frontmatter):
+    def test_complexity_values_valid(self, project_root):
+        data = yaml.safe_load((project_root / "skills" / "metadata.yaml").read_text()) or {}
         invalid = {}
-        for name, fm in all_skill_frontmatter.items():
-            if '_error' in fm:
-                continue
-            effort = fm.get('effort')
+        for name, meta in data.get("skills", {}).items():
+            tier = meta.get("complexity_tier")
+            effort = meta.get("complexity_effort")
+            if tier not in VALID_COMPLEXITY_TIERS:
+                invalid[name] = tier
             if effort is not None and effort not in VALID_EFFORT:
                 invalid[name] = effort
-        assert not invalid, (
-            f"Invalid effort values (allowed: {sorted(VALID_EFFORT)}): {invalid}"
-        )
+        assert not invalid, f"Invalid advisory complexity metadata: {invalid}"
 
-    def test_effort_present_on_capable_skills(self, all_skill_frontmatter):
-        missing = {}
-        for name, fm in all_skill_frontmatter.items():
-            if '_error' in fm:
+    def test_openai_yaml_exists_and_parses(self, all_skill_dirs):
+        missing = []
+        invalid = {}
+        for skill_dir in all_skill_dirs:
+            metadata_file = skill_dir / "agents" / "openai.yaml"
+            if not metadata_file.exists():
+                missing.append(skill_dir.name)
                 continue
-            tier = _model_tier(fm.get('model', ''))
-            if tier in EFFORT_CAPABLE_TIERS and not fm.get('effort'):
-                missing[name] = tier
-        assert not missing, (
-            f"Opus/Sonnet skills must set an effort level: {missing}"
-        )
-
-    def test_effort_absent_on_haiku_skills(self, all_skill_frontmatter):
-        # Haiku does not support effort; setting it is a misleading no-op.
-        present = {}
-        for name, fm in all_skill_frontmatter.items():
-            if '_error' in fm:
+            try:
+                data = yaml.safe_load(metadata_file.read_text()) or {}
+            except yaml.YAMLError as exc:
+                invalid[skill_dir.name] = str(exc)
                 continue
-            if _model_tier(fm.get('model', '')) == 'haiku' and fm.get('effort'):
-                present[name] = fm.get('effort')
-        assert not present, (
-            f"Haiku skills must not set effort (unsupported, no-op): {present}"
-        )
+            interface = data.get("interface", {})
+            if not interface.get("display_name") or not interface.get("default_prompt"):
+                invalid[skill_dir.name] = "missing interface display_name/default_prompt"
+        assert not missing, f"Missing agents/openai.yaml for: {missing}"
+        assert not invalid, f"Invalid agents/openai.yaml: {invalid}"
 
 
 class TestRequirements:
@@ -329,19 +309,19 @@ class TestAlbumStatusManagement:
             "verify-sources SKILL.md missing auto-advancement documentation"
         )
 
-    def test_claude_md_documentary_album_flow(self, claude_md_content):
-        """CLAUDE.md must document documentary album status flow."""
-        assert 'Documentary' in claude_md_content or 'documentary' in claude_md_content, (
-            "CLAUDE.md missing documentary album status flow"
+    def test_agents_md_documentary_album_flow(self, agents_md_content):
+        """AGENTS.md must document documentary album status flow."""
+        assert 'Documentary' in agents_md_content or 'documentary' in agents_md_content, (
+            "AGENTS.md missing documentary album status flow"
         )
-        assert 'Research Complete' in claude_md_content, (
-            "CLAUDE.md missing 'Research Complete' status for documentary flow"
+        assert 'Research Complete' in agents_md_content, (
+            "AGENTS.md missing 'Research Complete' status for documentary flow"
         )
 
-    def test_claude_md_standard_album_flow(self, claude_md_content):
-        """CLAUDE.md must document standard (non-documentary) album status flow."""
-        assert 'Standard albums' in claude_md_content or 'standard albums' in claude_md_content, (
-            "CLAUDE.md missing standard album status flow"
+    def test_agents_md_standard_album_flow(self, agents_md_content):
+        """AGENTS.md must document standard (non-documentary) album status flow."""
+        assert 'Standard albums' in agents_md_content or 'standard albums' in agents_md_content, (
+            "AGENTS.md missing standard album status flow"
         )
 
 
@@ -378,13 +358,13 @@ class TestSkillIndex:
 
 
 class TestSkillRegistrationIntegrity:
-    """On-disk skills must match the Claude Code plugin cache (#234)."""
+    """On-disk skills must match the Codex plugin cache (#234)."""
 
-    @pytest.mark.xfail(reason="Stale plugin cache — run: claude plugin update bitwize-music (#234)", strict=False)
+    @pytest.mark.xfail(reason="Stale plugin cache — reinstall with codex plugin add maxinger15-music@maxinger15-local (#234)", strict=False)
     def test_no_ghost_skills_in_cache(self, skills_dir):
         """Skills in plugin cache but not on disk are ghost registrations."""
         from pathlib import Path
-        cache_base = Path.home() / ".claude" / "plugins" / "cache" / "bitwize-music"
+        cache_base = Path.home() / ".codex" / "plugins" / "cache" / "maxinger15-music"
         if not cache_base.is_dir():
             pytest.skip("No plugin cache found (plugin not installed via marketplace)")
 
@@ -406,14 +386,14 @@ class TestSkillRegistrationIntegrity:
 
         assert not ghost, (
             f"Ghost skills in plugin cache (deleted but still cached): "
-            f"{', '.join(sorted(ghost))} — run: claude plugin update bitwize-music"
+            f"{', '.join(sorted(ghost))} — reinstall with codex plugin add maxinger15-music@maxinger15-local"
         )
 
-    @pytest.mark.xfail(reason="Stale plugin cache — run: claude plugin update bitwize-music (#234)", strict=False)
+    @pytest.mark.xfail(reason="Stale plugin cache — reinstall with codex plugin add maxinger15-music@maxinger15-local (#234)", strict=False)
     def test_no_missing_skills_in_cache(self, skills_dir):
         """Skills on disk must also be present in the plugin cache."""
         from pathlib import Path
-        cache_base = Path.home() / ".claude" / "plugins" / "cache" / "bitwize-music"
+        cache_base = Path.home() / ".codex" / "plugins" / "cache" / "maxinger15-music"
         if not cache_base.is_dir():
             pytest.skip("No plugin cache found (plugin not installed via marketplace)")
 
@@ -443,5 +423,5 @@ class TestSkillRegistrationIntegrity:
         missing = source_skills - cached_skills
         assert not missing, (
             f"Skills on disk but missing from plugin cache (v{latest_cache.name}): "
-            f"{', '.join(sorted(missing))} — run: claude plugin update bitwize-music"
+            f"{', '.join(sorted(missing))} — reinstall with codex plugin add maxinger15-music@maxinger15-local"
         )

@@ -1,0 +1,15 @@
+interface:
+  display_name: "Promo Reviewer"
+  short_description: "Reviews and iterates on social media copy in album promo/..."
+  brand_color: "#2563EB"
+  default_prompt: "Use $maxinger15-music:promo-reviewer for this music workflow task."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "maxinger15-music-mcp"
+      description: "Structured album, track, config, and processing tools for maxinger15 Music."
+      transport: "stdio"
+
+policy:
+  allow_implicit_invocation: true

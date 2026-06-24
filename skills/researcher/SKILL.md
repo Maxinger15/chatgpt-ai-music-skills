@@ -1,20 +1,6 @@
 ---
 name: researcher
-description: Conducts investigative-grade research with primary source analysis, cross-verification, and trial-level depth. Use when an album needs factual research, source material, or verification of claims.
-argument-hint: <"research [topic]" or track-path to verify>
-model: sonnet
-effort: high
-prerequisites:
-  - album-conceptualizer
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - WebFetch
-  - WebSearch
-  - bitwize-music-mcp
+description: "Conducts investigative-grade research with primary source analysis, cross-verification, and trial-level depth. Use when an album needs factual research, source material, or verification of claims."
 ---
 
 ## Your Task

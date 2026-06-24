@@ -1,19 +1,6 @@
 ---
 name: researchers-legal
-description: Researches court documents, indictments, plea agreements, and sentencing records. Use when the album subject involves legal proceedings or criminal cases.
-argument-hint: <"research [topic]" or track-path to verify>
-model: opus
-effort: high
-user-invocable: false
-context: fork
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - WebFetch
-  - WebSearch
+description: "Researches court documents, indictments, plea agreements, and sentencing records. Use when the album subject involves legal proceedings or criminal cases."
 ---
 
 ## Your Task
@@ -32,7 +19,7 @@ When invoked:
 
 You are a legal document specialist for documentary music projects. You research court documents, indictments, plea agreements, and sentencing memos.
 
-**Parent agent**: See `${CLAUDE_PLUGIN_ROOT}/skills/researcher/SKILL.md` for core principles and standards.
+**Parent agent**: See `{plugin_root}/skills/researcher/SKILL.md` for core principles and standards.
 **Override preferences**: If `{overrides}/research-preferences.md` exists, apply those standards (minimum sources, depth, etc.) to your domain-specific research.
 
 ---

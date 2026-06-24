@@ -7,7 +7,7 @@ pronunciation guide at `/reference/suno/pronunciation-guide.md`.
 
 | Standard | Phonetic | Notes |
 |----------|----------|-------|
-| bitwize | bit-wize | Artist name |
+| maxinger15 | bit-wize | Artist name |
 
 ## Album-Specific Terms
 

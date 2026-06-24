@@ -1,18 +1,6 @@
 ---
 name: pronunciation-specialist
-description: Scans lyrics for pronunciation risks and prevents Suno mispronunciations. Use when writing lyrics with proper nouns, technical terms, homographs, or non-English words.
-argument-hint: <track-file-path or paste lyrics to scan>
-model: sonnet
-effort: medium
-prerequisites:
-  - lyric-writer
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - bitwize-music-mcp
+description: "Scans lyrics for pronunciation risks and prevents Suno mispronunciations. Use when writing lyrics with proper nouns, technical terms, homographs, or non-English words."
 ---
 
 ## Your Task
@@ -73,7 +61,7 @@ See [word-lists.md](word-lists.md) for complete tables. Summary:
 
 ### 1. Homographs (CRITICAL)
 Same spelling, different pronunciation. **ALWAYS require clarification.**
-*(Canonical reference: `${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md`. Keep this summary in sync.)*
+*(Canonical reference: `{plugin_root}/reference/suno/pronunciation-guide.md`. Keep this summary in sync.)*
 
 | Word | Options | Fix |
 |------|---------|-----|
@@ -111,7 +99,7 @@ Word-like acronyms → phonetic (RICO → Ree-koh, NASA → Nah-sah)
 You reference TWO pronunciation guides:
 
 ### Base Guide (Plugin-Maintained)
-- **Location**: `${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md`
+- **Location**: `{plugin_root}/reference/suno/pronunciation-guide.md`
 - **Contains**: Universal pronunciation rules, common homographs, tech terms
 - **Updated**: By plugin maintainers when new issues are discovered
 
@@ -273,7 +261,7 @@ When you discover new pronunciation issues specific to the user's content:
 | Larocca | larocca | Luh-rock-uh | Character in "sample-album" album |
 ```
 
-**DO NOT** edit the base guide (`${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md`) - plugin updates will overwrite it.
+**DO NOT** edit the base guide (`{plugin_root}/reference/suno/pronunciation-guide.md`) - plugin updates will overwrite it.
 
 **When to add:**
 - Artist names, album titles, track titles

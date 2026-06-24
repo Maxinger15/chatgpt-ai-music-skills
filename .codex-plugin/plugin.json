@@ -1,0 +1,49 @@
+{
+  "name": "maxinger15-music",
+  "description": "AI music generation workflow for Suno: album concepts, lyrics, prompts, mastering, and release prep.",
+  "version": "0.92.0",
+  "author": {
+    "name": "maxinger15-music"
+  },
+  "repository": "https://github.com/Maxinger15/chatgpt-ai-music-skills",
+  "homepage": "https://github.com/Maxinger15/chatgpt-ai-music-skills#readme",
+  "license": "CC0-1.0",
+  "keywords": [
+    "music",
+    "suno",
+    "lyrics",
+    "album",
+    "mastering",
+    "ai-music",
+    "codex",
+    "chatgpt",
+    "music-production",
+    "songwriting",
+    "audio-mastering",
+    "music-generation",
+    "suno-ai",
+    "lyric-writing",
+    "album-release",
+    "music-workflow",
+    "promo-videos",
+    "social-media",
+    "video-generation"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "maxinger15 Music",
+    "shortDescription": "Album production workflow for Suno and Codex",
+    "longDescription": "A Codex-native music production workflow for developing album concepts, writing and reviewing lyrics, preparing Suno prompts, managing generation state, polishing/mastering audio, and preparing release assets.",
+    "developerName": "maxinger15-music",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write", "MCP"],
+    "websiteURL": "https://github.com/Maxinger15/chatgpt-ai-music-skills",
+    "defaultPrompt": [
+      "Use maxinger15 Music to resume an album.",
+      "Use maxinger15 Music to plan a new Suno album.",
+      "Use maxinger15 Music to review lyrics before generation."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

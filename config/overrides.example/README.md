@@ -17,7 +17,7 @@ cp suno-preferences.md ~/music-projects/overrides/
 nano ~/music-projects/overrides/pronunciation-guide.md
 
 # 4. Verify config points to your overrides
-# In ~/.bitwize-music/config.yaml:
+# In ~/.maxinger15-music/config.yaml:
 # paths:
 #   overrides: "~/music-projects/overrides"
 ```
@@ -26,7 +26,7 @@ nano ~/music-projects/overrides/pronunciation-guide.md
 
 | File | Purpose | Priority |
 |------|---------|----------|
-| `CLAUDE.md` | Custom workflow instructions | Start here |
+| `AGENTS.md` | Custom workflow instructions | Start here |
 | `pronunciation-guide.md` | Artist/album-specific pronunciations | Essential |
 | `explicit-words.md` | Custom explicit word list | As needed |
 | `lyric-writing-guide.md` | Lyric style, vocabulary, themes | Recommended |
@@ -43,13 +43,13 @@ nano ~/music-projects/overrides/pronunciation-guide.md
 Most users should start with these two:
 
 1. **`pronunciation-guide.md`** - Add your artist name and any album-specific terms
-2. **`CLAUDE.md`** - Add any workflow preferences (optional)
+2. **`AGENTS.md`** - Add any workflow preferences (optional)
 
 Add more overrides as you discover patterns in your work.
 
 ## File Descriptions
 
-### CLAUDE.md
+### AGENTS.md
 Add custom workflow rules that supplement the base instructions. Good for:
 - Album/track naming conventions
 - Default settings you always want
@@ -62,7 +62,7 @@ Essential for getting Suno to pronounce your artist name, album titles, and char
 Customize the explicit content scanner. Add regional slang or remove words that have non-explicit uses in your content (e.g., "hell" in a historical narrative).
 
 ### lyric-writing-guide.md
-Define your lyric writing voice: preferred POV, vocabulary to use/avoid, themes to explore, structure preferences. Claude references this when writing or revising lyrics.
+Define your lyric writing voice: preferred POV, vocabulary to use/avoid, themes to explore, structure preferences. Codex references this when writing or revising lyrics.
 
 ### suno-preferences.md
 Map your genre names to Suno-specific tags, set default vocal descriptions, and define what to avoid in style prompts.
@@ -87,7 +87,7 @@ Page layout, notation preferences, and songbook formatting for the sheet music p
 
 ## How Overrides Work
 
-1. At session start, Claude checks your overrides directory
+1. At session start, Codex checks your overrides directory
 2. For each override file found, it's loaded and merged with base behavior
 3. Missing files are silently skipped (no error)
 4. Your overrides take precedence over base settings

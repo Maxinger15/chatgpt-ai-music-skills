@@ -10,7 +10,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-SERVER_DIR = PROJECT_ROOT / "servers" / "bitwize-music-server"
+SERVER_DIR = PROJECT_ROOT / "servers" / "maxinger15-music-server"
 if str(SERVER_DIR) not in sys.path:
     sys.path.insert(0, str(SERVER_DIR))
 
@@ -21,7 +21,7 @@ def test_resolve_analyzer_thresholds_defaults(monkeypatch):
     from handlers.processing.mixing import _resolve_analyzer_thresholds
 
     # Stub load_mix_presets so the test doesn't read the host's
-    # ~/bitwize-music/overrides/mix-presets.yaml — see #360.
+    # ~/maxinger15-music/overrides/mix-presets.yaml — see #360.
     monkeypatch.setattr(mix_tracks, "load_mix_presets", lambda: {"defaults": {}})
 
     dark, harsh, adm_aware = _resolve_analyzer_thresholds()

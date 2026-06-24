@@ -1,4 +1,4 @@
-"""Path resolver utility for bitwize-music tools.
+"""Path resolver utility for maxinger15-music tools.
 
 Eliminates manual path construction across skills by providing a single
 function that resolves content, audio, and document paths correctly.

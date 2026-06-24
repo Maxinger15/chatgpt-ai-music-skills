@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Suno Auto-Fill (bitwize-music)
-// @namespace    https://github.com/bitwize-music-studio
+// @name         Suno Auto-Fill (maxinger15-music)
+// @namespace    https://github.com/Maxinger15
 // @version      1.2.0
 // @description  Auto-fill Suno's create page with title, style, and lyrics from clipboard JSON (SPA-aware)
-// @author       bitwize
+// @author       maxinger15
 // @match        https://suno.com/*
 // @grant        none
 // ==/UserScript==

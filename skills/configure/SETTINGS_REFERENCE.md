@@ -1,13 +1,13 @@
 # Configure Skill - Settings Reference
 
-Quick lookup for all configuration options. Full documentation: [${CLAUDE_PLUGIN_ROOT}/config/README.md](${CLAUDE_PLUGIN_ROOT}/config/README.md).
+Quick lookup for all configuration options. Full documentation: [{plugin_root}/config/README.md]({plugin_root}/config/README.md).
 
 ---
 
 ## Config File Location
 
 ```
-~/.bitwize-music/config.yaml
+~/.maxinger15-music/config.yaml
 ```
 
 ---
@@ -16,7 +16,7 @@ Quick lookup for all configuration options. Full documentation: [${CLAUDE_PLUGIN
 
 | Setting | Description | Example |
 |---------|-------------|---------|
-| `artist.name` | Your artist/project name | `"bitwize"` |
+| `artist.name` | Your artist/project name | `"maxinger15"` |
 | `paths.content_root` | Albums, artists, research | `"~/music-projects"` |
 | `paths.audio_root` | Mastered audio output | `"~/music-projects/audio"` |
 | `paths.documents_root` | PDFs, primary sources | `"~/music-projects/documents"` |
@@ -32,7 +32,7 @@ Quick lookup for all configuration options. Full documentation: [${CLAUDE_PLUGIN
 | `artist.genres` | Primary genres (array) | `["electronic", "hip-hop"]` |
 | `artist.style` | Brief style description | `"dark industrial electronic"` |
 
-**Tip**: `artist.style` helps Claude understand your overall vibe for consistent suggestions.
+**Tip**: `artist.style` helps Codex understand your overall vibe for consistent suggestions.
 
 ### Paths
 
@@ -69,7 +69,7 @@ Currently only Suno is supported.
 
 ### Promo Videos (`promotion:`)
 
-For `/bitwize-music:promo-director`:
+For `$maxinger15-music:promo-director`:
 
 | Setting | Description | Default |
 |---------|-------------|---------|
@@ -82,7 +82,7 @@ For `/bitwize-music:promo-director`:
 
 ### Sheet Music (`sheet_music:`)
 
-For `/bitwize-music:sheet-music-publisher`:
+For `$maxinger15-music:sheet-music-publisher`:
 
 | Setting | Description | Default |
 |---------|-------------|---------|
@@ -93,7 +93,7 @@ For `/bitwize-music:sheet-music-publisher`:
 
 ### Cloud Storage (`cloud:`)
 
-For `/bitwize-music:cloud-uploader`:
+For `$maxinger15-music:cloud-uploader`:
 
 | Setting | Description |
 |---------|-------------|
@@ -101,7 +101,7 @@ For `/bitwize-music:cloud-uploader`:
 | `cloud.provider` | `r2` or `s3` |
 | `cloud.public_read` | Make uploads public |
 
-Provider-specific keys documented in [${CLAUDE_PLUGIN_ROOT}/reference/cloud/setup-guide.md](${CLAUDE_PLUGIN_ROOT}/reference/cloud/setup-guide.md).
+Provider-specific keys documented in [{plugin_root}/reference/cloud/setup-guide.md]({plugin_root}/reference/cloud/setup-guide.md).
 
 ---
 
@@ -109,16 +109,16 @@ Provider-specific keys documented in [${CLAUDE_PLUGIN_ROOT}/reference/cloud/setu
 
 ```bash
 # Show current config
-/bitwize-music:configure show
+$maxinger15-music:configure show
 
 # Edit a specific setting
-/bitwize-music:configure edit
+$maxinger15-music:configure edit
 
 # Validate config for issues
-/bitwize-music:configure validate
+$maxinger15-music:configure validate
 
 # Start fresh
-/bitwize-music:configure reset
+$maxinger15-music:configure reset
 ```
 
 ---
@@ -139,12 +139,12 @@ paths:
 
 ### Full Config
 
-See [${CLAUDE_PLUGIN_ROOT}/config/config.example.yaml](${CLAUDE_PLUGIN_ROOT}/config/config.example.yaml) for complete example with all options.
+See [{plugin_root}/config/config.example.yaml]({plugin_root}/config/config.example.yaml) for complete example with all options.
 
 ---
 
 ## See Also
 
 - [SKILL.md](SKILL.md) - Full skill documentation
-- [${CLAUDE_PLUGIN_ROOT}/config/README.md](${CLAUDE_PLUGIN_ROOT}/config/README.md) - Complete config reference with examples
-- [${CLAUDE_PLUGIN_ROOT}/config/config.example.yaml](${CLAUDE_PLUGIN_ROOT}/config/config.example.yaml) - Example config file
+- [{plugin_root}/config/README.md]({plugin_root}/config/README.md) - Complete config reference with examples
+- [{plugin_root}/config/config.example.yaml]({plugin_root}/config/config.example.yaml) - Example config file

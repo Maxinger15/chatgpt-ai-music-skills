@@ -75,7 +75,7 @@ For character limits and hashtag rules during review, see [/skills/promo-reviewe
 - #MusicIsLife, #Beats — too generic, zero discovery value
 
 **AI music tags** — use sparingly, not on every post:
-- #AIMusic, #SunoAI, #ClaudeCode
+- #AIMusic, #SunoAI, #Codex
 - Position as "AI-assisted artist" not "AI-generated music"
 - Lead with the music and story; mention AI as the interesting detail, not the headline
 
@@ -397,7 +397,7 @@ How to talk about AI-assisted music on social media:
 - Engage with "AI isn't real music" debates — it's a losing conversation
 
 **When asked about AI directly:**
-- Be honest and specific: "I use Suno for generation and Claude for lyrics and production"
+- Be honest and specific: "I use Suno for generation and Codex for lyrics and production"
 - Frame it as a tool: "AI is my instrument — I still write, direct, and produce"
 - Point to the creative decisions you made
 

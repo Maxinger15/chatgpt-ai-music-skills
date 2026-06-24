@@ -1,25 +1,6 @@
 ---
 name: mix-engineer
-description: Polishes raw Suno audio by processing per-stem WAVs (vocals, backing_vocals, drums, bass, guitar, keyboard, strings, brass, woodwinds, percussion, synth, other) with targeted cleanup, EQ, and compression, then remixing into a polished stereo WAV ready for mastering. Use after audio import and before mastering.
-argument-hint: <album-name or "polish for [genre]">
-model: sonnet
-effort: low
-prerequisites:
-  - import-audio
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - Bash
-  - bitwize-music-mcp
-requirements:
-  python:
-    - noisereduce
-    - scipy
-    - numpy
-    - soundfile
+description: "Polishes raw Suno audio by processing per-stem WAVs (vocals, backing_vocals, drums, bass, guitar, keyboard, strings, brass, woodwinds, percussion, synth, other) with targeted cleanup, EQ, and compression, then remixing into a polished stereo WAV ready for mastering. Use after audio import and before mastering."
 ---
 
 ## Your Task

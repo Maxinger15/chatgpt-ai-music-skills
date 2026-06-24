@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to claude-ai-music-skills.
+All notable changes to chatgpt-ai-music-skills.
 
 This project uses [Conventional Commits](https://conventionalcommits.org/) and [Semantic Versioning](https://semver.org/).
 
@@ -86,7 +86,7 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 - `_stage_verification` emits `VERIFICATION_WARNINGS.md` sidecar and
   downgrades to `status: "warn"` when auto-recovery exhausts
   iterations. Pipeline continues instead of halting.
-- **`/bitwize-music:promote-idea` skill + `promote_idea` MCP tool (#328)**: One-shot conversion of a `Pending` idea from `IDEAS.md` into a full album project. Auto-derives the album slug from the idea title (lowercase, ASCII-only, diacritics stripped, apostrophes elided, non-alphanumeric → hyphen) or accepts an explicit override. Calls `create_album_structure` with the idea's genre, injects the idea's `**Concept**` text into the new album `README.md` under a `## Concept` section, advances idea status `Pending → In Progress`, and adds a `**Promoted To**: <slug>` back-link in `IDEAS.md`. Distinct errors for missing idea, already-promoted idea, missing/invalid genre, and duplicate album slug. `documentary=True` flag mirrors `new-album` behavior (creates `RESEARCH.md` + `SOURCES.md`). The state indexer now also extracts `concept` and `promoted_to` fields from `IDEAS.md` so downstream tools can read the concept without re-parsing the markdown.
+- **`$bitwize-music:promote-idea` skill + `promote_idea` MCP tool (#328)**: One-shot conversion of a `Pending` idea from `IDEAS.md` into a full album project. Auto-derives the album slug from the idea title (lowercase, ASCII-only, diacritics stripped, apostrophes elided, non-alphanumeric → hyphen) or accepts an explicit override. Calls `create_album_structure` with the idea's genre, injects the idea's `**Concept**` text into the new album `README.md` under a `## Concept` section, advances idea status `Pending → In Progress`, and adds a `**Promoted To**: <slug>` back-link in `IDEAS.md`. Distinct errors for missing idea, already-promoted idea, missing/invalid genre, and duplicate album slug. `documentary=True` flag mirrors `new-album` behavior (creates `RESEARCH.md` + `SOURCES.md`). The state indexer now also extracts `concept` and `promoted_to` fields from `IDEAS.md` so downstream tools can read the concept without re-parsing the markdown.
 - **Genre-aware silence QC thresholds**: new `silence_leading_max_s` / `silence_trailing_max_s` preset fields (`tools/mastering/genre-presets.yaml`). Defaults 0.5 / 3.0 s. `electronic` and `edm` override `silence_leading_max_s: 1.5` so filter-sweep / build intros don't FAIL the silence gate. (#323 comment)
 - **Click removal on every stem polish chain**: `vocals`, `backing_vocals`, `bass`, `synth`, `guitar`, `keyboard`, `strings`, `brass`, `woodwinds`, `other` now run click removal as the first step (was drums / percussion only). Shared `_apply_click_removal` helper standardizes the detector across all chains — `click_peak_ratio: 15.0` default matches the analyzer in `analyze_mix_issues` so polish and analysis report the same events. Genre presets (e.g. `electronic: 10.0`) overlay the default per-genre. Drum / percussion chains kept `cubic` repair (better spectral reconstruction on isolated transients); harmonic stems use `linear` repair (safer on dense mix content and vocal consonants). `mix_track_stems` dispatch unified — every processor now accepts `report` and surfaces `clicks_removed`. (#323 comment)
 - `ctx.track_ceilings`, `ctx.dark_tracks`, `ctx.remaster_filenames`
@@ -101,7 +101,7 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 - **Opus skills migrated from 4.6 to 4.7** (#319). Bumped `model:`
   frontmatter on the seven Opus-tier skills: `album-conceptualizer`,
   `lyric-refiner`, `lyric-reviewer`, `lyric-writer`, `researchers-legal`,
-  `researchers-verifier`, `suno-engineer`. Co-author line in `CLAUDE.md`,
+  `researchers-verifier`, `suno-engineer`. Co-author line in `AGENTS.md`,
   `CONTRIBUTING.md`, `.github/SECURITY.md`, and `.github/pull_request_template.md`
   updated to `Claude Opus 4.7`. Docstring example in `tools/state/parsers.py`
   and schema example in `reference/state-schema.md` updated to use the
@@ -164,7 +164,7 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
   couldn't converge. The docstring promised warn-fallback; the
   implementation now delivers it.
 - **`master_album` status_update stage no longer brittle on re-masters (#335)**: The stage previously only promoted tracks from `Generated → Final` and appended a "Skipped: expected Generated" error for any other starting status. Combined with a hardcoded `status: "pass"` report this silently no-op'd the entire stage on any re-master of an album whose tracks weren't pinned at exactly `Generated` (Not Started, Sources Pending, Sources Verified, In Progress, Released — all hit this). The stage now promotes any non-terminal status (`Not Started`, `Sources Pending`, `Sources Verified`, `In Progress`, `Generated`) to `Final` because the mastered WAV is real and status should follow. `Final` and `Released` are left alone as terminal states; `Released` specifically is never demoted back to `Final` on a re-master. Tracks with an empty `path` (cache-staleness, no disk file) are now silently skipped instead of appending an error. Stage outcome is now classified honestly: `pass` when clean or idempotent, `partial` when some updates succeeded and some errors exist, `skipped` when nothing updated AND errors exist (was always `pass` before, masking real failures).
-- **`/bitwize-music:lyric-refiner` no longer blocks on instrumental-mixed albums (#311)**: The refiner's former guard clause — "Track status `Not Started` or `Sources Pending` → error" — fired on any non-ready vocal track and stopped the whole run, even when other tracks were refineable. Replaced with a three-bucket triage (instrumental / not-ready / refineable): non-refineable tracks are silently skipped with a one-line note (`Skipping {track} — instrumental` or `Skipping {track} — no lyrics yet ({status})`), and the refiner processes whatever is left. Zero-refineable is now a clean informational exit, not a guard-clause failure. Added explicit `### Instrumental Guard` section to match the convention shared with `lyric-writer` / `lyric-reviewer` / `pronunciation-specialist`, and extended the `TestInstrumentalGuard.test_instrumental_guard_section` parametrize to cover `lyric-refiner`. Report header now shows both skip counters: `X of Y (Z instrumental skipped, W Not Started skipped)`.
+- **`$bitwize-music:lyric-refiner` no longer blocks on instrumental-mixed albums (#311)**: The refiner's former guard clause — "Track status `Not Started` or `Sources Pending` → error" — fired on any non-ready vocal track and stopped the whole run, even when other tracks were refineable. Replaced with a three-bucket triage (instrumental / not-ready / refineable): non-refineable tracks are silently skipped with a one-line note (`Skipping {track} — instrumental` or `Skipping {track} — no lyrics yet ({status})`), and the refiner processes whatever is left. Zero-refineable is now a clean informational exit, not a guard-clause failure. Added explicit `### Instrumental Guard` section to match the convention shared with `lyric-writer` / `lyric-reviewer` / `pronunciation-specialist`, and extended the `TestInstrumentalGuard.test_instrumental_guard_section` parametrize to cover `lyric-refiner`. Report header now shows both skip counters: `X of Y (Z instrumental skipped, W Not Started skipped)`.
 - **qc_audio silence check (#321)**: Trailing silence followed by a sub-threshold noise-floor blip no longer gets misclassified as an internal gap. The silence detector now classifies each silent region by position AND by the amount of non-silent content between the region and the file edge — a region ending within 1s of the file end (with <300ms of non-silent content after it) counts as trailing, not internal. Unblocks the `master_album` / `polish_album` pre-QC gate on tracks with natural fade-outs.
 - **analyze_mix_issues click detection (#323)**: Replaced the sample-wise `|diff| > 6·σ(diff)` detector with a windowed peak-to-RMS check (matches `qc_tracks._check_clicks`) at `peak_ratio=15` over 10 ms windows. The old detector flagged tens of thousands of "clicks" on every clean vocal, bass, and synth stem (vocal consonants and synth attacks have high instantaneous derivatives but spread their energy across a window), emitting `click_removal: true` recommendations that the polish pipeline silently ignored. The analyzer now only recommends click removal when genuine single-sample discontinuities exist.
 
@@ -321,22 +321,22 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 ## [0.84.1] - 2026-04-05
 
 ### Removed
-- **Ship skill** — internal release automation that didn't fit the plugin's music production scope; assumed a single-branch workflow incompatible with the develop → main release flow ([#145](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/145))
+- **Ship skill** — internal release automation that didn't fit the plugin's music production scope; assumed a single-branch workflow incompatible with the develop → main release flow ([#145](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/145))
 
 ## [0.84.0] - 2026-04-05
 
 ### Added
-- **Bollywood genre** — Hindi film music (filmi) with 10 subgenres, 15 artists, 14 reference tracks, Suno keywords, mukhda/antara lyric conventions, and mastering presets with differentiated LUFS targets ([#141](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/141), community contribution by [@markus-michalski](https://github.com/markus-michalski))
-- **Diagnose MCP tool** — comprehensive health check tool for troubleshooting plugin, server, and environment issues ([#137](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/137))
-- **Explicit flag consistency check** — release gate validates that frontmatter `explicit` flag matches actual lyric content ([#117](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/117))
-- **Realistic audio fixtures** — WAV/MP3 test fixtures with proper headers, pipeline integration tests, and dev Makefile ([#132](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/132))
-- **Tool tests and CI coverage threshold** — handler isolation tests for gates, album_ops, streaming, and server unit tests ([#119](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/119))
+- **Bollywood genre** — Hindi film music (filmi) with 10 subgenres, 15 artists, 14 reference tracks, Suno keywords, mukhda/antara lyric conventions, and mastering presets with differentiated LUFS targets ([#141](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/141), community contribution by [@markus-michalski](https://github.com/markus-michalski))
+- **Diagnose MCP tool** — comprehensive health check tool for troubleshooting plugin, server, and environment issues ([#137](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/137))
+- **Explicit flag consistency check** — release gate validates that frontmatter `explicit` flag matches actual lyric content ([#117](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/117))
+- **Realistic audio fixtures** — WAV/MP3 test fixtures with proper headers, pipeline integration tests, and dev Makefile ([#132](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/132))
+- **Tool tests and CI coverage threshold** — handler isolation tests for gates, album_ops, streaming, and server unit tests ([#119](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/119))
 
 ### Changed
-- **Refactored processing.py** — split monolithic 2,752-line module into 4 focused submodules: audio, mixing, sheet_music, video ([#122](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/122))
+- **Refactored processing.py** — split monolithic 2,752-line module into 4 focused submodules: audio, mixing, sheet_music, video ([#122](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/122))
 
 ### Fixed
-- **Genre index count** — corrected stale count from 71 to 74 ([#143](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/143))
+- **Genre index count** — corrected stale count from 71 to 74 ([#143](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/143))
 
 ## [0.83.1] - 2026-04-04
 
@@ -346,19 +346,19 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 ## [0.83.0] - 2026-04-04
 
 ### Added
-- **Instrumental field sync validation** — validate-album warns and pre-generation-check blocks when frontmatter `instrumental` and Track Details table disagree ([#129](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/129))
-- **Guided regeneration workflow** — structured path for rejecting and regenerating tracks that don't meet quality standards ([#116](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/116))
-  - CLAUDE.md: regeneration workflow documented in Status Tracking section
+- **Instrumental field sync validation** — validate-album warns and pre-generation-check blocks when frontmatter `instrumental` and Track Details table disagree ([#129](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/129))
+- **Guided regeneration workflow** — structured path for rejecting and regenerating tracks that don't meet quality standards ([#116](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/116))
+  - AGENTS.md: regeneration workflow documented in Status Tracking section
   - Resume: detects Generated tracks without approval (✓), offers style/lyrics/retry regeneration paths
   - Next-step: recommends review and regeneration for unapproved Generated tracks
   - SKILL_INDEX: new "Track Regeneration" workflow sequence and decision tree entries
-- **Album status management improvements** — auto-advancement, batch operations, and documented status flows ([#118](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/118))
-  - CLAUDE.md: documented non-documentary status flow (Concept → In Progress, skipping Research/Sources phases), auto-advancement rules, and batch-approve workflow
+- **Album status management improvements** — auto-advancement, batch operations, and documented status flows ([#118](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/118))
+  - AGENTS.md: documented non-documentary status flow (Concept → In Progress, skipping Research/Sources phases), auto-advancement rules, and batch-approve workflow
   - Verify-sources: auto-advances album from Research Complete → Sources Verified when all tracks verified, with partial verification progress reports
   - Resume: phase table covers both documentary and standard album flows, batch-approve path for Generated → Final
   - Next-step: batch-approve path for all-generated albums
   - SKILL_INDEX: batch-approve entry in Album Lifecycle table
-- **Instrumental track support** — tracks can be marked `instrumental: true` in frontmatter to skip the lyrics workflow entirely ([#115](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/115))
+- **Instrumental track support** — tracks can be marked `instrumental: true` in frontmatter to skip the lyrics workflow entirely ([#115](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/115))
   - Track template: new `instrumental` field in frontmatter and Track Details table
   - Pre-generation-check: Gates 2 (Lyrics), 3 (Pronunciation), 4 (Explicit) auto-skip for instrumental tracks
   - Lyric-writer, lyric-reviewer, pronunciation-specialist: instrumental guard stops execution with clear routing to suno-engineer
@@ -373,8 +373,8 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 ### Added
 - **Musicals genre** — integrated theatrical form from Golden Age Broadway (Rodgers & Hammerstein) to contemporary hip-hop musicals (Hamilton); 8 subgenres, 15 artists, 14 reference tracks, Suno keywords, lyric conventions, and mastering presets
 - **Soundtrack genre** — vocal songs and curated compilations for film/TV, distinct from instrumental Cinematic scoring; covers Bond themes, disco soundtracks, needle drops, animated features, and power ballads; 8 subgenres, 15 artists, 14 reference tracks, Suno keywords, lyric conventions, and mastering presets
-- **Database query pagination** — `db_list_tweets` and `db_search_tweets` support `limit`/`offset` parameters ([#114](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/114))
-- **MCP payload pagination** — summary modes and top-N limiting for large-payload MCP tools ([#113](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/113))
+- **Database query pagination** — `db_list_tweets` and `db_search_tweets` support `limit`/`offset` parameters ([#114](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/114))
+- **MCP payload pagination** — summary modes and top-N limiting for large-payload MCP tools ([#113](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/113))
 
 ## [0.81.2] - 2026-03-27
 
@@ -384,12 +384,12 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 ## [0.81.1] - 2026-03-27
 
 ### Fixed
-- **`[End]` tag misclassification** — `validate_section_structure` now recognizes `[End]` as a dedicated section type instead of defaulting to `verse` ([#111](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/111), closes [#108](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/108))
+- **`[End]` tag misclassification** — `validate_section_structure` now recognizes `[End]` as a dedicated section type instead of defaulting to `verse` ([#111](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/111), closes [#108](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/108))
 
 ## [0.81.0] - 2026-03-26
 
 ### Added
-- **mypy strict type checking** — full type annotations across all 51 source files (handlers, tools, server) with strict settings (`disallow_untyped_defs`, `disallow_any_generics`, `warn_unreachable`, etc.), integrated into CI lint job ([#110](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/110), closes [#102](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/102))
+- **mypy strict type checking** — full type annotations across all 51 source files (handlers, tools, server) with strict settings (`disallow_untyped_defs`, `disallow_any_generics`, `warn_unreachable`, etc.), integrated into CI lint job ([#110](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/110), closes [#102](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/102))
 - **`types-PyYAML` stubs** — proper yaml typing, eliminated all `import-untyped` suppressions
 - **Extended ruff rules** — added I (isort), UP (pyupgrade), B (bugbear), SIM (simplify), RUF rule sets; auto-fixed 216 import/syntax issues, manually fixed 44 remaining across tools/ and handlers/
 
@@ -401,7 +401,7 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 ## [0.80.0] - 2026-03-26
 
 ### Added
-- **Modularized MCP server** — broke monolithic `server.py` (10,260 lines, 76 tools) into 16 focused handler modules under `handlers/`, reducing `server.py` to ~480 lines of orchestration ([#85](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/85), closes [#81](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues/81))
+- **Modularized MCP server** — broke monolithic `server.py` (10,260 lines, 76 tools) into 16 focused handler modules under `handlers/`, reducing `server.py` to ~480 lines of orchestration ([#85](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/85), closes [#81](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/issues/81))
 - **`_find_track_or_error` shared helper** — deduplicated track lookup boilerplate across 8 call sites in 5 handler modules
 - **`StateCache.get_state_ref()`** — public API for in-place state mutation, replacing 3 direct `cache._state` accesses
 - **Re-export completeness test** — catches missing re-exports when new tools are added to handler modules
@@ -453,23 +453,23 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 - **Rilo Kiley artist deep-dive** — comprehensive artist reference for indie-rock genre covering discography, production techniques, and style characteristics
 
 ### Fixed
-- **`line` style ignores `color_hex` and `glow` parameters** — was hardcoded to `colors=white` with no glow support; now uses custom color and glow like all other styles (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#84](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/84))
+- **`line` style ignores `color_hex` and `glow` parameters** — was hardcoded to `colors=white` with no glow support; now uses custom color and glow like all other styles (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#84](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/84))
 - **CI: ignore unfixed pygments CVE-2026-4539 in pip-audit** — added exclusion for upstream vulnerability with no available fix
 
 ## [0.78.1] - 2026-03-24
 
 ### Added
-- **German pronunciation section in Suno pronunciation guide** — documents vowel length fixes (single → double vowel for long sounds, e.g. `juchhe` → `juchee`), umlaut handling, and German interjection pronunciation table (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#79](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/79))
+- **German pronunciation section in Suno pronunciation guide** — documents vowel length fixes (single → double vowel for long sounds, e.g. `juchhe` → `juchee`), umlaut handling, and German interjection pronunciation table (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#79](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/79))
 
 ## [0.78.0] - 2026-03-24
 
 ### Added
-- **Children's Music genre** — comprehensive documentation covering nursery rhymes, educational music, Kinderlieder, lullabies, kids pop, singalong, musical storytelling, action/movement songs, animated/TV soundtrack, and family folk subgenres; 18 artists from Woody Guthrie (1947) to Cocomelon (2006+); mastering presets with lullaby variant (-16 LUFS) (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#78](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/78))
+- **Children's Music genre** — comprehensive documentation covering nursery rhymes, educational music, Kinderlieder, lullabies, kids pop, singalong, musical storytelling, action/movement songs, animated/TV soundtrack, and family folk subgenres; 18 artists from Woody Guthrie (1947) to Cocomelon (2006+); mastering presets with lullaby variant (-16 LUFS) (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#78](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/78))
 
 ## [0.77.1] - 2026-03-23
 
 ### Fixed
-- **Test skill uses venv Python and absolute paths** — `python3 -m pytest tests/` replaced with `~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/` across SKILL.md and test-definitions.md, fixing failures when invoked as a plugin skill (system Python missing deps, relative paths not resolving)
+- **Test skill uses venv Python and absolute paths** — `python3 -m pytest tests/` replaced with `~/.bitwize-music/venv/bin/python3 -m pytest {plugin_root}/tests/` across SKILL.md and test-definitions.md, fixing failures when invoked as a plugin skill (system Python missing deps, relative paths not resolving)
 
 ## [0.77.0] - 2026-03-23
 
@@ -484,42 +484,42 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 ## [0.76.0] - 2026-03-23
 
 ### Added
-- **`color_hex` parameter** for `generate_promo_videos` and `generate_album_sampler` — manually set wave color (e.g. `"#C9A96E"`) instead of auto-extracting from artwork (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/76))
-- **`glow` parameter** for both tools — control glow intensity from 0.0 (none) to 1.0 (full), default 0.6; replaces hardcoded 3-layer screen blend (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/76))
-- **`text_color` parameter** for both tools — override default white text color (e.g. `"#FFD700"` for gold) (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/76))
-- **`style` parameter for `generate_album_sampler`** — same 9 visualization styles as promo videos (was hardcoded to "pulse") (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/76))
+- **`color_hex` parameter** for `generate_promo_videos` and `generate_album_sampler` — manually set wave color (e.g. `"#C9A96E"`) instead of auto-extracting from artwork (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/76))
+- **`glow` parameter** for both tools — control glow intensity from 0.0 (none) to 1.0 (full), default 0.6; replaces hardcoded 3-layer screen blend (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/76))
+- **`text_color` parameter** for both tools — override default white text color (e.g. `"#FFD700"` for gold) (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/76))
+- **`style` parameter for `generate_album_sampler`** — same 9 visualization styles as promo videos (was hardcoded to "pulse") (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/76))
 
 ### Changed
-- **Album sampler clip generation** refactored to delegate to `generate_waveform_video()` from promo video module, eliminating duplicated filter code and ensuring consistent rendering (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/76))
+- **Album sampler clip generation** refactored to delegate to `generate_waveform_video()` from promo video module, eliminating duplicated filter code and ensuring consistent rendering (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#76](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/76))
 
 ## [0.75.0] - 2026-03-23
 
 ### Added
-- **Promo language selection** — New Step 4 in promo-writer workflow asks user which language(s) to generate copy in (English, German, French, Spanish, bilingual, or custom); skipped automatically when `## Language` is set in `promotion-preferences.md` override (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/75))
-- **Bilingual promo mode** — Stacked primary + secondary language in one post (separated by `---` divider); Twitter exception uses separate tweets per language due to 280-char limit (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/75))
-- **Language Adaptation section** in copy-formulas.md with bilingual post format example and language rules (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/75))
-- **Campaign cross-reference links** — All 5 platform template files now link back to campaign.md (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/75))
-- **Platform copy overview table** in campaign.md template with links to each platform file (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/75))
+- **Promo language selection** — New Step 4 in promo-writer workflow asks user which language(s) to generate copy in (English, German, French, Spanish, bilingual, or custom); skipped automatically when `## Language` is set in `promotion-preferences.md` override (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/75))
+- **Bilingual promo mode** — Stacked primary + secondary language in one post (separated by `---` divider); Twitter exception uses separate tweets per language due to 280-char limit (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/75))
+- **Language Adaptation section** in copy-formulas.md with bilingual post format example and language rules (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/75))
+- **Campaign cross-reference links** — All 5 platform template files now link back to campaign.md (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/75))
+- **Platform copy overview table** in campaign.md template with links to each platform file (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/75))
 
 ### Changed
-- **Promo templates reformatted** — Cleaner heading structure, consistent `---` separators across all platform templates; Instagram hashtag sets as table; campaign.md includes Language field in overview (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/75))
-- **Promo-writer workflow renumbered** — Steps 5-9 (was 4-8) to accommodate new Language Selection step (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/75))
+- **Promo templates reformatted** — Cleaner heading structure, consistent `---` separators across all platform templates; Instagram hashtag sets as table; campaign.md includes Language field in overview (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/75))
+- **Promo-writer workflow renumbered** — Steps 5-9 (was 4-8) to accommodate new Language Selection step (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#75](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/75))
 
 ## [0.74.0] - 2026-03-23
 
 ### Added
-- **Multi-platform AI art prompts** — Album art director now asks which AI art platform to use (Midjourney, Leonardo.ai, DALL-E, Stable Diffusion) and generates platform-specific prompts with appropriate format, negative prompts, and model/preset recommendations (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/74))
-- **Leonardo.ai support** — Natural language prompts with separate negative prompt field, model selection (Phoenix, Kino XL), and preset recommendations (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/74))
-- **Platform comparison table** — Quick reference for choosing the right AI art generator (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/74))
-- **Platform-specific tips** — Refinement keywords and best practices per platform (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/74))
+- **Multi-platform AI art prompts** — Album art director now asks which AI art platform to use (Midjourney, Leonardo.ai, DALL-E, Stable Diffusion) and generates platform-specific prompts with appropriate format, negative prompts, and model/preset recommendations (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/74))
+- **Leonardo.ai support** — Natural language prompts with separate negative prompt field, model selection (Phoenix, Kino XL), and preset recommendations (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/74))
+- **Platform comparison table** — Quick reference for choosing the right AI art generator (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/74))
+- **Platform-specific tips** — Refinement keywords and best practices per platform (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#74](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/74))
 
 ## [0.73.0] - 2026-03-23
 
 ### Added
-- **Chanson genre** — French chanson documentation covering réaliste, à texte, rive gauche, musette, nouvelle chanson and more (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/73))
-- **Middle Eastern Pop genre** — Arabic, Israeli, and North African pop covering raï, Mizrahi, khaleeji, mahraganat, and Arabic-electronic fusion (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/73))
-- **Mastering presets** — Added Schlager, Chanson, and Middle Eastern Pop (with aliases for arabic-pop, rai, mizrahi, mahraganat) to both `genre-presets.yaml` and `genre-presets.md` (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/73))
-- **Genre-creator skill update** — Added step 9 to genre-creator workflow: update mastering preset files when creating new genres (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/73))
+- **Chanson genre** — French chanson documentation covering réaliste, à texte, rive gauche, musette, nouvelle chanson and more (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/73))
+- **Middle Eastern Pop genre** — Arabic, Israeli, and North African pop covering raï, Mizrahi, khaleeji, mahraganat, and Arabic-electronic fusion (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/73))
+- **Mastering presets** — Added Schlager, Chanson, and Middle Eastern Pop (with aliases for arabic-pop, rai, mizrahi, mahraganat) to both `genre-presets.yaml` and `genre-presets.md` (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/73))
+- **Genre-creator skill update** — Added step 9 to genre-creator workflow: update mastering preset files when creating new genres (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#73](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/73))
 
 ## [0.72.2] - 2026-03-22
 
@@ -537,8 +537,8 @@ This project uses [Conventional Commits](https://conventionalcommits.org/) and [
 ## [0.72.0] - 2026-03-22
 
 ### Added
-- **Schlager genre** — 68th genre documentation covering German-language popular music from post-war ballads to modern EDM-infused party hits; full Overview, Characteristics, Lyric Conventions, Subgenres, Artists, Suno Keywords, and Reference Tracks sections (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#69](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/69))
-- **`genre-creator` skill** — Standardizes creation of new genre documentation files with consistent section order, fact-checking via WebSearch, and automatic INDEX.md updates (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#69](https://github.com/bitwize-music-studio/claude-ai-music-skills/pull/69))
+- **Schlager genre** — 68th genre documentation covering German-language popular music from post-war ballads to modern EDM-infused party hits; full Overview, Characteristics, Lyric Conventions, Subgenres, Artists, Suno Keywords, and Reference Tracks sections (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#69](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/69))
+- **`genre-creator` skill** — Standardizes creation of new genre documentation files with consistent section order, fact-checking via WebSearch, and automatic INDEX.md updates (contributed by [@markus-michalski](https://github.com/markus-michalski) in [#69](https://github.com/bitwize-music-studio/chatgpt-ai-music-skills/pull/69))
 - **Contributors section** — README now credits community contributors
 
 ## [0.71.0] - 2026-03-21
@@ -661,7 +661,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 
 ### Added
 - **`develop` branch model** — two-branch workflow with `develop` for active work and `main` for stable releases; plugin distribution channels via branch-based marketplace
-- **Plugin version in about skill** — `/bitwize-music:about` now reads and displays version from plugin.json dynamically
+- **Plugin version in about skill** — `$bitwize-music:about` now reads and displays version from plugin.json dynamically
 
 ### Changed
 - **CI targets Python 3.11 only** — dropped 3.9/3.10/3.12 matrix; not a library, runs in user's venv
@@ -681,7 +681,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 - **29 new tests** — 6 for `migrate_audio_layout`, plus mastering and mixing coverage
 
 ### Changed
-- **CLAUDE.md** — updated audio path structure documentation to reflect `originals/` layout
+- **AGENTS.md** — updated audio path structure documentation to reflect `originals/` layout
 - **import-audio skill** — imports now target `originals/` subdirectory
 - **mastering-engineer skill** — updated pre-flight check to look in `originals/` first
 - **mix-engineer skill** — updated audio directory convention docs
@@ -785,7 +785,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ### Changed
 - **Skills migrated from bare python3 to MCP tools** — mastering-engineer (12 refs), promo-director (2 refs), sheet-music-publisher (9 refs), session-start (1 ref) now use MCP tools instead of bash python3 commands
 - **Skills without MCP equivalents use `get_python_command`** — cloud-uploader (4 refs), test-definitions (1 ref) now call `get_python_command()` first to get the venv path
-- **CLAUDE.md** — indexer rebuild references updated to `rebuild_state()` MCP tool
+- **AGENTS.md** — indexer rebuild references updated to `rebuild_state()` MCP tool
 - **genre-presets.md** — all python3 CLI examples replaced with MCP tool calls
 
 ## [0.51.0] - 2026-02-14
@@ -938,7 +938,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 - **Resume skill** — merged next-step decision tree into resume (Step 8) for single-skill navigation
 - **Lyric reviewer checklist** — heading corrected from 13-Point to 14-Point (matches actual items)
 - **Lyric workflow test** — regex now matches writer's `Quality Check (N-Point)` format
-- **README/CLAUDE.md alignment** — fixed trigger phrases, co-author line, status definitions
+- **README/AGENTS.md alignment** — fixed trigger phrases, co-author line, status definitions
 - **Import-audio** — added MP3 file handling guidance and supported formats list
 
 ### Changed
@@ -955,7 +955,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.41.5] - 2026-02-06
 
 ### Fixed
-- **MCP server config portability** — .mcp.json now uses `${HOME}` and `${CLAUDE_PLUGIN_ROOT}` environment variables instead of hardcoded absolute paths, making the config portable across different installations
+- **MCP server config portability** — .mcp.json now uses `${HOME}` and `{plugin_root}` environment variables instead of hardcoded absolute paths, making the config portable across different installations
 
 ## [0.41.4] - 2026-02-05
 
@@ -1008,7 +1008,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.39.0] - 2026-02-05
 
 ### Added
-- **Setup skill** — `/bitwize-music:setup` detects Python environment, checks dependencies, and provides installation commands specific to your system (externally-managed vs user-managed Python)
+- **Setup skill** — `$bitwize-music:setup` detects Python environment, checks dependencies, and provides installation commands specific to your system (externally-managed vs user-managed Python)
 - **Session start setup check** — automatic MCP dependency verification on session start with immediate setup guidance if missing
 
 ### Changed
@@ -1030,7 +1030,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 - **Suno: instrumental-tags.md updates** — Producer's Prompt narrative approach, tag soup warning
 
 ### Fixed
-- **Plugin manifest: duplicate hooks reference** — removed explicit `hooks/hooks.json` reference from plugin.json since it's loaded automatically by Claude Code
+- **Plugin manifest: duplicate hooks reference** — removed explicit `hooks/hooks.json` reference from plugin.json since it's loaded automatically by Codex
 
 ## [0.37.1] - 2026-02-04
 
@@ -1071,7 +1071,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 - **Bass homograph standardized** — `bayss` (music) across lyric-writer, lyric-reviewer, pronunciation-specialist
 - **New-album: documentary parsing** — documents both 2-arg and 3-arg formats, always asks about true-story status
 - **Pronunciation-specialist: standard Override Support section** — restructured to match pattern used by other skills
-- **Researcher: state cache + Glob approach** — replaced `find`/`cat` commands with state cache lookup per CLAUDE.md
+- **Researcher: state cache + Glob approach** — replaced `find`/`cat` commands with state cache lookup per AGENTS.md
 - **Researcher: smart album detection** — checks for single in-progress album before asking user
 - **Mastering-engineer: version-safe plugin detection** — `[0-9]*` pattern replaces `0.*` (works post-1.0)
 - **Mastering-engineer: step renumbering** — 6 steps with new pre-flight check
@@ -1094,14 +1094,14 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.36.0] - 2026-02-03
 
 ### Added
-- **CI: CLAUDE.md size check** — validates CLAUDE.md stays under 40K characters (matches pre-commit hook)
+- **CI: AGENTS.md size check** — validates AGENTS.md stays under 40K characters (matches pre-commit hook)
 - **CI: Skill frontmatter validation** — validates required fields (name, description, model) and model ID format pattern
-- **Reference: status-tracking.md** — new reference doc for track/album status workflows (split from CLAUDE.md)
+- **Reference: status-tracking.md** — new reference doc for track/album status workflows (split from AGENTS.md)
 
 ### Changed
-- **CLAUDE.md trimmed** — reduced from 40.2K to 33.2K chars by moving skills table to SKILL_INDEX.md, lyrics checklist to lyric-writer SKILL.md, and status tracking to reference file
+- **AGENTS.md trimmed** — reduced from 40.2K to 33.2K chars by moving skills table to SKILL_INDEX.md, lyrics checklist to lyric-writer SKILL.md, and status tracking to reference file
 - **Model validation uses pattern** — skill frontmatter check now uses regex `^claude-(opus|sonnet|haiku)-\d+-\d+-\d{8}$` instead of hardcoded model IDs, allowing new model versions without updating checks
-- **Plugin tests check SKILL_INDEX.md** — skill documentation test now checks SKILL_INDEX.md instead of CLAUDE.md (since skills table was moved there)
+- **Plugin tests check SKILL_INDEX.md** — skill documentation test now checks SKILL_INDEX.md instead of AGENTS.md (since skills table was moved there)
 
 ## [0.35.0] - 2026-02-03
 
@@ -1162,7 +1162,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.32.0] - 2026-02-01
 
 ### Changed
-- **CLAUDE.md deduplicated and trimmed to under 40KB** — consolidated 4 checkpoint sections into single table, slimmed Model Strategy to table with doc reference, condensed Lessons Learned, removed redundant sections (Quick Reference, Using Skills for Research, standalone Watch Your Rhymes, CORRECT APPROACH block). No information lost — all content consolidated or referenced elsewhere.
+- **AGENTS.md deduplicated and trimmed to under 40KB** — consolidated 4 checkpoint sections into single table, slimmed Model Strategy to table with doc reference, condensed Lessons Learned, removed redundant sections (Quick Reference, Using Skills for Research, standalone Watch Your Rhymes, CORRECT APPROACH block). No information lost — all content consolidated or referenced elsewhere.
 
 ## [0.31.0] - 2026-02-01
 
@@ -1221,7 +1221,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ### Added
 - **Section length guardrails by genre** — per-section line limits for 12 genre families (all 67 genres) to prevent Suno from rushing, compressing, or skipping lyrics. Covers Hip-Hop, Pop, Rock, Punk, Metal, Country/Folk, Electronic, Ambient, R&B, Jazz, Reggae, and Ballad.
 - **Section length enforcement rules** — hard limits that must be trimmed before presenting drafts (hip-hop verse max 8 lines, any chorus max 6 lines, electronic verse max 6 lines, punk kept tight)
-- **Section length added to quality checks** — now check #7 in both lyric-writer Automatic Quality Check and CLAUDE.md master workflow, plus added to Lyric Pitfalls Checklist
+- **Section length added to quality checks** — now check #7 in both lyric-writer Automatic Quality Check and AGENTS.md master workflow, plus added to Lyric Pitfalls Checklist
 
 ## [0.23.0] - 2026-01-31
 
@@ -1264,11 +1264,11 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 
 ### Added
 - **Artist reference indexes** — New `genres/[genre]/artists/INDEX.md` files for punk (127 lines) and piano-rock (84 lines) providing extracted Suno prompt keywords and reference tracks without loading full deep-dives (~2,900 lines across 6 files)
-- **Lazy-loading guidance in CLAUDE.md** — New rule: read `artists/INDEX.md` first for Suno keywords; only read full deep-dive when detailed history/analysis is needed
+- **Lazy-loading guidance in AGENTS.md** — New rule: read `artists/INDEX.md` first for Suno keywords; only read full deep-dive when detailed history/analysis is needed
 
 ### Changed
 - **Genre README Artists tables** — Deep Dive column now includes `[Keywords]` shortcut links to INDEX.md alongside existing deep-dive links (punk, piano-rock)
-- **CLAUDE.md directory structure** — Added `INDEX.md` to both plugin and content directory trees; updated deep-dive creation rule to require INDEX.md updates
+- **AGENTS.md directory structure** — Added `INDEX.md` to both plugin and content directory trees; updated deep-dive creation rule to require INDEX.md updates
 
 ## [0.20.2] - 2026-01-31
 
@@ -1285,12 +1285,12 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ### Changed
 - **Genre directory structure** — Artist deep-dives now live in `genres/[genre]/artists/` subdirectories instead of alongside genre READMEs
 - **Genre README Artists tables** — Added "Deep Dive" column with links to artist reference files (punk, piano-rock)
-- **CLAUDE.md** — Added `genres/` to plugin root directory tree, documented `artists/` subdirectory pattern, added deep-dive linking rule to Key Rules
+- **AGENTS.md** — Added `genres/` to plugin root directory tree, documented `artists/` subdirectory pattern, added deep-dive linking rule to Key Rules
 
 ## [0.20.1] - 2026-01-30
 
 ### Changed
-- **README** — Added Claude Code Max plan ($200/month) recommendation callout for new users
+- **README** — Added Codex Max plan ($200/month) recommendation callout for new users
 
 ## [0.20.0] - 2026-01-29
 
@@ -1370,13 +1370,13 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - `test_indexer.py` - 28 integration tests for build, update, validate, migrate, session, script invocation
   - Test fixtures for album README, track files, and IDEAS.md
   - Regression tests: script invocation (`python3 tools/state/indexer.py --help`), module invocation, package invocation
-- **State test category** in test runner (`/bitwize-music:test state`)
+- **State test category** in test runner (`$bitwize-music:test state`)
   - Validates state tool files exist
   - Checks schema version constant
   - Runs parser unit tests as subprocess
 
 ### Changed
-- Session Start in CLAUDE.md now uses state cache instead of scanning markdown files
+- Session Start in AGENTS.md now uses state cache instead of scanning markdown files
   - Reduces startup from 50-220 file reads to 2-3 file reads
   - Falls back to full rebuild if cache missing, corrupted, or schema changed
   - Shows last session context (album, phase, pending actions)
@@ -1384,14 +1384,14 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - Reduces per-invocation from 15-50 file reads to 1-2 file reads
   - Updates session context via `indexer.py session` command
   - Includes optional staleness check with incremental update
-- CLAUDE.md "Finding Albums" section now references state cache as primary lookup before Glob fallback
-- CLAUDE.md "Resuming Work" section updated to describe state cache workflow
-- CLAUDE.md Session Start step 2 uses full `python3 {plugin_root}/tools/state/indexer.py` paths consistently
+- AGENTS.md "Finding Albums" section now references state cache as primary lookup before Glob fallback
+- AGENTS.md "Resuming Work" section updated to describe state cache workflow
+- AGENTS.md Session Start step 2 uses full `python3 {plugin_root}/tools/state/indexer.py` paths consistently
 
 ### Fixed
 - **Critical**: `indexer.py` now runnable as `python3 tools/state/indexer.py` (was failing with `ModuleNotFoundError`)
   - Added `sys.path` fixup at top of file (same pattern as test files)
-  - CLAUDE.md and resume SKILL.md both documented the broken form
+  - AGENTS.md and resume SKILL.md both documented the broken form
 - `documents_root` default now derives from `content_root` instead of CWD
   - `audio_root` default also derives from `content_root`
   - Prevents wrong paths when running from a different directory
@@ -1434,7 +1434,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ### Changed
 - Expanded error-recovery.md from 52 to 316 lines with 12 detailed recovery scenarios
 - Enhanced config.example.yaml with comprehensive inline documentation and platform examples
-- Updated CLAUDE.md model strategy section to reference new documentation
+- Updated AGENTS.md model strategy section to reference new documentation
 
 ## [0.16.0] - 2026-01-28
 
@@ -1451,7 +1451,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 
 ### Added
 - Example override files in `config/overrides.example/` for all 11 documented overrides
-  - CLAUDE.md, pronunciation-guide.md, suno-preferences.md, lyric-writing-guide.md
+  - AGENTS.md, pronunciation-guide.md, suno-preferences.md, lyric-writing-guide.md
   - explicit-words.md, mastering-presets.yaml, album-planning-guide.md
   - album-art-preferences.md, research-preferences.md, release-preferences.md
   - sheet-music-preferences.md
@@ -1498,7 +1498,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.14.1] - 2026-01-27
 
 ### Fixed
-- Add missing YAML frontmatter to `promo-director` and `resume` skills (skills weren't appearing in Claude Code)
+- Add missing YAML frontmatter to `promo-director` and `resume` skills (skills weren't appearing in Codex)
 - Add `--batch-artwork` and `--album` flags to promo video generator for better artwork discovery
   - `--batch-artwork /path/to/art.png` - explicit artwork path
   - `--album my-album` - checks content directory for artwork via config
@@ -1507,7 +1507,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.14.0] - 2026-01-27
 
 ### Added
-- `/bitwize-music:cloud-uploader` skill for uploading promo videos to Cloudflare R2 or AWS S3
+- `$bitwize-music:cloud-uploader` skill for uploading promo videos to Cloudflare R2 or AWS S3
   - Uses boto3 S3-compatible API (works with both R2 and S3)
   - Dry-run mode for previewing uploads
   - Public/private upload options
@@ -1547,15 +1547,15 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - `include_sampler` - Generate album sampler by default
   - `sampler_clip_duration` - Seconds per track in sampler (12s default)
 - **Workflow integration**: Added promo videos as optional step 8 (between Master and Release)
-  - Updated CLAUDE.md workflow: Concept → Research → Write → Generate → Master → **Promo Videos** → Release
+  - Updated AGENTS.md workflow: Concept → Research → Write → Generate → Master → **Promo Videos** → Release
   - Added to Album Completion Checklist
-  - Added "Promo Videos (Optional)" section to CLAUDE.md
+  - Added "Promo Videos (Optional)" section to AGENTS.md
 - **Plugin keywords**: Added promo-videos, social-media, video-generation to plugin.json
 - **Skill documentation safeguards**: Added validation and documentation to prevent skills being forgotten
   - `tools/validate_help_completeness.py` - Cross-platform Python script that checks all skills are documented
-  - Validates skills appear in CLAUDE.md skills table
+  - Validates skills appear in AGENTS.md skills table
   - Validates skills appear in skills/help/SKILL.md
-  - Integrated into `/bitwize-music:test consistency` suite
+  - Integrated into `$bitwize-music:test consistency` suite
   - Added "Adding a New Skill - Complete Checklist" to CONTRIBUTING.md with 15-item checklist
   - Lists all required files, recommended updates, testing steps, and common mistakes
 
@@ -1594,7 +1594,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.12.0] - 2026-01-26
 
 ### Added
-- **Quick Win #1**: Added `/bitwize-music:resume` skill to README.md Skills Reference table (Setup & Maintenance section)
+- **Quick Win #1**: Added `$bitwize-music:resume` skill to README.md Skills Reference table (Setup & Maintenance section)
 - **Quick Win #2**: Comprehensive Troubleshooting section in README.md with 8 common issue categories
   - Config Not Found with setup instructions
   - Album Not Found When Resuming with debug steps
@@ -1654,25 +1654,25 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ## [0.11.0] - 2026-01-26
 
 ### Added
-- New `/bitwize-music:help` skill - comprehensive quick reference for all skills, workflows, and tips
+- New `$bitwize-music:help` skill - comprehensive quick reference for all skills, workflows, and tips
   - Skills organized by category (Album Creation, Research, QC, Production, File Management, System)
   - Common workflow guides (new album, true-story albums, resuming work)
   - Quick tips reference (config, pronunciation, explicit content, mastering, status flows)
   - Key documentation paths
   - Getting help section with navigation tips
-- Added help skill to CLAUDE.md skills table
+- Added help skill to AGENTS.md skills table
 - Added help skill to README.md Setup & Maintenance section
 
 ## [0.10.1] - 2026-01-26
 
 ### Fixed
-- Removed reference to non-existent `/bitwize-music:help` skill in session startup productivity tips
+- Removed reference to non-existent `$bitwize-music:help` skill in session startup productivity tips
 - Updated tip to simply suggest asking "what should I do next?" for guidance
 
 ## [0.10.0] - 2026-01-26
 
 ### Added
-- Session startup contextual tips system in CLAUDE.md
+- Session startup contextual tips system in AGENTS.md
   - Smart, contextual one-liners based on detected user state
   - 6 conditional tip categories: tutorial (new users), album ideas, resume, overrides customization, overrides loaded confirmation, verification warning
   - 6 rotating general productivity tips for feature discovery
@@ -1684,7 +1684,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - Tests verify path variables used instead of hardcoded paths
 
 ### Changed
-- Session Start section in CLAUDE.md now shows contextual tips after status summary
+- Session Start section in AGENTS.md now shows contextual tips after status summary
 - Session startup tips replace single static tip with comprehensive contextual guidance
 - Final session startup prompt now asks "What would you like to work on?"
 
@@ -1693,14 +1693,14 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ### Changed
 - Updated all documentation examples to use generic album names (my-album, demo-album) instead of "shell-no"
   - Changed examples in /resume skill documentation
-  - Changed examples in CLAUDE.md "Finding Albums" section
+  - Changed examples in AGENTS.md "Finding Albums" section
   - Changed examples in "Resuming Work" section
   - Changed examples in "Creating a New Album" section
 
 ## [0.9.0] - 2026-01-26
 
 ### Added
-- `/bitwize-music:resume` skill - Dedicated skill for resuming work on albums
+- `$bitwize-music:resume` skill - Dedicated skill for resuming work on albums
   - Takes album name as argument
   - Reads config to get paths
   - Uses Glob to find album across all genre folders
@@ -1709,18 +1709,18 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - Reports detailed status: location, progress, what's done, next steps
   - Lists available albums if target album not found
   - Handles case-insensitive matching and album name variations
-  - Usage: `/bitwize-music:resume shell-no`
+  - Usage: `$bitwize-music:resume shell-no`
 
 ### Changed
-- CLAUDE.md "Finding Albums" section now recommends `/bitwize-music:resume` skill as the primary approach
+- AGENTS.md "Finding Albums" section now recommends `$bitwize-music:resume` skill as the primary approach
 - "Resuming Work on an Album" section updated to prioritize the resume skill
-- Skills table: Added `/bitwize-music:resume` at the top
-- Session Start tip now mentions `/bitwize-music:resume <album-name>` instead of tutorial resume
+- Skills table: Added `$bitwize-music:resume` at the top
+- Session Start tip now mentions `$bitwize-music:resume <album-name>` instead of tutorial resume
 
 ## [0.8.2] - 2026-01-26
 
 ### Added
-- "Resuming Work on an Album" section in CLAUDE.md with explicit instructions for finding albums when user mentions them
+- "Resuming Work on an Album" section in AGENTS.md with explicit instructions for finding albums when user mentions them
 
 ### Changed
 - Session Start step 4 now includes explicit instructions to use Glob tool to find album READMEs
@@ -1752,7 +1752,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 - `/reference/distribution.md` - Streaming lyrics format and explicit content guidelines
 
 ### Changed
-- **CLAUDE.md refactored for performance** - Reduced from 50,495 to 34,202 characters (32% reduction)
+- **AGENTS.md refactored for performance** - Reduced from 50,495 to 34,202 characters (32% reduction)
   - Compressed checkpoint sections - Kept triggers/actions, moved verbose messages to `/reference/workflows/checkpoint-scripts.md`
   - Condensed Audio Mastering section - Brief overview with reference to existing `/reference/mastering/mastering-workflow.md`
   - Condensed Sheet Music section - Summary with reference to `/reference/sheet-music/workflow.md`
@@ -1763,7 +1763,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - Condensed Distribution Guidelines - Combined streaming lyrics and explicit content with reference to `/reference/distribution.md`
   - Simplified Creating Content sections - Condensed album creation and file import workflows
   - Simplified Suno Generation Workflow - Streamlined process description
-  - Architecture: CLAUDE.md now focuses on workflow orchestration (WHEN/WHY), detailed procedures in reference docs (HOW)
+  - Architecture: AGENTS.md now focuses on workflow orchestration (WHEN/WHY), detailed procedures in reference docs (HOW)
 
 ## [0.8.0] - 2026-01-26
 
@@ -1784,10 +1784,10 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - Integrated into session start workflow (step 3: check album ideas)
 
 ### Changed
-- CLAUDE.md session start now checks album ideas file (step 3) and mentions `/album-ideas list` for details
+- AGENTS.md session start now checks album ideas file (step 3) and mentions `/album-ideas list` for details
 - `/configure` skill now prompts for `paths.ideas_file` during setup
 - config/README.md expanded with comprehensive override system documentation (10 skills, full examples)
-- Skills table in CLAUDE.md now includes `/album-ideas` skill
+- Skills table in AGENTS.md now includes `/album-ideas` skill
 
 ### Fixed
 - Tests updated to validate override support in all 10 skills and album-ideas commands
@@ -1799,7 +1799,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
   - Replaced `paths.custom_instructions` with `paths.overrides`
   - Replaced `paths.custom_pronunciation` with `paths.overrides`
   - Single directory now contains all override files: `~/music-projects/overrides/`
-  - Override files: `CLAUDE.md`, `pronunciation-guide.md`, `explicit-words.md` (future), etc.
+  - Override files: `AGENTS.md`, `pronunciation-guide.md`, `explicit-words.md` (future), etc.
   - Benefits: self-documenting, easy discovery, future-proof, convention over configuration
   - **Note**: Released immediately after 0.7.0 to fix design before user adoption
 
@@ -1811,8 +1811,8 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 ### Added
 - Custom instructions support (`paths.custom_instructions` config field)
   - Load user's custom Claude workflow instructions at session start
-  - Defaults to `{content_root}/CUSTOM_CLAUDE.md` if not set in config
-  - Supplements (doesn't override) base CLAUDE.md
+  - Defaults to `{content_root}/CUSTOM_AGENTS.md` if not set in config
+  - Supplements (doesn't override) base AGENTS.md
   - Optional - fails silently if file doesn't exist
   - Prevents plugin update conflicts for user workflow preferences
 - Custom pronunciation guide support (`paths.custom_pronunciation` config field)
@@ -1832,7 +1832,7 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 - `/configure` skill now prompts for custom_instructions and custom_pronunciation paths during setup
 - `/pronunciation-specialist` now loads and merges both base and custom pronunciation guides
 - `/lyric-reviewer` pronunciation check now links to mandatory auto-fix section
-- CLAUDE.md session start procedure now loads custom instructions and custom pronunciation files
+- AGENTS.md session start procedure now loads custom instructions and custom pronunciation files
 - Self-updating skills documentation clarified: pronunciation-specialist updates custom guide only
 
 ### Fixed
@@ -1904,5 +1904,5 @@ These 0.61.0 audio pipeline changes degraded output quality. Infrastructure from
 - Research files being saved to working directory instead of album directory
 - Mastering scripts mixing .py files with .wav files in audio folders
 - User-provided names now preserve exact casing (no auto-capitalization)
-- Skill references in docs now use full `/bitwize-music:` prefix (required for plugin skills)
+- Skill references in docs now use full `$bitwize-music:` prefix (required for plugin skills)
 - Researcher skill names aligned with folder names (colon → hyphen in frontmatter)

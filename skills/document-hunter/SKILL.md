@@ -1,24 +1,6 @@
 ---
 name: document-hunter
-description: Searches and retrieves documents from free public sources using automated browser navigation. Use when research needs primary source documents like court filings, government reports, or public records.
-argument-hint: <case-name or "auto-search [album-path]">
-model: sonnet
-effort: low
-context: fork
-allowed-tools:
-  - Bash
-  - Write
-  - Read
-  - Glob
-  - WebSearch
-  - bitwize-music-mcp
-requirements:
-  external:
-    - name: Chromium
-      purpose: Browser for Playwright automation
-      install: "playwright install chromium"
-  python:
-    - playwright
+description: "Searches and retrieves documents from free public sources using automated browser navigation. Use when research needs primary source documents like court filings, government reports, or public records."
 ---
 
 ## Your Task
@@ -171,7 +153,7 @@ The RECAP browser extension crowdsources PACER documents.
 - When anyone views a PACER document, RECAP uploads it to CourtListener
 - You can then download for free
 
-**Location**: `${CLAUDE_PLUGIN_ROOT}/tools/extensions/recap-extension/`
+**Location**: `{plugin_root}/tools/extensions/recap-extension/`
 
 **Setup**:
 ```bash

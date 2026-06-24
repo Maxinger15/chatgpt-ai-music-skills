@@ -43,15 +43,15 @@ def get_all_skills(plugin_root: Path) -> list[str]:
 
     return skills
 
-def check_claude_md(plugin_root: Path, skills: list[str]) -> list[str]:
-    """Check which skills are missing from CLAUDE.md."""
-    claude_file = plugin_root / "CLAUDE.md"
+def check_agents_md(plugin_root: Path, skills: list[str]) -> list[str]:
+    """Check which skills are missing from AGENTS.md."""
+    agents_file = plugin_root / "AGENTS.md"
 
-    if not claude_file.exists():
-        logger.error("CLAUDE.md not found!")
+    if not agents_file.exists():
+        logger.error("AGENTS.md not found!")
         return skills
 
-    claude_content = claude_file.read_text()
+    agents_content = agents_file.read_text()
     missing = []
 
     # Skip system/internal skills
@@ -62,8 +62,8 @@ def check_claude_md(plugin_root: Path, skills: list[str]) -> list[str]:
             continue
 
         # Check for skill reference
-        skill_pattern = f"/bitwize-music:{skill}"
-        if skill_pattern not in claude_content:
+        skill_pattern = f"$maxinger15-music:{skill}"
+        if skill_pattern not in agents_content:
             missing.append(skill)
 
     return missing
@@ -85,7 +85,7 @@ def check_help_skill(plugin_root: Path, skills: list[str]) -> list[str]:
             continue
 
         # Check for skill reference
-        skill_pattern = f"/bitwize-music:{skill}"
+        skill_pattern = f"$maxinger15-music:{skill}"
         if skill_pattern not in help_content:
             missing.append(skill)
 
@@ -113,17 +113,17 @@ def main() -> int:
 
     errors = 0
 
-    # Check CLAUDE.md
-    logger.info("Checking CLAUDE.md skills table...")
-    missing_claude = check_claude_md(plugin_root, all_skills)
+    # Check AGENTS.md
+    logger.info("Checking AGENTS.md skills table...")
+    missing_agents = check_agents_md(plugin_root, all_skills)
 
-    if not missing_claude:
-        print(f"{GREEN}[OK] All skills documented in CLAUDE.md{NC}")
+    if not missing_agents:
+        print(f"{GREEN}[OK] All skills documented in AGENTS.md{NC}")
     else:
-        print(f"{RED}[FAIL] Skills missing from CLAUDE.md:{NC}")
-        for skill in missing_claude:
+        print(f"{RED}[FAIL] Skills missing from AGENTS.md:{NC}")
+        for skill in missing_agents:
             print(f"  - {skill}")
-        errors += len(missing_claude)
+        errors += len(missing_agents)
     print()
 
     # Check help system
@@ -145,14 +145,14 @@ def main() -> int:
         print(f"{GREEN}[OK] All skills properly documented!{NC}")
         print()
         print("All skills are listed in:")
-        print("  - CLAUDE.md (main skills table)")
+        print("  - AGENTS.md (main skills table)")
         print("  - skills/help/SKILL.md (help system)")
         return 0
     else:
         print(f"{RED}[FAIL] Found {errors} documentation issues{NC}")
         print()
         print("To fix:")
-        print("  1. Add missing skills to CLAUDE.md skills table")
+        print("  1. Add missing skills to AGENTS.md skills table")
         print("  2. Add missing skills to skills/help/SKILL.md")
         print("  3. Update CHANGELOG.md with the changes")
         print()

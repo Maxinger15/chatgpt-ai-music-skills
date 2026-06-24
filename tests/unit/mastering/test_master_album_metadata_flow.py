@@ -13,7 +13,7 @@ import soundfile as sf
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-SERVER_DIR = PROJECT_ROOT / "servers" / "bitwize-music-server"
+SERVER_DIR = PROJECT_ROOT / "servers" / "maxinger15-music-server"
 if str(SERVER_DIR) not in sys.path:
     sys.path.insert(0, str(SERVER_DIR))
 
@@ -50,9 +50,9 @@ def test_metadata_stage_embeds_artist_tag(
         "tools.shared.config.load_config",
         lambda: {
             "artist": {
-                "name": "bitwize",
-                "copyright_holder": "bitwize 2026",
-                "label": "bitwize records",
+                "name": "maxinger15",
+                "copyright_holder": "maxinger15 2026",
+                "label": "maxinger15 records",
             }
         },
     )
@@ -79,7 +79,7 @@ def test_metadata_stage_embeds_artist_tag(
     from mutagen.wave import WAVE
     tags = WAVE(str(wav)).tags
     assert tags is not None
-    assert str(tags.get("TPE1")) == "bitwize"
+    assert str(tags.get("TPE1")) == "maxinger15"
 
 
 def test_metadata_stage_embeds_track_number_year_genre(
@@ -109,9 +109,9 @@ def test_metadata_stage_embeds_track_number_year_genre(
         "tools.shared.config.load_config",
         lambda: {
             "artist": {
-                "name": "bitwize",
-                "copyright_holder": "bitwize 2026",
-                "label": "bitwize records",
+                "name": "maxinger15",
+                "copyright_holder": "maxinger15 2026",
+                "label": "maxinger15 records",
             }
         },
     )

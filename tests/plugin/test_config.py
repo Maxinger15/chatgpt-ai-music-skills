@@ -54,7 +54,7 @@ class TestConfigDocs:
     def test_config_readme_exists(self, config_dir):
         assert (config_dir / "README.md").exists(), "config/README.md missing"
 
-    def test_config_path_in_claude_md(self, claude_md_content):
-        assert '~/.bitwize-music/config.yaml' in claude_md_content, (
-            "CLAUDE.md should reference ~/.bitwize-music/config.yaml"
+    def test_config_path_in_agents_md(self, agents_md_content):
+        assert '~/.maxinger15-music/config.yaml' in agents_md_content, (
+            "AGENTS.md should reference ~/.maxinger15-music/config.yaml"
         )

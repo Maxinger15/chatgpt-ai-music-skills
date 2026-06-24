@@ -1,12 +1,12 @@
 # Plugin Migration Notes
 
-This directory contains versioned migration notes that guide Claude through upgrade actions when users update to a new plugin version.
+This directory contains versioned migration notes that guide Codex through upgrade actions when users update to a new plugin version.
 
 ## How It Works
 
 1. `state.json` stores `plugin_version` — the last version the user ran
-2. On session start (Step 4.5), Claude compares stored vs current version
-3. If versions differ, Claude reads applicable migration files and processes actions
+2. On session start (Step 4.5), Codex compares stored vs current version
+3. If versions differ, Codex reads applicable migration files and processes actions
 4. After processing, `plugin_version` updates to current via `indexer.py rebuild`
 
 ## When to Write a Migration
@@ -57,7 +57,7 @@ actions:
     instruction: "Steps to take"
 ---
 
-[Markdown body with context for Claude — background, rationale, details]
+[Markdown body with context for Codex — background, rationale, details]
 ```
 
 ## Action Types
@@ -82,4 +82,4 @@ When `plugin_version` is `null` (new install or pre-upgrade-system), the session
 - [ ] `auto` actions have `check` and `command`
 - [ ] `action` actions have `confirm: true` and `check`
 - [ ] `check` commands return non-zero if action is still needed
-- [ ] Markdown body explains context for Claude
+- [ ] Markdown body explains context for Codex

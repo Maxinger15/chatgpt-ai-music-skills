@@ -76,7 +76,7 @@ def _make_minimal_state(**overrides):
             'skills_root': '/tmp/skills',
             'skills_root_mtime': 0.0,
             'count': 0,
-            'model_counts': {},
+            'complexity_counts': {},
             'items': {},
         },
         'session': {
@@ -92,7 +92,7 @@ def _make_minimal_state(**overrides):
 
 
 def _make_skill_content(name="test-skill", description="A test skill.",
-                        model="claude-opus-4-6", allowed_tools=None,
+                        model="codex-opus-4-6", allowed_tools=None,
                         prerequisites=None, user_invocable=None,
                         context=None, requirements=None):
     """Return markdown content for a SKILL.md file."""
@@ -1778,7 +1778,7 @@ class TestScanSkills:
         result = scan_skills(tmp_path)
         assert result['count'] == 0
         assert result['items'] == {}
-        assert result['model_counts'] == {}
+        assert result['complexity_counts'] == {}
 
     def test_empty_skills_dir(self, tmp_path):
         """Empty skills dir returns empty result."""
@@ -1792,19 +1792,19 @@ class TestScanSkills:
         skill_dir = tmp_path / "skills" / "my-skill"
         skill_dir.mkdir(parents=True)
         (skill_dir / "SKILL.md").write_text(
-            _make_skill_content("my-skill", "Does things", "claude-opus-4-6"))
+            _make_skill_content("my-skill", "Does things", "codex-opus-4-6"))
         result = scan_skills(tmp_path)
         assert result['count'] == 1
         assert 'my-skill' in result['items']
         assert result['items']['my-skill']['name'] == 'my-skill'
-        assert result['items']['my-skill']['model_tier'] == 'opus'
+        assert result['items']['my-skill']['complexity_tier'] == 'opus'
 
     def test_mixed_tiers(self, tmp_path):
-        """Skills with different model tiers are counted correctly."""
-        for name, model in [("s1", "claude-opus-4-6"),
-                            ("s2", "claude-sonnet-4-5-20250929"),
-                            ("s3", "claude-haiku-4-5-20251001"),
-                            ("s4", "claude-sonnet-4-5-20250929")]:
+        """Skills with different complexity tiers are counted correctly."""
+        for name, model in [("s1", "codex-opus-4-6"),
+                            ("s2", "codex-sonnet-4-5-20250929"),
+                            ("s3", "codex-haiku-4-5-20251001"),
+                            ("s4", "codex-sonnet-4-5-20250929")]:
             skill_dir = tmp_path / "skills" / name
             skill_dir.mkdir(parents=True)
             (skill_dir / "SKILL.md").write_text(
@@ -1812,7 +1812,7 @@ class TestScanSkills:
 
         result = scan_skills(tmp_path)
         assert result['count'] == 4
-        assert result['model_counts'] == {'opus': 1, 'sonnet': 2, 'haiku': 1}
+        assert result['complexity_counts'] == {'opus': 1, 'sonnet': 2, 'haiku': 1}
 
     def test_error_skill_skipped(self, tmp_path):
         """Skills with parse errors are skipped without crashing."""
@@ -1820,7 +1820,7 @@ class TestScanSkills:
         valid_dir = tmp_path / "skills" / "valid"
         valid_dir.mkdir(parents=True)
         (valid_dir / "SKILL.md").write_text(
-            _make_skill_content("valid", "Valid skill", "claude-opus-4-6"))
+            _make_skill_content("valid", "Valid skill", "codex-opus-4-6"))
 
         # Broken skill (no frontmatter)
         broken_dir = tmp_path / "skills" / "broken"
@@ -1837,7 +1837,7 @@ class TestScanSkills:
         skill_dir = tmp_path / "skills" / "test"
         skill_dir.mkdir(parents=True)
         (skill_dir / "SKILL.md").write_text(
-            _make_skill_content("test", "Test", "claude-opus-4-6"))
+            _make_skill_content("test", "Test", "codex-opus-4-6"))
 
         result = scan_skills(tmp_path)
         assert result['skills_root_mtime'] > 0
@@ -1854,7 +1854,7 @@ class TestScanSkills:
         skill_dir.mkdir(parents=True)
         (skill_dir / "SKILL.md").write_text(
             _make_skill_content("complex", "Complex skill",
-                                "claude-sonnet-4-5-20250929",
+                                "codex-sonnet-4-5-20250929",
                                 allowed_tools=["Read", "Bash"],
                                 prerequisites=["lyric-writer"],
                                 user_invocable=False,
@@ -1911,7 +1911,7 @@ class TestValidateStateSkills:
         }
         errors = validate_state(state)
         assert any("Skill 'broken' missing 'description'" in e for e in errors)
-        assert any("Skill 'broken' missing 'model_tier'" in e for e in errors)
+        assert any("Skill 'broken' missing 'complexity_tier'" in e for e in errors)
 
     def test_skill_item_not_dict(self):
         state = _make_minimal_state()
@@ -1925,13 +1925,13 @@ class TestValidateStateSkills:
             'skills_root': '/tmp/skills',
             'skills_root_mtime': 100.0,
             'count': 1,
-            'model_counts': {'opus': 1},
+            'complexity_counts': {'opus': 1},
             'items': {
                 'test-skill': {
                     'name': 'test-skill',
                     'description': 'A test skill.',
-                    'model': 'claude-opus-4-6',
-                    'model_tier': 'opus',
+                    'model': 'codex-opus-4-6',
+                    'complexity_tier': 'opus',
                     'allowed_tools': [],
                     'prerequisites': [],
                     'requirements': {},
@@ -2026,7 +2026,7 @@ class TestBuildStateWithSkills:
         skill_dir = tmp_path / "skills" / "my-skill"
         skill_dir.mkdir(parents=True)
         (skill_dir / "SKILL.md").write_text(
-            _make_skill_content("my-skill", "A skill", "claude-opus-4-6"))
+            _make_skill_content("my-skill", "A skill", "codex-opus-4-6"))
 
         config = {
             'artist': {'name': 'testartist'},
@@ -2064,7 +2064,7 @@ class TestReadPluginVersion:
 
     def test_valid_plugin_json(self, tmp_path):
         """Reads version from valid plugin.json."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test-plugin",
@@ -2080,7 +2080,7 @@ class TestReadPluginVersion:
 
     def test_malformed_json(self, tmp_path):
         """Returns None for invalid JSON."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text("{invalid json")
         result = _read_plugin_version(tmp_path)
@@ -2088,7 +2088,7 @@ class TestReadPluginVersion:
 
     def test_no_version_key(self, tmp_path):
         """Returns None when version key is missing."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test-plugin",
@@ -2098,7 +2098,7 @@ class TestReadPluginVersion:
 
     def test_version_not_string(self, tmp_path):
         """Returns None when version is not a string."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test-plugin",
@@ -2109,7 +2109,7 @@ class TestReadPluginVersion:
 
     def test_empty_string_version(self, tmp_path):
         """Empty string version is returned as-is (valid string)."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test-plugin",
@@ -2120,7 +2120,7 @@ class TestReadPluginVersion:
 
     def test_version_is_list(self, tmp_path):
         """Returns None when version is a list."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test-plugin",
@@ -2131,7 +2131,7 @@ class TestReadPluginVersion:
 
     def test_permission_error(self, tmp_path):
         """Returns None when file is unreadable."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         plugin_json = plugin_dir / "plugin.json"
         plugin_json.write_text(json.dumps({"version": "1.0.0"}))
@@ -2160,7 +2160,7 @@ class TestBuildStatePluginVersion:
         content_root.mkdir()
 
         # Create plugin.json
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test",
@@ -2181,7 +2181,7 @@ class TestBuildStatePluginVersion:
         """build_state sets plugin_version to None when plugin.json missing."""
         content_root = tmp_path / "content"
         content_root.mkdir()
-        # No .claude-plugin directory
+        # No .codex-plugin directory
 
         config = {
             'artist': {'name': 'testartist'},
@@ -2198,7 +2198,7 @@ class TestBuildStatePluginVersion:
         content_root = tmp_path / "content"
         content_root.mkdir()
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test",
@@ -2239,7 +2239,7 @@ class TestMigrate1_1To1_2:
                 'skills_root': '/tmp/skills',
                 'skills_root_mtime': 0.0,
                 'count': 0,
-                'model_counts': {},
+                'complexity_counts': {},
                 'items': {},
             },
             'session': {
@@ -2275,7 +2275,7 @@ class TestMigrate1_1To1_2:
                 'skills_root': '/tmp/skills',
                 'skills_root_mtime': 0.0,
                 'count': 0,
-                'model_counts': {},
+                'complexity_counts': {},
                 'items': {},
             },
             'session': {
@@ -2416,7 +2416,7 @@ class TestIncrementalUpdatePluginVersion:
         monkeypatch.setattr(indexer, '_PROJECT_ROOT', tmp_path)
 
         # Create plugin.json at the mocked _PROJECT_ROOT
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test",
@@ -2444,7 +2444,7 @@ class TestIncrementalUpdatePluginVersion:
         import tools.state.indexer as indexer
         monkeypatch.setattr(indexer, 'get_config_mtime', lambda: 100.0)
         monkeypatch.setattr(indexer, '_PROJECT_ROOT', tmp_path)
-        # No .claude-plugin directory at tmp_path
+        # No .codex-plugin directory at tmp_path
 
         existing = _make_minimal_state()
         existing['plugin_version'] = '0.43.0'
@@ -2468,7 +2468,7 @@ class TestIncrementalUpdatePluginVersion:
         monkeypatch.setattr(indexer, 'get_config_mtime', lambda: 100.0)
         monkeypatch.setattr(indexer, '_PROJECT_ROOT', tmp_path)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text(json.dumps({
             "name": "test",
@@ -2574,14 +2574,14 @@ class TestMigrateStateChain:
         skills = result['skills']
         assert 'items' in skills
         assert 'count' in skills
-        assert 'model_counts' in skills
+        assert 'complexity_counts' in skills
         assert skills['count'] == 0
 
     def test_migration_1_1_adds_plugin_version(self):
         """1.1->1.2 migration adds plugin_version as None."""
         state = {
             'version': '1.1.0',
-            'skills': {'items': {}, 'count': 0, 'model_counts': {},
+            'skills': {'items': {}, 'count': 0, 'complexity_counts': {},
                        'skills_root': '', 'skills_root_mtime': 0.0},
         }
         result = migrate_state(state)
@@ -2594,7 +2594,7 @@ class TestMigrateStateChain:
         state = {
             'version': '1.0.0',
             'skills': {'items': {'custom-skill': {}}, 'count': 1,
-                       'model_counts': {'opus': 1},
+                       'complexity_counts': {'opus': 1},
                        'skills_root': '/tmp', 'skills_root_mtime': 1.0},
         }
         result = migrate_state(state)
@@ -3123,7 +3123,7 @@ class TestReadPluginVersionEdgeCases:
 
     def test_invalid_json(self, tmp_path):
         """Invalid JSON returns None."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text("not json{{{")
         result = _read_plugin_version(tmp_path)
@@ -3131,7 +3131,7 @@ class TestReadPluginVersionEdgeCases:
 
     def test_version_not_string(self, tmp_path):
         """Non-string version value returns None."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": 42}')
         result = _read_plugin_version(tmp_path)
@@ -3139,7 +3139,7 @@ class TestReadPluginVersionEdgeCases:
 
     def test_missing_version_key(self, tmp_path):
         """JSON without version key returns None."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"name": "test"}')
         result = _read_plugin_version(tmp_path)
@@ -3147,7 +3147,7 @@ class TestReadPluginVersionEdgeCases:
 
     def test_valid_version(self, tmp_path):
         """Valid plugin.json returns version string."""
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.43.1"}')
         result = _read_plugin_version(tmp_path)

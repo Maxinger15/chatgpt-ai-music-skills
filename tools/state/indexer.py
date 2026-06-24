@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-State cache indexer for claude-ai-music-skills.
+State cache indexer for chatgpt-ai-music-skills.
 
 Scans all markdown files and produces a JSON state cache at
-~/.bitwize-music/cache/state.json. Markdown files remain the source
+~/.maxinger15-music/cache/state.json. Markdown files remain the source
 of truth; state is a cache that can always be rebuilt.
 
 Commands:
@@ -68,14 +68,14 @@ logger = logging.getLogger(__name__)
 CURRENT_VERSION = "1.2.0"
 
 # Cache location (constant, not configurable)
-CACHE_DIR = Path.home() / ".bitwize-music" / "cache"
+CACHE_DIR = Path.home() / ".maxinger15-music" / "cache"
 STATE_FILE = CACHE_DIR / "state.json"
 LOCK_FILE = CACHE_DIR / "state.lock"
 
 CONFIG_FILE = CONFIG_PATH
 
 def _read_plugin_version(plugin_root: Path) -> str | None:
-    """Read plugin version from .claude-plugin/plugin.json.
+    """Read plugin version from .codex-plugin/plugin.json.
 
     Args:
         plugin_root: Root directory of the plugin.
@@ -83,7 +83,7 @@ def _read_plugin_version(plugin_root: Path) -> str | None:
     Returns:
         Version string (e.g., "0.43.1"), or None if unreadable.
     """
-    plugin_json = plugin_root / ".claude-plugin" / "plugin.json"
+    plugin_json = plugin_root / ".codex-plugin" / "plugin.json"
     if not plugin_json.exists():
         return None
     try:
@@ -103,7 +103,7 @@ def _migrate_1_0_to_1_1(state: dict[str, Any]) -> dict[str, Any]:
             'skills_root': '',
             'skills_root_mtime': 0.0,
             'count': 0,
-            'model_counts': {},
+            'complexity_counts': {},
             'items': {},
         }
     return state
@@ -125,7 +125,7 @@ MIGRATIONS: dict[str, tuple[Any, str]] = {
 
 
 def read_config() -> dict[str, Any] | None:
-    """Read ~/.bitwize-music/config.yaml.
+    """Read ~/.maxinger15-music/config.yaml.
 
     Returns:
         Parsed config dict, or None if missing/invalid.
@@ -338,6 +338,21 @@ def scan_ideas(config: dict[str, Any], content_root: Path) -> dict[str, Any]:
     }
 
 
+def _read_skill_metadata(plugin_root: Path) -> dict[str, Any]:
+    """Read advisory per-skill metadata from skills/metadata.yaml."""
+    metadata_path = plugin_root / "skills" / "metadata.yaml"
+    if not metadata_path.exists():
+        return {}
+    try:
+        with open(metadata_path) as f:
+            data = yaml.safe_load(f) or {}
+    except (yaml.YAMLError, OSError) as e:
+        logger.warning("Cannot read skill metadata: %s", e)
+        return {}
+    skills = data.get("skills", {})
+    return skills if isinstance(skills, dict) else {}
+
+
 def scan_skills(plugin_root: Path) -> dict[str, Any]:
     """Scan all skill SKILL.md files and build skills index.
 
@@ -345,14 +360,14 @@ def scan_skills(plugin_root: Path) -> dict[str, Any]:
         plugin_root: Root of the plugin directory containing skills/.
 
     Returns:
-        Dict with skills_root, skills_root_mtime, count, model_counts, items.
+        Dict with skills_root, skills_root_mtime, count, complexity_counts, items.
     """
     skills_dir = plugin_root / "skills"
     result: dict[str, Any] = {
         'skills_root': str(skills_dir),
         'skills_root_mtime': 0.0,
         'count': 0,
-        'model_counts': {},
+        'complexity_counts': {},
         'items': {},
     }
 
@@ -362,11 +377,12 @@ def scan_skills(plugin_root: Path) -> dict[str, Any]:
     with contextlib.suppress(OSError):
         result['skills_root_mtime'] = skills_dir.stat().st_mtime
 
-    model_counts: dict[str, int] = {}
+    skill_metadata = _read_skill_metadata(plugin_root)
+    complexity_counts: dict[str, int] = {}
     items: dict[str, dict[str, Any]] = {}
 
     for skill_path in sorted(skills_dir.glob("*/SKILL.md")):
-        skill_data = parse_skill_file(skill_path)
+        skill_data = parse_skill_file(skill_path, skill_metadata)
         if '_error' in skill_data:
             logger.warning("Skipping skill %s: %s", skill_path, skill_data['_error'])
             continue
@@ -374,12 +390,12 @@ def scan_skills(plugin_root: Path) -> dict[str, Any]:
         name = skill_data['name']
         items[name] = skill_data
 
-        tier = skill_data.get('model_tier', 'unknown')
-        model_counts[tier] = model_counts.get(tier, 0) + 1
+        tier = skill_data.get('complexity_tier', 'unknown')
+        complexity_counts[tier] = complexity_counts.get(tier, 0) + 1
 
     result['items'] = items
     result['count'] = len(items)
-    result['model_counts'] = model_counts
+    result['complexity_counts'] = complexity_counts
     return result
 
 
@@ -873,7 +889,7 @@ def validate_state(state: dict[str, Any]) -> list[str]:
                 if not isinstance(skill, dict):
                     errors.append(f"Skill '{skill_name}' should be a dict")
                     continue
-                for key in ('name', 'description', 'model_tier'):
+                for key in ('name', 'description', 'complexity_tier'):
                     if key not in skill:
                         errors.append(f"Skill '{skill_name}' missing '{key}'")
     else:
@@ -898,7 +914,7 @@ def cmd_rebuild(args: argparse.Namespace) -> int:
     config = read_config()
     if config is None:
         logger.error("Config not found at %s", CONFIG_FILE)
-        logger.error("Run /bitwize-music:configure to set up.")
+        logger.error("Run $maxinger15-music:configure to set up.")
         return 1
 
     state = build_state(config)
@@ -1137,14 +1153,14 @@ def cmd_show(args: argparse.Namespace) -> int:
     # Skills
     skills = state.get('skills', {})
     skills_count = skills.get('count', 0)
-    model_counts = skills.get('model_counts', {})
+    complexity_counts = skills.get('complexity_counts', {})
     print(f"{Colors.BOLD}Skills ({skills_count}):{Colors.NC}")
-    if model_counts:
-        tier_parts = [f"{tier}: {count}" for tier, count in sorted(model_counts.items())]
-        print(f"  By model: {', '.join(tier_parts)}")
+    if complexity_counts:
+        tier_parts = [f"{tier}: {count}" for tier, count in sorted(complexity_counts.items())]
+        print(f"  By complexity: {', '.join(tier_parts)}")
     if args.verbose and skills.get('items'):
         for name, skill in sorted(skills['items'].items()):
-            tier = skill.get('model_tier', '?')
+            tier = skill.get('complexity_tier', '?')
             invocable = '' if skill.get('user_invocable', True) else ' [internal]'
             print(f"    {name} ({tier}){invocable}")
     print()
@@ -1168,7 +1184,7 @@ def cmd_show(args: argparse.Namespace) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description='State cache indexer for claude-ai-music-skills',
+        description='State cache indexer for chatgpt-ai-music-skills',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

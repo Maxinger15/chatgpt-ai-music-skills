@@ -134,7 +134,7 @@ class _MultiPatch:
 # ---------------------------------------------------------------------------
 
 # Add server source to path
-sys.path.insert(0, "servers/bitwize-music-server")
+sys.path.insert(0, "servers/maxinger15-music-server")
 from handlers import database as server  # noqa: E402
 
 

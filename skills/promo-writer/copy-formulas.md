@@ -240,7 +240,7 @@ Follow [Artist]:
 ### AI Music Tags (Use Sparingly)
 - #AIMusic — general, recognizable
 - #SunoAI — platform-specific
-- #ClaudeCode — tool-specific
+- #Codex — tool-specific
 
 Don't put AI tags on every post. Lead with the music. Mention AI when it adds to the story.
 

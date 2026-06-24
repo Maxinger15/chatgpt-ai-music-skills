@@ -1,16 +1,6 @@
 ---
 name: verify-sources
-description: Captures human source verification for tracks, timestamps it, and updates track files. Use when sources need human review before generation.
-argument-hint: <album-name>
-model: sonnet
-effort: low
-allowed-tools:
-  - Read
-  - Edit
-  - Glob
-  - Grep
-  - Bash
-  - bitwize-music-mcp
+description: "Captures human source verification for tracks, timestamps it, and updates track files. Use when sources need human review before generation."
 ---
 
 ## Your Task
@@ -125,7 +115,7 @@ Album status: [previous] → [new status]
 Date: YYYY-MM-DD
 
 All sources verified. This album is cleared for lyric writing.
-Next step: /bitwize-music:lyric-writer [track] (write lyrics from verified sources)
+Next step: $maxinger15-music:lyric-writer [track] (write lyrics from verified sources)
 ```
 
 **Partial verification report** (if some tracks still pending):
@@ -138,7 +128,7 @@ Tracks still pending: Y
   - [track-slug] — [reason if known]
 
 Album status: unchanged ([current])
-Resume verification later with /bitwize-music:verify-sources [album]
+Resume verification later with $maxinger15-music:verify-sources [album]
 ```
 
 ---

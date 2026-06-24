@@ -1,17 +1,13 @@
 ---
 name: setup
-description: Detects your Python environment and guides you through installing plugin dependencies. Use on first-time setup or when MCP server fails to start.
-argument-hint: <blank for full check | "mcp" | "mastering" | "document-hunter">
-model: haiku
-allowed-tools:
-  - Bash
+description: "Detects your Python environment and guides you through installing plugin dependencies. Use on first-time setup or when MCP server fails to start."
 ---
 
-Base directory for this skill: ${CLAUDE_PLUGIN_BASE_DIR}
+Base directory for this skill: {plugin_root}
 
 ## Your Task
 
-Guide the user through installing bitwize-music plugin dependencies based on their Python environment and requested components.
+Guide the user through installing maxinger15-music plugin dependencies based on their Python environment and requested components.
 
 ---
 
@@ -52,11 +48,11 @@ uname -s
 
 ```bash
 # Set venv path
-VENV_PYTHON=~/.bitwize-music/venv/bin/python3
+VENV_PYTHON=~/.maxinger15-music/venv/bin/python3
 
 # Check if venv exists
 if [ -f "$VENV_PYTHON" ]; then
-    echo "✅ Venv exists at ~/.bitwize-music/venv"
+    echo "✅ Venv exists at ~/.maxinger15-music/venv"
 
     # Check each component in the venv
     $VENV_PYTHON -c "import mcp; print('✅ mcp installed')" 2>&1 || echo "❌ mcp not installed"
@@ -67,7 +63,7 @@ if [ -f "$VENV_PYTHON" ]; then
     # Check for version drift against requirements.txt
     $VENV_PYTHON -c "
 import importlib.metadata, pathlib
-reqs = pathlib.Path('${CLAUDE_PLUGIN_ROOT}/requirements.txt').read_text()
+reqs = pathlib.Path('{plugin_root}/requirements.txt').read_text()
 stale = []
 for line in reqs.splitlines():
     line = line.split('#')[0].strip()
@@ -88,8 +84,8 @@ else:
     print('✅ All package versions match requirements.txt')
 " 2>&1
 else
-    echo "❌ Venv not found at ~/.bitwize-music/venv"
-    echo "   Run: python3 -m venv ~/.bitwize-music/venv"
+    echo "❌ Venv not found at ~/.maxinger15-music/venv"
+    echo "   Run: python3 -m venv ~/.maxinger15-music/venv"
 fi
 ```
 
@@ -103,16 +99,16 @@ All components are installed together in the venv via requirements.txt.
 
 ```bash
 # Create unified venv (if it doesn't exist)
-python3 -m venv ~/.bitwize-music/venv
+python3 -m venv ~/.maxinger15-music/venv
 
 # Install ALL plugin dependencies
-~/.bitwize-music/venv/bin/pip install -r ${CLAUDE_PLUGIN_ROOT}/requirements.txt
+~/.maxinger15-music/venv/bin/pip install -r {plugin_root}/requirements.txt
 
 # Set up document hunter browser
-~/.bitwize-music/venv/bin/playwright install chromium
+~/.maxinger15-music/venv/bin/playwright install chromium
 ```
 
-**That's it!** The plugin automatically detects and uses `~/.bitwize-music/venv`. No configuration needed.
+**That's it!** The plugin automatically detects and uses `~/.maxinger15-music/venv`. No configuration needed.
 
 **Works on:**
 - ✅ Linux (externally-managed Python)
@@ -130,14 +126,14 @@ Present a clear, simple installation guide:
 2. **Missing components**: [list what needs to be installed]
 3. **Installation commands**:
    ```bash
-   python3 -m venv ~/.bitwize-music/venv
-   ~/.bitwize-music/venv/bin/pip install -r ${CLAUDE_PLUGIN_ROOT}/requirements.txt
-   ~/.bitwize-music/venv/bin/playwright install chromium
+   python3 -m venv ~/.maxinger15-music/venv
+   ~/.maxinger15-music/venv/bin/pip install -r {plugin_root}/requirements.txt
+   ~/.maxinger15-music/venv/bin/playwright install chromium
    ```
 4. **After installation**:
-   - Restart Claude Code to reload the plugin
-   - MCP server should show as running in `/plugin` status
-   - Run `/bitwize-music:setup` again to verify
+   - Restart Codex to reload the plugin
+   - Plugin should show in `codex plugin list`
+   - Run `$maxinger15-music:setup` again to verify
 
 ---
 
@@ -150,7 +146,7 @@ After user reports they've installed, re-run the checks from Step 2 and confirm:
 ✅ **Cloud uploads**: Ready
 ✅ **Document hunter**: Ready
 
-**Next steps**: Run `/bitwize-music:configure` to set up your workspace paths.
+**Next steps**: Run `$maxinger15-music:configure` to set up your workspace paths.
 
 ---
 
@@ -159,7 +155,7 @@ After user reports they've installed, re-run the checks from Step 2 and confirm:
 Use clear sections with checkboxes for status:
 
 ```markdown
-## bitwize-music Setup
+## maxinger15-music Setup
 
 ### Environment
 - Python: 3.12.3
@@ -177,21 +173,21 @@ Run these commands to install all plugin dependencies:
 
 ```bash
 # Create unified venv
-python3 -m venv ~/.bitwize-music/venv
+python3 -m venv ~/.maxinger15-music/venv
 
 # Install ALL dependencies
-~/.bitwize-music/venv/bin/pip install -r ${CLAUDE_PLUGIN_ROOT}/requirements.txt
+~/.maxinger15-music/venv/bin/pip install -r {plugin_root}/requirements.txt
 
 # Set up browser
-~/.bitwize-music/venv/bin/playwright install chromium
+~/.maxinger15-music/venv/bin/playwright install chromium
 ```
 
 **After installation:**
-1. Restart Claude Code
+1. Restart Codex
 2. All components will work automatically
-3. Run `/bitwize-music:setup` to verify
+3. Run `$maxinger15-music:setup` to verify
 
-The plugin automatically detects `~/.bitwize-music/venv` — everything just works!
+The plugin automatically detects `~/.maxinger15-music/venv` — everything just works!
 ```
 
 ---

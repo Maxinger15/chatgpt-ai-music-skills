@@ -1,23 +1,23 @@
 # Configuration
 
-Plugin configuration lives at `~/.bitwize-music/config.yaml` (outside the plugin directory).
+Plugin configuration lives at `~/.maxinger15-music/config.yaml` (outside the plugin directory).
 
 ## Setup
 
 ```bash
 # Create config directory
-mkdir -p ~/.bitwize-music
+mkdir -p ~/.maxinger15-music
 
 # Copy template from plugin
-cp config/config.example.yaml ~/.bitwize-music/config.yaml
+cp config/config.example.yaml ~/.maxinger15-music/config.yaml
 
 # Edit with your settings
-nano ~/.bitwize-music/config.yaml
+nano ~/.maxinger15-music/config.yaml
 ```
 
 ## Why Outside the Plugin?
 
-When you install via `/plugin install`, the plugin lives in `~/.claude/plugins/`. Putting config in `~/.bitwize-music/` means:
+When you install via `codex plugin add`, the plugin lives in Codex's plugin cache. Putting config in `~/.maxinger15-music/` means:
 
 1. **Easy access** - Always at the same location
 2. **Survives updates** - Plugin updates don't overwrite your config
@@ -25,7 +25,7 @@ When you install via `/plugin install`, the plugin lives in `~/.claude/plugins/`
 
 ## Config File Reference
 
-### `~/.bitwize-music/config.yaml`
+### `~/.maxinger15-music/config.yaml`
 
 ```yaml
 # Artist info
@@ -91,10 +91,10 @@ All paths use a mirrored structure:
 
 ### Tools Directory
 
-The `~/.bitwize-music/` directory also contains:
+The `~/.maxinger15-music/` directory also contains:
 
 ```
-~/.bitwize-music/
+~/.maxinger15-music/
 ├── config.yaml         # Your configuration
 ├── venv/               # Unified Python venv (all tools)
 ├── logs/               # Debug logs (when enabled)
@@ -109,7 +109,7 @@ The `~/.bitwize-music/` directory also contains:
 |---------|----------|-------------|
 | `artist.name` | Yes | Your artist/project name |
 | `artist.genres` | No | Primary genres (array) |
-| `artist.style` | No | Brief style description to help Claude understand your vibe |
+| `artist.style` | No | Brief style description to help Codex understand your vibe |
 | `paths.content_root` | Yes | Where albums and artists live |
 | `paths.audio_root` | Yes | Where mastered audio goes |
 | `paths.documents_root` | Yes | Where PDFs/sources go |
@@ -124,7 +124,7 @@ The `~/.bitwize-music/` directory also contains:
 
 ### Promo Videos (`promotion:`)
 
-Settings for `/bitwize-music:promo-director` skill.
+Settings for `$maxinger15-music:promo-director` skill.
 
 | Setting | Required | Description |
 |---------|----------|-------------|
@@ -135,7 +135,7 @@ Settings for `/bitwize-music:promo-director` skill.
 
 ### Sheet Music (`sheet_music:`)
 
-Settings for `/bitwize-music:sheet-music-publisher` skill.
+Settings for `$maxinger15-music:sheet-music-publisher` skill.
 
 | Setting | Required | Description |
 |---------|----------|-------------|
@@ -144,7 +144,7 @@ Settings for `/bitwize-music:sheet-music-publisher` skill.
 
 ### Cloud Storage (`cloud:`)
 
-Settings for `/bitwize-music:cloud-uploader` skill. See `/reference/cloud/setup-guide.md` for setup.
+Settings for `$maxinger15-music:cloud-uploader` skill. See `/reference/cloud/setup-guide.md` for setup.
 
 | Setting | Required | Description |
 |---------|----------|-------------|
@@ -168,7 +168,7 @@ File-based debug logging for development and troubleshooting. Silent by default.
 |---------|----------|-------------|
 | `logging.enabled` | Yes (to activate) | Master switch — `true` to enable file logging |
 | `logging.level` | No | Minimum log level: `debug`, `info`, `warning`, `error` (default: `debug`) |
-| `logging.file` | No | Log file path, supports `~` (default: `~/.bitwize-music/logs/debug.log`). Directory auto-created |
+| `logging.file` | No | Log file path, supports `~` (default: `~/.maxinger15-music/logs/debug.log`). Directory auto-created |
 | `logging.max_size_mb` | No | Max size per log file in MB before rotation (default: 5) |
 | `logging.backup_count` | No | Number of rotated backups to keep (default: 3) |
 
@@ -187,13 +187,13 @@ PostgreSQL database for tweet/promo management. Stores social media posts and th
 
 ## Missing Config
 
-If Claude can't find `~/.bitwize-music/config.yaml`, it will prompt:
+If Codex can't find `~/.maxinger15-music/config.yaml`, it will prompt:
 
 ```
 Config not found. Run:
-  mkdir -p ~/.bitwize-music
-  cp config/config.example.yaml ~/.bitwize-music/config.yaml
-Then edit ~/.bitwize-music/config.yaml with your settings.
+  mkdir -p ~/.maxinger15-music
+  cp config/config.example.yaml ~/.maxinger15-music/config.yaml
+Then edit ~/.maxinger15-music/config.yaml with your settings.
 ```
 
 ## Overrides System
@@ -205,7 +205,7 @@ The overrides directory lets you customize any skill or workflow without plugin 
 **Single directory, per-skill files:**
 ```bash
 ~/music-projects/overrides/
-├── CLAUDE.md                    # Override base workflow instructions
+├── AGENTS.md                    # Override base workflow instructions
 ├── pronunciation-guide.md      # Custom phonetic spellings
 ├── explicit-words.md            # Custom explicit word list
 ├── lyric-writing-guide.md       # Lyric writing preferences
@@ -222,7 +222,7 @@ The overrides directory lets you customize any skill or workflow without plugin 
 **Format convention:** Override files use Markdown (`.md`) for free-form text and guidelines that skills interpret as context. The one exception is `mastering-presets.yaml`, which uses YAML because mastering presets are structured numeric values (EQ curves, LUFS targets) parsed programmatically by the mastering pipeline.
 
 **Each skill checks for its own override:**
-1. Skill reads `~/.bitwize-music/config.yaml` → `paths.overrides`
+1. Skill reads `~/.maxinger15-music/config.yaml` → `paths.overrides`
 2. Checks for `{overrides}/[filename].md`
 3. If exists: merge with base (or replace, depending on skill)
 4. If not exists: use base only (no error)
@@ -243,8 +243,8 @@ cp config/overrides.example/suno-preferences.md ~/music-projects/overrides/
 
 ### Available Overrides
 
-#### `CLAUDE.md` - Workflow Instructions
-Supplements base CLAUDE.md with your personal workflow preferences.
+#### `AGENTS.md` - Workflow Instructions
+Supplements base AGENTS.md with your personal workflow preferences.
 
 **Example:**
 ```markdown
@@ -267,7 +267,7 @@ Merges with base pronunciation guide for artist-specific terms.
 ## Artist-Specific Terms
 | Word | Standard | Phonetic | Notes |
 |------|----------|----------|-------|
-| BitWize | bitwize | Bit-Wize | Artist name |
+| Maxinger15 | maxinger15 | Bit-Wize | Artist name |
 | SampleAlbum | samplealbum | Sample-Album | Album title |
 
 ## Album-Specific Names
@@ -456,8 +456,8 @@ Custom QA requirements and platform priorities.
 - Secondary: Spotify, Apple Music (via DistroKid)
 
 ## Metadata Standards
-- Artist name format: "bitwize" (lowercase, no capitals)
-- Tags: Always include: ai-music, suno, claude-code
+- Artist name format: "maxinger15" (lowercase, no capitals)
+- Tags: Always include: ai-music, suno, codex
 ```
 
 **Behavior:** Loaded by release-director, applied to QA checklist and platform workflow.

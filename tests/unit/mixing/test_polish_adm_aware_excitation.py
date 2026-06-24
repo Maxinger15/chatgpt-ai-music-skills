@@ -54,7 +54,7 @@ class TestAnalyzerEmitsExcitationRec:
         """Thin wrapper: build the analyzer the way the production caller
         does (via _build_analyzer), but with the adm_aware_excitation flag
         controlled by the test."""
-        SERVER_DIR = PROJECT_ROOT / "servers" / "bitwize-music-server"
+        SERVER_DIR = PROJECT_ROOT / "servers" / "maxinger15-music-server"
         if str(SERVER_DIR) not in sys.path:
             sys.path.insert(0, str(SERVER_DIR))
         from handlers.processing.mixing import _build_analyzer  # type: ignore

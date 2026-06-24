@@ -1,16 +1,6 @@
 ---
 name: plagiarism-checker
-description: Scans lyrics for phrases that may match existing songs using web search and LLM knowledge. Use before release to check for unintentional borrowing.
-argument-hint: <album-name> [track-slug]
-model: sonnet
-effort: high
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - WebSearch
-  - WebFetch
-  - bitwize-music-mcp
+description: "Scans lyrics for phrases that may match existing songs using web search and LLM knowledge. Use before release to check for unintentional borrowing."
 ---
 
 ## Your Task

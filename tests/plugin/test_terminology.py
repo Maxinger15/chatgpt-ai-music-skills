@@ -9,8 +9,8 @@ pytestmark = pytest.mark.plugin
 DEPRECATED_TERMS = {
     'media_root': 'Use audio_root instead',
     'paths.media_root': 'Use paths.audio_root instead',
-    'config/paths.yaml': 'Config is now at ~/.bitwize-music/config.yaml',
-    'config/artist.md': 'Config is now at ~/.bitwize-music/config.yaml',
+    'config/paths.yaml': 'Config is now at ~/.maxinger15-music/config.yaml',
+    'config/artist.md': 'Config is now at ~/.maxinger15-music/config.yaml',
 }
 
 # Files that intentionally document deprecated terms
@@ -57,11 +57,11 @@ class TestDeprecatedTerms:
 
 
 class TestPathVariables:
-    """Expected path variables should be documented in CLAUDE.md."""
+    """Expected path variables should be documented in AGENTS.md."""
 
     @pytest.mark.parametrize("var", EXPECTED_PATH_VARS)
-    def test_path_variable_documented(self, claude_md_content, var):
-        assert var in claude_md_content, f"Path variable {var} not found in CLAUDE.md"
+    def test_path_variable_documented(self, agents_md_content, var):
+        assert var in agents_md_content, f"Path variable {var} not found in AGENTS.md"
 
 
 class TestHardcodedPaths:

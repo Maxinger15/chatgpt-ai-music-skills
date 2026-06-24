@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install git hooks for bitwize-music plugin
+# Install git hooks for maxinger15-music plugin
 
 set -e
 

@@ -209,17 +209,17 @@ V5 improved tag reliability significantly over V4/V4.5. Tags that were inconsist
 
 ## Related Skills
 
-- **`/bitwize-music:lyric-writer`** - Lyric writing with automatic section tagging
+- **`$maxinger15-music:lyric-writer`** - Lyric writing with automatic section tagging
   - Automatically adds section tags to lyrics
   - Uses tags from this reference guide
   - Ensures proper song structure
 
-- **`/bitwize-music:suno-engineer`** - Technical Suno V5 prompting
+- **`$maxinger15-music:suno-engineer`** - Technical Suno V5 prompting
   - Applies section tags correctly in lyrics boxes
   - Optimizes tag placement for generation results
   - Uses this guide as reference for tag selection
 
-- **`/bitwize-music:lyric-reviewer`** - Pre-generation QC
+- **`$maxinger15-music:lyric-reviewer`** - Pre-generation QC
   - Verifies section tags are present and correct
   - Checks for proper song structure
   - Ensures tags follow Suno best practices

@@ -1,13 +1,13 @@
 # Configuration
 
-Config file: `~/.bitwize-music/config.yaml`
+Config file: `~/.maxinger15-music/config.yaml`
 
 Create from template:
 ```bash
-cp config/config.example.yaml ~/.bitwize-music/config.yaml
+cp config/config.example.yaml ~/.maxinger15-music/config.yaml
 ```
 
-Or use the interactive setup: `/bitwize-music:configure`
+Or use the interactive setup: `$maxinger15-music:configure`
 
 ## Settings
 
@@ -31,6 +31,6 @@ Content, audio, and documents use a mirrored directory structure:
 {documents_root}/artists/{artist}/albums/{genre}/{album}/  # Research PDFs
 ```
 
-The `~/.bitwize-music/` directory also contains the shared Python venv, cache files, and state.
+The `~/.maxinger15-music/` directory also contains the shared Python venv, cache files, and state.
 
 See `config/README.md` for the full reference and `config/config.example.yaml` for all available options.

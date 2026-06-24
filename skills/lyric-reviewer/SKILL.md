@@ -1,18 +1,6 @@
 ---
 name: lyric-reviewer
-description: Reviews lyrics against a quality checklist before Suno generation. Use before generating tracks to catch rhyme, prosody, pronunciation, and structural issues.
-argument-hint: <track-path | album-path | --fix>
-model: opus
-effort: max
-prerequisites:
-  - lyric-writer
-  - pronunciation-specialist
-allowed-tools:
-  - Read
-  - Edit
-  - Glob
-  - Grep
-  - bitwize-music-mcp
+description: "Reviews lyrics against a quality checklist before Suno generation. Use before generating tracks to catch rhyme, prosody, pronunciation, and structural issues."
 ---
 
 ## Your Task
@@ -178,7 +166,7 @@ When you detect a homograph (live, read, lead, wind, tear, bass, bow, etc.):
 **Anti-pattern**: Determining pronunciation from context is WRONG. Suno cannot infer from context. Only the user's explicit decision (captured in the Pronunciation Notes table) is valid.
 
 #### Common Homograph Fixes
-*(Canonical reference: `${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md`. Keep this table in sync.)*
+*(Canonical reference: `{plugin_root}/reference/suno/pronunciation-guide.md`. Keep this table in sync.)*
 
 | Word | Context A | Spelling | Context B | Spelling |
 |------|-----------|----------|-----------|----------|

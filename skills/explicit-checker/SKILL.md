@@ -1,14 +1,6 @@
 ---
 name: explicit-checker
-description: Scans lyrics for explicit content and verifies that explicit flags match actual content. Use before Suno generation or release to ensure accurate content ratings.
-argument-hint: <album-path or track-path>
-model: sonnet
-effort: medium
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - bitwize-music-mcp
+description: "Scans lyrics for explicit content and verifies that explicit flags match actual content. Use before Suno generation or release to ensure accurate content ratings."
 ---
 
 ## Your Task

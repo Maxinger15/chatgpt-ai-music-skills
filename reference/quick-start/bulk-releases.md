@@ -28,7 +28,7 @@ Plan multiple albums before writing any lyrics.
 ### Step 1: Collect Ideas
 
 ```
-/bitwize-music:album-ideas list
+$maxinger15-music:album-ideas list
 ```
 
 Review your backlog. Select 3-5 albums to plan.
@@ -36,9 +36,9 @@ Review your backlog. Select 3-5 albums to plan.
 ### Step 2: Create All Album Structures
 
 ```
-/bitwize-music:new-album album-one electronic
-/bitwize-music:new-album album-two hip-hop
-/bitwize-music:new-album album-three folk
+$maxinger15-music:new-album album-one electronic
+$maxinger15-music:new-album album-two hip-hop
+$maxinger15-music:new-album album-three folk
 ```
 
 ### Step 3: Plan Each Album
@@ -106,9 +106,9 @@ Write similar tracks across albums together.
 
 ### Efficient Writing Tips
 
-1. **Use clipboard skill** - `/bitwize-music:clipboard` for quick Suno pasting
+1. **Use clipboard skill** - `$maxinger15-music:clipboard` for quick Suno pasting
 2. **Template reuse** - Similar albums can share style prompt structures
-3. **Pronunciation batch** - Run `/bitwize-music:pronunciation-specialist` on all albums at once
+3. **Pronunciation batch** - Run `$maxinger15-music:pronunciation-specialist` on all albums at once
 
 ---
 
@@ -130,7 +130,7 @@ For each album session:
 
 1. **Prep**: Copy all style prompts to a notes file
 2. **Generate**: Work through tracks sequentially
-3. **Log immediately**: Tell Claude each result as you go
+3. **Log immediately**: Tell Codex each result as you go
 4. **Mark keepers**: Update status as you find keepers
 
 ### Batch Logging Example
@@ -192,13 +192,13 @@ Check each album's mastered output:
 ### Option A: Generate Sequentially
 
 ```
-/bitwize-music:album-art-director album-one
+$maxinger15-music:album-art-director album-one
 # Generate in ChatGPT
-/bitwize-music:import-art ~/Downloads/art1.png album-one
+$maxinger15-music:import-art ~/Downloads/art1.png album-one
 
-/bitwize-music:album-art-director album-two
+$maxinger15-music:album-art-director album-two
 # Generate in ChatGPT
-/bitwize-music:import-art ~/Downloads/art2.png album-two
+$maxinger15-music:import-art ~/Downloads/art2.png album-two
 ```
 
 ### Option B: Batch Prompts
@@ -208,7 +208,7 @@ Get all prompts first, then generate images in one ChatGPT session:
 1. Get all art prompts
 2. Generate all images in ChatGPT
 3. Download all
-4. Import all with `/bitwize-music:import-art`
+4. Import all with `$maxinger15-music:import-art`
 
 ---
 
@@ -246,7 +246,7 @@ Get all prompts first, then generate images in one ChatGPT session:
 ### Time Savers
 
 1. **Batch similar tasks** - All planning, then all writing, then all generation
-2. **Use clipboard skill** - `/bitwize-music:clipboard` to quickly copy prompts between tracks
+2. **Use clipboard skill** - `$maxinger15-music:clipboard` to quickly copy prompts between tracks
 3. **Template consistency** - Reuse style prompt structures across similar genres
 4. **Session notes** - Keep a running log of what's done/pending
 
@@ -254,18 +254,18 @@ Get all prompts first, then generate images in one ChatGPT session:
 
 1. **Don't rush verification** - Source verification is still required for true-story albums
 2. **QA each album** - Listen through before marking complete
-3. **Run validators** - `/bitwize-music:validate-album` catches issues early
+3. **Run validators** - `$maxinger15-music:validate-album` catches issues early
 
 ### Progress Tracking
 
-Use `/bitwize-music:resume` to check any album's status:
+Use `$maxinger15-music:resume` to check any album's status:
 
 ```
-/bitwize-music:resume album-one
-/bitwize-music:resume album-two
+$maxinger15-music:resume album-one
+$maxinger15-music:resume album-two
 ```
 
-Or start a session with a full scan (Claude does this automatically on session start).
+Or start a session with a full scan (Codex does this automatically on session start).
 
 ---
 
@@ -273,13 +273,13 @@ Or start a session with a full scan (Claude does this automatically on session s
 
 | Task | Command |
 |------|---------|
-| List album ideas | `/bitwize-music:album-ideas list` |
-| Create album | `/bitwize-music:new-album name genre` |
-| Check album status | `/bitwize-music:resume album-name` |
-| Validate structure | `/bitwize-music:validate-album` |
-| Copy to clipboard | `/bitwize-music:clipboard track-name` |
-| Import art | `/bitwize-music:import-art path album` |
-| Check explicit | `/bitwize-music:explicit-checker` |
+| List album ideas | `$maxinger15-music:album-ideas list` |
+| Create album | `$maxinger15-music:new-album name genre` |
+| Check album status | `$maxinger15-music:resume album-name` |
+| Validate structure | `$maxinger15-music:validate-album` |
+| Copy to clipboard | `$maxinger15-music:clipboard track-name` |
+| Import art | `$maxinger15-music:import-art path album` |
+| Check explicit | `$maxinger15-music:explicit-checker` |
 
 ---
 
@@ -312,7 +312,7 @@ Or start a session with a full scan (Claude does this automatically on session s
 ## Troubleshooting
 
 **Lost track of which albums are where?**
-- Start a new session - Claude scans all in-progress albums
+- Start a new session - Codex scans all in-progress albums
 
 **Inconsistent quality across albums?**
 - Slow down. Quality > quantity.

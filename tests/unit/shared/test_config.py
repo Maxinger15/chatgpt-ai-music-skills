@@ -85,8 +85,8 @@ class TestLoadConfig:
                 load_config(required=True)
 
     def test_config_path_is_in_home_dir(self):
-        """CONFIG_PATH points to ~/.bitwize-music/config.yaml."""
-        expected = Path.home() / ".bitwize-music" / "config.yaml"
+        """CONFIG_PATH points to ~/.maxinger15-music/config.yaml."""
+        expected = Path.home() / ".maxinger15-music" / "config.yaml"
         assert config_module.CONFIG_PATH == expected
 
 

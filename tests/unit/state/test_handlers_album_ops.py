@@ -30,7 +30,7 @@ if str(PROJECT_ROOT) not in sys.path:
 # Mock MCP SDK if not installed
 # ---------------------------------------------------------------------------
 
-SERVER_PATH = PROJECT_ROOT / "servers" / "bitwize-music-server" / "server.py"
+SERVER_PATH = PROJECT_ROOT / "servers" / "maxinger15-music-server" / "server.py"
 
 try:
     import mcp  # noqa: F401

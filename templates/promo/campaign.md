@@ -56,7 +56,7 @@
 ## Hashtags
 
 **Primary**: #NewMusic #[Genre] #AIMusic
-**Secondary**: #ClaudeCode #SunoAI #[AlbumSpecific]
+**Secondary**: #Codex #SunoAI #[AlbumSpecific]
 
 ---
 

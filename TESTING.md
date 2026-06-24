@@ -1,4 +1,4 @@
-# Testing Plan for claude-ai-music-skills
+# Testing Plan for chatgpt-ai-music-skills
 
 Comprehensive testing checklist before marketplace release.
 
@@ -6,7 +6,7 @@ Comprehensive testing checklist before marketplace release.
 
 ## Prerequisites
 
-- Claude Code installed and working
+- Codex installed and working
 - Python 3.8+ installed
 - Git configured
 - A test directory outside the plugin repo (e.g., `~/test-music-plugin/`)
@@ -23,16 +23,16 @@ mkdir -p ~/test-music-plugin
 cd ~/test-music-plugin
 
 # Clone fresh copy
-git clone https://github.com/bitwize-music-studio/claude-ai-music-skills.git
-cd claude-ai-music-skills
+git clone https://github.com/Maxinger15/chatgpt-ai-music-skills.git
+cd chatgpt-ai-music-skills
 
-# Start Claude Code
+# Start Codex
 claude
 ```
 
 **Verify:**
-- [ ] Claude loads without errors
-- [ ] CLAUDE.md is recognized (check session start behavior)
+- [ ] Codex loads without errors
+- [ ] AGENTS.md is recognized (check session start behavior)
 - [ ] Skills are available (type `/` and check menu)
 
 ### 1.2 Plugin Install (Marketplace Method)
@@ -45,10 +45,10 @@ cd ~/test-music-plugin
 claude
 ```
 
-Then in Claude Code:
+Then in Codex:
 ```
-/plugin marketplace add bitwize-music-studio/claude-ai-music-skills
-/plugin install bitwize-music@claude-ai-music-skills
+/plugin marketplace add Maxinger15/chatgpt-ai-music-skills
+/plugin install maxinger15-music@chatgpt-ai-music-skills
 ```
 
 **Verify:**
@@ -63,14 +63,14 @@ Then in Claude Code:
 ### 2.1 Initial Config Setup
 
 ```bash
-cd ~/test-music-plugin/claude-ai-music-skills
+cd ~/test-music-plugin/chatgpt-ai-music-skills
 
 # Copy example config
-mkdir -p ~/.bitwize-music
-cp config/config.example.yaml ~/.bitwize-music/config.yaml
+mkdir -p ~/.maxinger15-music
+cp config/config.example.yaml ~/.maxinger15-music/config.yaml
 ```
 
-Edit `~/.bitwize-music/config.yaml`:
+Edit `~/.maxinger15-music/config.yaml`:
 ```yaml
 artist:
   name: "test-artist"
@@ -79,7 +79,7 @@ paths:
   content_root: "~/test-music-plugin/content"
   audio_root: "~/test-music-plugin/audio"
   documents_root: "~/test-music-plugin/documents"
-  tools_root: "~/.bitwize-music"
+  tools_root: "~/.maxinger15-music"
   plugin_root: "."
 
 urls:
@@ -94,17 +94,17 @@ Create directories:
 mkdir -p ~/test-music-plugin/content/artists
 mkdir -p ~/test-music-plugin/audio
 mkdir -p ~/test-music-plugin/documents
-mkdir -p ~/.bitwize-music
+mkdir -p ~/.maxinger15-music
 ```
 
 **Verify:**
 - [ ] Config loads on session start
 - [ ] No errors about missing paths
-- [ ] Claude reports paths correctly
+- [ ] Codex reports paths correctly
 
 ### 2.2 Path Resolution
 
-In Claude Code, ask: "What are my configured paths?"
+In Codex, ask: "What are my configured paths?"
 
 **Verify:**
 - [ ] content_root resolves correctly
@@ -188,7 +188,7 @@ Ask it to write a simple verse.
 
 ### 3.6 Suno Engineer
 
-Ask Claude to help with Suno prompts for a track.
+Ask Codex to help with Suno prompts for a track.
 
 **Verify:**
 - [ ] Generates Style Box content
@@ -245,9 +245,9 @@ After document-hunter runs:
 
 ```bash
 # One-time setup
-mkdir -p ~/.bitwize-music
-python3 -m venv ~/.bitwize-music/venv
-source ~/.bitwize-music/venv/bin/activate
+mkdir -p ~/.maxinger15-music
+python3 -m venv ~/.maxinger15-music/venv
+source ~/.maxinger15-music/venv/bin/activate
 pip install matchering pyloudnorm scipy numpy soundfile
 deactivate
 ```
@@ -266,10 +266,10 @@ mkdir -p ~/test-music-plugin/test-master
 
 ```bash
 cd ~/test-music-plugin/test-master
-source ~/.bitwize-music/venv/bin/activate
+source ~/.maxinger15-music/venv/bin/activate
 
 # Copy scripts from plugin
-cp ~/test-music-plugin/claude-ai-music-skills/tools/mastering/*.py .
+cp ~/test-music-plugin/chatgpt-ai-music-skills/tools/mastering/*.py .
 
 # Run analysis
 python3 analyze_tracks.py
@@ -307,7 +307,7 @@ When mastering a real album:
 ### 6.1 PDF Blocking
 
 ```bash
-cd ~/test-music-plugin/claude-ai-music-skills
+cd ~/test-music-plugin/chatgpt-ai-music-skills
 
 # Create a fake PDF in content area
 touch ~/test-music-plugin/content/artists/test-artist/test.pdf
@@ -375,14 +375,14 @@ Run each skill and verify it loads:
 
 ```bash
 # Remove config
-rm ~/.bitwize-music/config.yaml
+rm ~/.maxinger15-music/config.yaml
 
-# Start Claude Code
+# Start Codex
 claude
 ```
 
 **Verify:**
-- [ ] Claude prompts user to set up config
+- [ ] Codex prompts user to set up config
 - [ ] Doesn't crash or error out
 
 ### 8.2 Invalid Paths
@@ -394,7 +394,7 @@ paths:
 ```
 
 **Verify:**
-- [ ] Claude handles gracefully
+- [ ] Codex handles gracefully
 - [ ] Offers to create directory or warns user
 
 ### 8.3 Empty Album
@@ -438,10 +438,10 @@ rm -rf ~/test-music-plugin/audio
 rm -rf ~/test-music-plugin/documents
 
 # Optionally remove shared venv (or keep for future use)
-# rm -rf ~/.bitwize-music
+# rm -rf ~/.maxinger15-music
 
 # Remove test plugin install
-# /plugin uninstall bitwize-music@claude-ai-music-skills
+# /plugin uninstall maxinger15-music@chatgpt-ai-music-skills
 ```
 
 ---
@@ -472,15 +472,15 @@ set -e
 echo "=== Testing Plugin ==="
 
 # Setup
-cd ~/test-music-plugin/claude-ai-music-skills
-mkdir -p ~/.bitwize-music
-cp config/config.example.yaml ~/.bitwize-music/config.yaml
+cd ~/test-music-plugin/chatgpt-ai-music-skills
+mkdir -p ~/.maxinger15-music
+cp config/config.example.yaml ~/.maxinger15-music/config.yaml
 
 # Create test paths
 mkdir -p ~/test-music-plugin/{content/artists,audio,documents}
 
 # Test mastering venv
-source ~/.bitwize-music/venv/bin/activate
+source ~/.maxinger15-music/venv/bin/activate
 python -c "import matchering, pyloudnorm, scipy, numpy, soundfile; print('Packages OK')"
 deactivate
 
@@ -496,4 +496,4 @@ If tests fail:
 1. Note the exact command/action that failed
 2. Capture error message
 3. Check which phase failed
-4. Report at: https://github.com/bitwize-music-studio/claude-ai-music-skills/issues
+4. Report at: https://github.com/Maxinger15/chatgpt-ai-music-skills/issues

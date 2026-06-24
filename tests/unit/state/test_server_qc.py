@@ -66,7 +66,7 @@ if str(PROJECT_ROOT) not in sys.path:
 # which may not be installed in the test environment.
 # ---------------------------------------------------------------------------
 
-SERVER_PATH = PROJECT_ROOT / "servers" / "bitwize-music-server" / "server.py"
+SERVER_PATH = PROJECT_ROOT / "servers" / "maxinger15-music-server" / "server.py"
 
 try:
     import mcp  # noqa: F401
@@ -1639,7 +1639,7 @@ class TestCleanupLegacyVenvs:
     """Tests for the cleanup_legacy_venvs MCP tool."""
 
     def test_dry_run_reports_stale_venvs(self, tmp_path):
-        tools_root = tmp_path / ".bitwize-music"
+        tools_root = tmp_path / ".maxinger15-music"
         tools_root.mkdir()
         stale = tools_root / "mastering-env"
         stale.mkdir()
@@ -1656,7 +1656,7 @@ class TestCleanupLegacyVenvs:
         assert stale.exists()
 
     def test_delete_stale_venvs(self, tmp_path):
-        tools_root = tmp_path / ".bitwize-music"
+        tools_root = tmp_path / ".maxinger15-music"
         tools_root.mkdir()
         for name in ("mastering-env", "promotion-env", "cloud-env"):
             d = tools_root / name
@@ -1672,7 +1672,7 @@ class TestCleanupLegacyVenvs:
             assert not (tools_root / name).exists()
 
     def test_no_stale_venvs(self, tmp_path):
-        tools_root = tmp_path / ".bitwize-music"
+        tools_root = tmp_path / ".maxinger15-music"
         tools_root.mkdir()
         # Only the active venv exists
         (tools_root / "venv").mkdir()
@@ -1685,7 +1685,7 @@ class TestCleanupLegacyVenvs:
             assert result["results"][name]["status"] == "not_found"
 
     def test_partial_stale_venvs(self, tmp_path):
-        tools_root = tmp_path / ".bitwize-music"
+        tools_root = tmp_path / ".maxinger15-music"
         tools_root.mkdir()
         (tools_root / "cloud-env").mkdir()
         (tools_root / "cloud-env" / "file.txt").write_bytes(b"\x00" * 50)

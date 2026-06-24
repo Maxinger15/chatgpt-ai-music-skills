@@ -7,7 +7,7 @@
 **Workflow files execute code in CI/CD and require strict security review.**
 
 Requirements for workflow changes:
-- ✅ Must be reviewed and approved by @bitwize-music
+- ✅ Must be reviewed and approved by @maxinger15-music
 - ✅ Manual security audit required (no automated approval)
 - ✅ Changes must be explained in PR description
 - ❌ Do not include executable code in PR descriptions or comments
@@ -20,14 +20,14 @@ Security considerations:
 
 ### Plugin Manifest Files
 
-Changes to `.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`:
+Changes to `.codex-plugin/plugin.json` or `.agents/plugins/marketplace.json`:
 - Trigger automated releases when merged to main
 - Must be reviewed by maintainer
 - Version changes should match CHANGELOG.md
 
 ### AI-Assisted Development
 
-This project uses Claude Code (AI pair programming). When contributing:
+This project uses Codex (AI pair programming). When contributing:
 
 **DO:**
 - ✅ Review all code changes carefully
@@ -50,7 +50,7 @@ This project uses Claude Code (AI pair programming). When contributing:
 - Credentials (passwords, service accounts)
 - Environment files (.env, config.local.yaml)
 
-User-specific configuration lives in `~/.bitwize-music/config.yaml` (outside this repository).
+User-specific configuration lives in `~/.maxinger15-music/config.yaml` (outside this repository).
 
 If you accidentally commit a secret:
 1. Immediately revoke/rotate the credential
@@ -80,14 +80,14 @@ Pre-1.0 versions are in active development. Security fixes will be released as p
 
 If you're using this plugin:
 
-1. **Keep your config secure**: `~/.bitwize-music/config.yaml` may contain paths and settings
+1. **Keep your config secure**: `~/.maxinger15-music/config.yaml` may contain paths and settings
 2. **Use .gitignore**: Don't commit your albums/content to public repos accidentally
 3. **Review generated content**: Always review lyrics/content before publishing
 4. **Separate repos**: Keep this plugin (public) separate from your albums (private)
 
 ## Attribution
 
-This project uses AI assistance (Claude Code) for development. Commits include:
+This project uses AI assistance (Codex) for development. Commits include:
 ```
 Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 ```

@@ -9,8 +9,8 @@ markers = [
 
 [tool.mypy]
 python_version = "3.11"
-mypy_path = "servers/bitwize-music-server"
-files = ["servers/bitwize-music-server", "tools"]
+mypy_path = "servers/maxinger15-music-server"
+files = ["servers/maxinger15-music-server", "tools"]
 namespace_packages = true
 explicit_package_bases = true
 warn_return_any = true
@@ -28,7 +28,7 @@ follow_imports = "silent"
 
 [tool.coverage.run]
 omit = [
-    "servers/bitwize-music-server/run.py",   # uvicorn entry point
+    "servers/maxinger15-music-server/run.py",   # uvicorn entry point
     "tools/state/__main__.py",               # python -m entry point
     "tools/validate_help_completeness.py",   # standalone validation script
 ]

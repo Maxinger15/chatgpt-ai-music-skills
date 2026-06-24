@@ -18,7 +18,7 @@ streaming:
 
 | Attribute | Detail |
 |-----------|--------|
-| **Artist** | [bitwize](../../../README.md) |
+| **Artist** | [maxinger15](../../../README.md) |
 | **Album** | Sample Album |
 | **Genre** | [Electronic](/genres/electronic/README.md) / Synthwave |
 | **Tracks** | 8 |

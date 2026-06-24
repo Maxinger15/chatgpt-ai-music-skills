@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 _BUILTIN_PRESETS_FILE = Path(__file__).parent / "genre-presets.yaml"
 
 # User override location
-_CONFIG_PATH = Path.home() / ".bitwize-music" / "config.yaml"
+_CONFIG_PATH = Path.home() / ".maxinger15-music" / "config.yaml"
 
 
 def _load_yaml_file(path: Path) -> dict[str, Any]:

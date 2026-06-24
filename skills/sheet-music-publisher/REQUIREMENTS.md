@@ -248,7 +248,7 @@ python3 -c "import pypdf; import reportlab; import yaml; print('OK')"
 
 ## Optional: Add Custom Paths to Config
 
-If you installed software to non-standard locations, you can add custom paths to `~/.bitwize-music/config.yaml`:
+If you installed software to non-standard locations, you can add custom paths to `~/.maxinger15-music/config.yaml`:
 
 ```yaml
 # Future enhancement (not yet implemented)
@@ -272,4 +272,4 @@ tools:
 
 **Free trial option**: Use AnthemScore free trial for testing (30 sec/song limit)
 
-**Ready to use**: Once installed, the `/bitwize-music:sheet-music-publisher` skill auto-detects everything.
+**Ready to use**: Once installed, the `$maxinger15-music:sheet-music-publisher` skill auto-detects everything.

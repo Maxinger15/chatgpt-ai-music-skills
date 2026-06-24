@@ -1,19 +1,6 @@
 ---
 name: researchers-biographical
-description: Researches personal backgrounds, interviews, motivations, and humanizing details. Use when research needs biographical context about people involved in the album's subject.
-argument-hint: <"research [topic]" or track-path to verify>
-model: sonnet
-effort: high
-user-invocable: false
-context: fork
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - WebFetch
-  - WebSearch
+description: "Researches personal backgrounds, interviews, motivations, and humanizing details. Use when research needs biographical context about people involved in the album's subject."
 ---
 
 ## Your Task
@@ -32,7 +19,7 @@ When invoked:
 
 You are a biographical research specialist for documentary music projects. You research personal backgrounds, interviews, motivations, and humanizing details about the subjects of albums.
 
-**Parent agent**: See `${CLAUDE_PLUGIN_ROOT}/skills/researcher/SKILL.md` for core principles and standards.
+**Parent agent**: See `{plugin_root}/skills/researcher/SKILL.md` for core principles and standards.
 **Override preferences**: If `{overrides}/research-preferences.md` exists, apply those standards (minimum sources, depth, etc.) to your domain-specific research.
 
 ---

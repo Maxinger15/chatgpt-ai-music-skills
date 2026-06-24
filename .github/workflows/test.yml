@@ -36,7 +36,7 @@ jobs:
 
         # Validate plugin.json can be read
         try:
-            with open('.claude-plugin/plugin.json') as f:
+            with open('.codex-plugin/plugin.json') as f:
                 import json
                 json.load(f)
             print('[OK] plugin.json is valid')
@@ -44,9 +44,9 @@ jobs:
             print(f'[FAIL] plugin.json validation failed: {e}')
             sys.exit(1)
 
-        # Validate marketplace.json can be read
+        # Validate Codex marketplace.json can be read
         try:
-            with open('.claude-plugin/marketplace.json') as f:
+            with open('.agents/plugins/marketplace.json') as f:
                 import json
                 json.load(f)
             print('[OK] marketplace.json is valid')
@@ -64,32 +64,36 @@ jobs:
             sys.exit(1)
         "
 
-    - name: Check version consistency
+    - name: Check Codex plugin metadata
       run: |
         python -c "
         import json
         import sys
+        import re
 
-        # Read plugin.json version
-        with open('.claude-plugin/plugin.json') as f:
-            plugin_version = json.load(f)['version']
+        with open('.codex-plugin/plugin.json') as f:
+            plugin = json.load(f)
 
-        # Read marketplace.json version
-        with open('.claude-plugin/marketplace.json') as f:
-            marketplace_version = json.load(f)['plugins'][0]['version']
+        with open('.agents/plugins/marketplace.json') as f:
+            marketplace = json.load(f)
 
+        plugin_name = plugin.get('name')
+        plugin_version = plugin.get('version', '')
+
+        print(f'plugin.json name: {plugin_name}')
         print(f'plugin.json version: {plugin_version}')
-        print(f'marketplace.json version: {marketplace_version}')
 
-        if plugin_version != marketplace_version:
-            print('[FAIL] ERROR: Version mismatch!')
-            print(f'  plugin.json:      {plugin_version}')
-            print(f'  marketplace.json: {marketplace_version}')
-            print('')
-            print('Fix by updating both files to the same version.')
+        if plugin_name != 'maxinger15-music':
+            print('[FAIL] ERROR: unexpected plugin name')
+            sys.exit(1)
+        if not re.match(r'^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$', plugin_version):
+            print('[FAIL] ERROR: invalid plugin version')
+            sys.exit(1)
+        if not any(entry.get('name') == plugin_name for entry in marketplace.get('plugins', [])):
+            print('[FAIL] ERROR: marketplace missing maxinger15-music entry')
             sys.exit(1)
 
-        print('[OK] Versions match')
+        print('[OK] Codex plugin metadata valid')
         "
 
     - name: Check SKILL.md structure and frontmatter
@@ -100,10 +104,10 @@ jobs:
         import yaml
         import re
 
-        REQUIRED_FIELDS = ['name', 'description', 'model']
-        # Skills must use a tier alias (opus/sonnet/haiku) or inherit/default —
-        # never a pinned model ID. Aliases auto-track the frontier model.
-        MODEL_PATTERN = r'^(opus|sonnet|haiku|inherit|default)$'
+        REQUIRED_FIELDS = ['name', 'description']
+        LEGACY_FIELDS = {'model', 'effort', 'allowed-tools', 'argument-hint', 'context'}
+        VALID_COMPLEXITY_TIERS = {'opus', 'sonnet', 'haiku'}
+        VALID_EFFORT = {'low', 'medium', 'high', 'xhigh', 'max'}
 
         skill_dirs = [d for d in os.listdir('skills') if os.path.isdir(f'skills/{d}')]
 
@@ -137,9 +141,31 @@ jobs:
                 if field not in frontmatter:
                     frontmatter_errors.append(f'{skill_md_path}: missing required field \"{field}\"')
 
-            # Validate model format (alias-only — pinned IDs are rejected)
-            if 'model' in frontmatter and not re.match(MODEL_PATTERN, frontmatter['model']):
-                frontmatter_errors.append(f'{skill_md_path}: invalid model format \"{frontmatter[\"model\"]}\"')
+            legacy_present = LEGACY_FIELDS & set(frontmatter)
+            if legacy_present:
+                frontmatter_errors.append(f'{skill_md_path}: legacy frontmatter fields {sorted(legacy_present)}')
+
+            openai_yaml = f'skills/{skill_dir}/agents/openai.yaml'
+            if not os.path.exists(openai_yaml):
+                frontmatter_errors.append(f'{skill_md_path}: missing agents/openai.yaml')
+
+        with open('skills/metadata.yaml') as f:
+            metadata = yaml.safe_load(f) or {}
+        skill_metadata = metadata.get('skills', {})
+        expected_skills = {
+            d for d in skill_dirs
+            if os.path.exists(f'skills/{d}/SKILL.md')
+        }
+        if set(skill_metadata) != expected_skills:
+            frontmatter_errors.append('skills/metadata.yaml does not match on-disk skills')
+
+        for skill_name, meta in skill_metadata.items():
+            tier = meta.get('complexity_tier')
+            effort = meta.get('complexity_effort')
+            if tier not in VALID_COMPLEXITY_TIERS:
+                frontmatter_errors.append(f'{skill_name}: invalid complexity_tier \"{tier}\"')
+            if effort is not None and effort not in VALID_EFFORT:
+                frontmatter_errors.append(f'{skill_name}: invalid complexity_effort \"{effort}\"')
 
         if missing_skill_md:
             print('[FAIL] Missing SKILL.md files:')
@@ -157,27 +183,27 @@ jobs:
         print(f'[OK] All {len(skill_dirs)} skills have valid SKILL.md with required frontmatter')
         "
 
-    - name: Check CLAUDE.md size
+    - name: Check AGENTS.md size
       run: |
         python -c "
         import sys
 
         MAX_CHARS = 40000
 
-        with open('CLAUDE.md', 'r', encoding='utf-8') as f:
+        with open('AGENTS.md', 'r', encoding='utf-8') as f:
             content = f.read()
             char_count = len(content)
 
         size_k = char_count / 1000
-        print(f'CLAUDE.md: {size_k:.1f}K chars (max {MAX_CHARS // 1000}K)')
+        print(f'AGENTS.md: {size_k:.1f}K chars (max {MAX_CHARS // 1000}K)')
 
         if char_count > MAX_CHARS:
-            print(f'[FAIL] CLAUDE.md exceeds {MAX_CHARS // 1000}K character limit')
+            print(f'[FAIL] AGENTS.md exceeds {MAX_CHARS // 1000}K character limit')
             print(f'  Current: {char_count} chars')
             print(f'  Over by: {char_count - MAX_CHARS} chars')
             sys.exit(1)
 
-        print('[OK] CLAUDE.md size within limit')
+        print('[OK] AGENTS.md size within limit')
         "
 
   test:

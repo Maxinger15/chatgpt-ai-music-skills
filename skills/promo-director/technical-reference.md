@@ -103,27 +103,27 @@ Without librosa (fallback):
 
 **Basic (everything):**
 ```
-/bitwize-music:promo-director my-album
+$maxinger15-music:promo-director my-album
 ```
 
 **Tracks only:**
 ```
-/bitwize-music:promo-director my-album --tracks-only
+$maxinger15-music:promo-director my-album --tracks-only
 ```
 
 **Sampler only:**
 ```
-/bitwize-music:promo-director my-album --sampler-only
+$maxinger15-music:promo-director my-album --sampler-only
 ```
 
 **Custom style:**
 ```
-/bitwize-music:promo-director my-album --style neon
+$maxinger15-music:promo-director my-album --style neon
 ```
 
 **Custom duration:**
 ```
-/bitwize-music:promo-director my-album --duration 30
+$maxinger15-music:promo-director my-album --duration 30
 ```
 
 ## Integration with Other Skills
@@ -137,8 +137,8 @@ After mastering complete:
 ## Mastering Complete
 
 **Next Steps:**
-1. [Optional] Generate promo videos: /bitwize-music:promo-director my-album
-2. Begin release workflow: /bitwize-music:release-director my-album
+1. [Optional] Generate promo videos: $maxinger15-music:promo-director my-album
+2. Begin release workflow: $maxinger15-music:release-director my-album
 ```
 
 ### Handoff TO
@@ -149,9 +149,9 @@ After promo generation:
 ```
 Promo videos generated successfully.
 
-**Optional:** Upload to cloud storage: /bitwize-music:cloud-uploader my-album
+**Optional:** Upload to cloud storage: $maxinger15-music:cloud-uploader my-album
 
-Ready for release workflow: /bitwize-music:release-director my-album
+Ready for release workflow: $maxinger15-music:release-director my-album
 ```
 
 ## Future Enhancements
@@ -183,12 +183,12 @@ Ready for release workflow: /bitwize-music:release-director my-album
 - Override with: `--font-path /path/to/font.ttf`
 
 **"Color extraction failed"**
-- Activate venv: `source ~/.bitwize-music/venv/bin/activate`
+- Activate venv: `source ~/.maxinger15-music/venv/bin/activate`
 - Install PIL in venv: `pip install pillow`
 - Or accept default cyan color scheme (still works)
 
 **"librosa not found" (warning, not error)**
-- Activate venv: `source ~/.bitwize-music/venv/bin/activate`
+- Activate venv: `source ~/.maxinger15-music/venv/bin/activate`
 - Install in venv: `pip install librosa numpy`
 - Or continue with fallback (20% into track)
 - Quality still good, just less intelligent segment selection

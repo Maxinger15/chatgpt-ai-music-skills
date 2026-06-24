@@ -46,9 +46,9 @@ This document defines the automated mastering workflow for preparing audio track
 
 ```bash
 # Create shared virtual environment
-mkdir -p ~/.bitwize-music
-python3 -m venv ~/.bitwize-music/venv
-source ~/.bitwize-music/venv/bin/activate
+mkdir -p ~/.maxinger15-music
+python3 -m venv ~/.maxinger15-music/venv
+source ~/.maxinger15-music/venv/bin/activate
 
 # Install Python audio libraries
 pip install matchering pyloudnorm scipy numpy soundfile
@@ -59,7 +59,7 @@ pip install matchering pyloudnorm scipy numpy soundfile
 ### Directory Structure
 
 ```
-~/.bitwize-music/              # Shared tools location ({tools_root})
+~/.maxinger15-music/              # Shared tools location ({tools_root})
 └── venv/                     # Unified Python virtual environment
 
 target-folder/                # Your album's WAV folder ({audio_root}/artists/{artist}/albums/{genre}/{album}/)
@@ -83,7 +83,7 @@ target-folder/                # Your album's WAV folder ({audio_root}/artists/{a
 Run the analysis script for accurate measurements:
 
 ```bash
-source ~/.bitwize-music/venv/bin/activate
+source ~/.maxinger15-music/venv/bin/activate
 python3 {plugin_root}/tools/mastering/analyze_tracks.py {audio_root}/artists/{artist}/albums/{genre}/{album}/
 ```
 
@@ -112,7 +112,7 @@ After analysis, categorize tracks:
 ### Standard Mastering Command
 
 ```bash
-source ~/.bitwize-music/venv/bin/activate
+source ~/.maxinger15-music/venv/bin/activate
 python3 {plugin_root}/tools/mastering/master_tracks.py {audio_root}/artists/{artist}/albums/{genre}/{album}/ --genre country
 ```
 
@@ -445,13 +445,13 @@ python3 reference_master.py --reference pro_track.wav --target single_track.wav
 
 ```bash
 # One-time setup (shared venv)
-mkdir -p ~/.bitwize-music
-python3 -m venv ~/.bitwize-music/venv
-source ~/.bitwize-music/venv/bin/activate
+mkdir -p ~/.maxinger15-music
+python3 -m venv ~/.maxinger15-music/venv
+source ~/.maxinger15-music/venv/bin/activate
 pip install matchering pyloudnorm scipy numpy soundfile
 
 # For each album - run from anywhere, scripts stay in plugin:
-source ~/.bitwize-music/venv/bin/activate
+source ~/.maxinger15-music/venv/bin/activate
 
 # Analyze tracks (pass audio folder path)
 python3 {plugin_root}/tools/mastering/analyze_tracks.py {audio_root}/artists/{artist}/albums/{genre}/{album}/
@@ -484,8 +484,8 @@ ls {audio_root}/artists/{artist}/albums/{genre}/{album}/mastered/
 ### "externally-managed-environment" error
 Use a virtual environment:
 ```bash
-python3 -m venv ~/.bitwize-music/venv
-source ~/.bitwize-music/venv/bin/activate
+python3 -m venv ~/.maxinger15-music/venv
+source ~/.maxinger15-music/venv/bin/activate
 ```
 
 ### Very slow processing
@@ -504,13 +504,13 @@ Large files take time. For a 10-track album, expect 30-60 seconds total.
 
 ## Related Skills
 
-- **`/bitwize-music:mastering-engineer`** - Audio mastering guidance and automation
+- **`$maxinger15-music:mastering-engineer`** - Audio mastering guidance and automation
   - Uses this workflow document as reference
   - Runs mastering scripts automatically
   - Analyzes LUFS and provides recommendations
   - Applies genre-specific EQ presets
 
-- **`/bitwize-music:release-director`** - Album release coordination
+- **`$maxinger15-music:release-director`** - Album release coordination
   - Verifies mastering is complete before release
   - Checks LUFS targets for streaming platforms
   - Manages final QA and distribution prep

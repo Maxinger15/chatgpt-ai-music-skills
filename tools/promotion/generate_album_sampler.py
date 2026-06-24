@@ -64,11 +64,11 @@ def _cleanup_temp_files() -> None:
 
 atexit.register(_cleanup_temp_files)
 
-_DEFAULT_CONFIG = {"artist": {"name": "bitwize"}}
+_DEFAULT_CONFIG = {"artist": {"name": "maxinger15"}}
 
 
 def load_config() -> dict[str, Any]:
-    """Load bitwize-music config file."""
+    """Load maxinger15-music config file."""
     return _load_config(fallback=_DEFAULT_CONFIG) or _DEFAULT_CONFIG
 
 
@@ -223,7 +223,7 @@ def generate_album_sampler(
     output_path: Path,
     clip_duration: int = DEFAULT_CLIP_DURATION,
     crossfade: float = DEFAULT_CROSSFADE,
-    artist_name: str = "bitwize",
+    artist_name: str = "maxinger15",
     font_path: str | None = None,
     titles: dict[str, str] | None = None,
     style: str = "pulse",
@@ -389,7 +389,7 @@ Examples:
 
     # Load config for artist name
     config = load_config()
-    artist_name = args.artist or config.get('artist', {}).get('name', 'bitwize')
+    artist_name = args.artist or config.get('artist', {}).get('name', 'maxinger15')
 
     # Find artwork
     if args.artwork:

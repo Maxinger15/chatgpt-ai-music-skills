@@ -11,7 +11,7 @@ Glob: config/config.example.yaml
 
 ### TEST: config.example.yaml is valid YAML
 ```bash
-~/.bitwize-music/venv/bin/python3 -c "import yaml; yaml.safe_load(open('${CLAUDE_PLUGIN_ROOT}/config/config.example.yaml'))"
+~/.maxinger15-music/venv/bin/python3 -c "import yaml; yaml.safe_load(open('{plugin_root}/config/config.example.yaml'))"
 ```
 
 ### TEST: config.example.yaml has all required sections
@@ -55,18 +55,18 @@ Verify inline comments use "Examples:" or "Example:" format
 2. Verify it documents each setting from config.example.yaml
 3. Check Settings Reference table is complete
 
-### TEST: Config location consistently documented as ~/.bitwize-music
+### TEST: Config location consistently documented as ~/.maxinger15-music
 Search these files for config path references:
-- CLAUDE.md
+- AGENTS.md
 - README.md
 - config/README.md
 - skills/configure/SKILL.md
 - skills/tutorial/SKILL.md
 
-All should reference `~/.bitwize-music/config.yaml` or `~/.bitwize-music/`
+All should reference `~/.maxinger15-music/config.yaml` or `~/.maxinger15-music/`
 
 ### TEST: Config must be read before path operations (regression)
-Read CLAUDE.md "When to Read Config" section.
+Read AGENTS.md "When to Read Config" section.
 Verify it includes:
 1. "ALWAYS read" instruction before moving/creating files
 2. "ALWAYS read" instruction before resolving paths
@@ -105,12 +105,14 @@ For each skills/*/SKILL.md:
 Each SKILL.md must have:
 - `name:` (required)
 - `description:` (required)
-- `model:` (required — tier alias preferred, see below)
-- `effort:` (required on Opus/Sonnet skills; omit on Haiku — see below)
-- `allowed-tools:` (required, must be array)
+- No legacy execution metadata such as `model`, `effort`, `allowed-tools`, `argument-hint`, or `context`
+
+Each skill must also have:
+- `skills/<skill>/agents/openai.yaml` for Codex UI metadata
+- an entry in `skills/metadata.yaml` for advisory complexity and workflow metadata
 
 ### TEST: Skills with external deps have requirements field
-Skills that require external tools or Python packages should have `requirements:` in frontmatter.
+Skills that require external tools or Python packages should have `requirements:` in `skills/metadata.yaml`.
 
 Required for:
 - `mastering-engineer` - needs matchering, pyloudnorm, scipy, numpy, soundfile
@@ -122,60 +124,60 @@ Required for:
 Check with:
 ```bash
 for skill in mastering-engineer promo-director sheet-music-publisher document-hunter cloud-uploader; do
-  if ! grep -q "^requirements:" "skills/$skill/SKILL.md"; then
-    echo "MISSING: skills/$skill/SKILL.md needs requirements field"
+  if ! grep -A20 "^  $skill:" skills/metadata.yaml | grep -q "requirements:"; then
+    echo "MISSING: skills/metadata.yaml needs requirements for $skill"
   fi
 done
 ```
 
-### TEST: All model references are valid
-Each skill's `model:` field MUST use a **tier alias** so it automatically tracks
-the frontier model of that tier (no per-release edits):
+### TEST: All advisory complexity references are valid
+Each skill's `complexity_tier:` in `skills/metadata.yaml` MUST use an advisory tier:
 ```
 opus | sonnet | haiku
 ```
-The special values `inherit` / `default` are also accepted. Pinned model IDs
-(e.g. `claude-opus-4-8`) are **rejected** — use an alias.
 
-Examples of valid models:
+Examples of valid complexity tiers:
 - `opus`
 - `sonnet`
 - `haiku`
 
 Check with:
 ```bash
-for f in skills/*/SKILL.md; do
-  model=$(grep -E '^model:' "$f" | sed 's/model: *//')
-  if ! echo "$model" | grep -qE '^(opus|sonnet|haiku|inherit|default)$'; then
-    echo "INVALID: $f has model: $model"
-  fi
-done
+python3 - <<'PY'
+import sys, yaml
+data = yaml.safe_load(open("skills/metadata.yaml")) or {}
+valid = {"opus", "sonnet", "haiku"}
+bad = {
+    name: meta.get("complexity_tier")
+    for name, meta in data.get("skills", {}).items()
+    if meta.get("complexity_tier") not in valid
+}
+if bad:
+    print(f"INVALID complexity_tier: {bad}")
+    sys.exit(1)
+PY
 ```
 
-### TEST: Effort levels are valid and correctly scoped
-Skills may set an `effort:` field (reasoning depth). Rules:
+### TEST: Complexity effort levels are valid
+Skills may set a `complexity_effort:` field in `skills/metadata.yaml`. Rules:
 - If present, the value must be one of: `low`, `medium`, `high`, `xhigh`, `max`.
-- **Opus/Sonnet** skills must set an effort level (these tiers honor it).
-- **Haiku** skills must NOT set effort — Haiku does not support it, so the field
-  would be a misleading no-op.
-
-`xhigh` is only honored on Opus 4.7/4.8; on Sonnet it gracefully falls back to
-`high`. `max` is honored on all Opus/Sonnet tiers. See the
-[effort docs](https://code.claude.com/docs/en/model-config.md#adjust-effort-level).
+- The field is advisory and is not a Codex runtime model-routing directive.
 
 Check with:
 ```bash
-for f in skills/*/SKILL.md; do
-  model=$(grep -E '^model:' "$f" | sed 's/model: *//')
-  effort=$(grep -E '^effort:' "$f" | sed 's/effort: *//')
-  case "$model" in
-    *opus*|*sonnet*) [ -z "$effort" ] && echo "MISSING effort: $f" ;;
-    *haiku*) [ -n "$effort" ] && echo "UNSUPPORTED effort on haiku: $f" ;;
-  esac
-  if [ -n "$effort" ] && ! echo "$effort" | grep -qE '^(low|medium|high|xhigh|max)$'; then
-    echo "INVALID effort: $f has effort: $effort"
-  fi
-done
+python3 - <<'PY'
+import sys, yaml
+data = yaml.safe_load(open("skills/metadata.yaml")) or {}
+valid = {"low", "medium", "high", "xhigh", "max"}
+bad = {
+    name: meta.get("complexity_effort")
+    for name, meta in data.get("skills", {}).items()
+    if meta.get("complexity_effort") is not None and meta.get("complexity_effort") not in valid
+}
+if bad:
+    print(f"INVALID complexity_effort: {bad}")
+    sys.exit(1)
+PY
 ```
 
 ### TEST: Skill count in README matches actual
@@ -183,16 +185,16 @@ done
 2. Find in README: "collection of **XX specialized skills**"
 3. Must match
 
-### TEST: All skills documented in CLAUDE.md
+### TEST: All skills documented in AGENTS.md
 Extract skill names from skills/ directory.
-Each must appear in CLAUDE.md skill table (except researcher sub-skills which are documented separately).
+Each must appear in AGENTS.md skill table (except researcher sub-skills which are documented separately).
 
 ### TEST: All skills documented in README.md
 Each skill must appear in README.md skill tables.
 
 ### TEST: /resume skill documented in README (quick win #1)
 Read README.md Skills Reference section.
-Verify `/bitwize-music:resume` appears in the Setup & Maintenance table.
+Verify `$maxinger15-music:resume` appears in the Setup & Maintenance table.
 Verify description includes: "Resume work on an album - finds album, shows status and next steps"
 
 ### TEST: /configure skill has all commands
@@ -240,8 +242,8 @@ Read skills/clipboard/SKILL.md and verify these content types are documented:
 - `all` - Combined Style + Lyrics
 
 ### TEST: /clipboard skill has correct argument format
-Read skills/clipboard/SKILL.md and verify:
-1. `argument-hint` matches format: `<content-type> <album-name> <track-number>`
+Read `skills/metadata.yaml` and `skills/clipboard/SKILL.md`, then verify:
+1. `argument_hint` matches format: `<content-type> <album-name> <track-number>`
 2. Examples show correct usage pattern
 3. Error handling for missing arguments is documented
 
@@ -278,8 +280,8 @@ These files must exist:
 - `templates/research.md`
 - `templates/sources.md`
 
-### TEST: Templates referenced in CLAUDE.md exist
-Search CLAUDE.md for `${CLAUDE_PLUGIN_ROOT}/templates/` references.
+### TEST: Templates referenced in AGENTS.md exist
+Search AGENTS.md for `{plugin_root}/templates/` references.
 Each referenced template must exist.
 
 ### TEST: IDEAS.md template uses consistent status values (quick win #4)
@@ -312,8 +314,8 @@ Read templates/sources.md and verify "Downloaded Documents" section exists.
 
 Tests for album creation workflow documentation.
 
-### TEST: 7 planning phases documented in CLAUDE.md
-Read CLAUDE.md "Building a New Album" section.
+### TEST: 7 planning phases documented in AGENTS.md
+Read AGENTS.md "Building a New Album" section.
 Verify all 7 phases are documented:
 1. Foundation
 2. Concept Deep Dive
@@ -324,7 +326,7 @@ Verify all 7 phases are documented:
 7. Confirmation
 
 ### TEST: Album status values documented
-Verify CLAUDE.md documents these album statuses:
+Verify AGENTS.md documents these album statuses:
 - Concept
 - Research Complete
 - Sources Verified
@@ -333,7 +335,7 @@ Verify CLAUDE.md documents these album statuses:
 - Released
 
 ### TEST: Track status values documented
-Verify CLAUDE.md documents these track statuses:
+Verify AGENTS.md documents these track statuses:
 - Not Started
 - Sources Pending
 - Sources Verified
@@ -342,22 +344,22 @@ Verify CLAUDE.md documents these track statuses:
 - Final
 
 ### TEST: Directory structure documented
-Verify CLAUDE.md documents the directory structure:
+Verify AGENTS.md documents the directory structure:
 - `{content_root}/artists/[artist]/albums/[genre]/[album]/`
 - `{audio_root}/artists/[artist]/albums/[genre]/[album]/`
 - `{documents_root}/artists/[artist]/albums/[genre]/[album]/`
 
 ### TEST: Audio path structure has concrete example (regression)
-Read CLAUDE.md "Mirrored structure" section.
+Read AGENTS.md "Mirrored structure" section.
 Verify it includes:
-1. A concrete example with actual paths (e.g., `~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/`)
+1. A concrete example with actual paths (e.g., `~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/`)
 2. The phrase "includes artist!" to emphasize artist folder is required
 3. A "Common mistake" warning about missing artist folder
 
 This test was added after a bug where audio files were placed at `{audio_root}/[album]/` instead of the full mirrored path.
 
 ### TEST: Importing external audio files documented (regression)
-Read CLAUDE.md "Importing External Audio Files" section.
+Read AGENTS.md "Importing External Audio Files" section.
 Verify it includes:
 1. Trigger for audio/WAV files in Downloads or external locations
 2. Explicit instruction that path "MUST use mirrored structure"
@@ -367,15 +369,15 @@ Verify it includes:
 This test was added after audio files were repeatedly moved to `{audio_root}/[album]/` without the artist folder.
 
 ### TEST: Session start procedure documented
-Read CLAUDE.md "Session Start" section.
+Read AGENTS.md "Session Start" section.
 Verify step 1 is loading configuration.
 Verify step 1b is loading overrides (if present).
 Verify step 3 is checking album ideas file.
 Verify it mentions /configure when config missing.
-Verify it mentions /bitwize-music:album-ideas for detailed ideas list.
+Verify it mentions $maxinger15-music:album-ideas for detailed ideas list.
 
 ### TEST: Session startup contextual tips system documented
-Read CLAUDE.md "Session Start" section after the 6 status check steps.
+Read AGENTS.md "Session Start" section after the 6 status check steps.
 Verify section exists: "Show contextual tips based on detected state:"
 Verify all conditional tip categories are documented:
 - If no albums exist → tutorial tip
@@ -386,31 +388,31 @@ Verify all conditional tip categories are documented:
 - If pending source verifications exist → verification warning
 
 ### TEST: Session startup general productivity tips exist
-Read CLAUDE.md "Session Start" section.
+Read AGENTS.md "Session Start" section.
 Verify section exists: "Always show one general productivity tip (rotate randomly):"
 Verify it contains at least 4 different productivity tips.
-Verify tips reference actual skills (e.g., /bitwize-music:resume, /bitwize-music:researcher).
+Verify tips reference actual skills (e.g., $maxinger15-music:resume, $maxinger15-music:researcher).
 
 ### TEST: Session startup ends with question
-Read CLAUDE.md "Session Start" section.
+Read AGENTS.md "Session Start" section.
 Verify final instruction says: "Finally, ask:" followed by "What would you like to work on?"
 
 ### TEST: Contextual tips use correct skill commands
-Read CLAUDE.md session startup tips section.
+Read AGENTS.md session startup tips section.
 Verify all skill references use correct format:
-- `/bitwize-music:tutorial` (not /tutorial)
-- `/bitwize-music:album-ideas` (not /album-ideas)
-- `/bitwize-music:resume` (not /resume)
-- `/bitwize-music:researcher` (not /researcher)
-- `/bitwize-music:pronunciation-specialist` (not /pronunciation-specialist)
-- `/bitwize-music:clipboard` (not /clipboard)
+- `$maxinger15-music:tutorial` (not /tutorial)
+- `$maxinger15-music:album-ideas` (not /album-ideas)
+- `$maxinger15-music:resume` (not /resume)
+- `$maxinger15-music:researcher` (not /researcher)
+- `$maxinger15-music:pronunciation-specialist` (not /pronunciation-specialist)
+- `$maxinger15-music:clipboard` (not /clipboard)
 
 ### TEST: Contextual tips reference overrides path variable
-Read CLAUDE.md session startup tips section.
+Read AGENTS.md session startup tips section.
 Verify overrides tips use `{overrides}` path variable (not hardcoded path).
 
 ### TEST: Checkpoints documented
-Verify these checkpoints exist in CLAUDE.md:
+Verify these checkpoints exist in AGENTS.md:
 - Ready to Generate Checkpoint
 - Album Generation Complete Checkpoint
 - Ready to Master Checkpoint
@@ -458,53 +460,53 @@ Verify it has examples for:
 ### TEST: Suno pronunciation guide has cross-references (quick win #10)
 Read reference/suno/pronunciation-guide.md.
 Verify "## Related Skills" section exists with:
-- /bitwize-music:pronunciation-specialist reference
-- /bitwize-music:lyric-writer reference
-- /bitwize-music:lyric-reviewer reference
+- $maxinger15-music:pronunciation-specialist reference
+- $maxinger15-music:lyric-writer reference
+- $maxinger15-music:lyric-reviewer reference
 Verify "## See Also" section exists with:
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/v5-best-practices.md reference
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/structure-tags.md reference
-- ${CLAUDE_PLUGIN_ROOT}/skills/lyric-writer/SKILL.md reference
-- ${CLAUDE_PLUGIN_ROOT}/skills/pronunciation-specialist/SKILL.md reference
+- {plugin_root}/reference/suno/v5-best-practices.md reference
+- {plugin_root}/reference/suno/structure-tags.md reference
+- {plugin_root}/skills/lyric-writer/SKILL.md reference
+- {plugin_root}/skills/pronunciation-specialist/SKILL.md reference
 
 ### TEST: Suno v5-best-practices has cross-references (quick win #10)
 Read reference/suno/v5-best-practices.md.
 Verify "## Related Skills" section exists with:
-- /bitwize-music:suno-engineer reference
-- /bitwize-music:lyric-writer reference
-- /bitwize-music:lyric-reviewer reference
+- $maxinger15-music:suno-engineer reference
+- $maxinger15-music:lyric-writer reference
+- $maxinger15-music:lyric-reviewer reference
 Verify "## See Also" section exists with:
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md reference
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/structure-tags.md reference
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/genre-list.md reference
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/voice-tags.md reference
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/tips-and-tricks.md reference
-- ${CLAUDE_PLUGIN_ROOT}/skills/suno-engineer/SKILL.md reference
+- {plugin_root}/reference/suno/pronunciation-guide.md reference
+- {plugin_root}/reference/suno/structure-tags.md reference
+- {plugin_root}/reference/suno/genre-list.md reference
+- {plugin_root}/reference/suno/voice-tags.md reference
+- {plugin_root}/reference/suno/tips-and-tricks.md reference
+- {plugin_root}/skills/suno-engineer/SKILL.md reference
 
 ### TEST: Suno structure-tags has cross-references (quick win #10)
 Read reference/suno/structure-tags.md.
 Verify "## Related Skills" section exists with:
-- /bitwize-music:lyric-writer reference
-- /bitwize-music:suno-engineer reference
-- /bitwize-music:lyric-reviewer reference
+- $maxinger15-music:lyric-writer reference
+- $maxinger15-music:suno-engineer reference
+- $maxinger15-music:lyric-reviewer reference
 Verify "## See Also" section exists with:
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/v5-best-practices.md reference
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md reference
-- ${CLAUDE_PLUGIN_ROOT}/reference/suno/voice-tags.md reference
-- ${CLAUDE_PLUGIN_ROOT}/skills/lyric-writer/SKILL.md reference
+- {plugin_root}/reference/suno/v5-best-practices.md reference
+- {plugin_root}/reference/suno/pronunciation-guide.md reference
+- {plugin_root}/reference/suno/voice-tags.md reference
+- {plugin_root}/skills/lyric-writer/SKILL.md reference
 
 ### TEST: Mastering workflow has cross-references (quick win #10)
 Read reference/mastering/mastering-workflow.md.
 Verify "## Related Skills" section exists with:
-- /bitwize-music:mastering-engineer reference
-- /bitwize-music:release-director reference
+- $maxinger15-music:mastering-engineer reference
+- $maxinger15-music:release-director reference
 Verify "## See Also" section exists with:
-- ${CLAUDE_PLUGIN_ROOT}/tools/mastering/ scripts listed
-- ${CLAUDE_PLUGIN_ROOT}/reference/workflows/release-procedures.md reference
-- ${CLAUDE_PLUGIN_ROOT}/skills/mastering-engineer/SKILL.md reference
+- {plugin_root}/tools/mastering/ scripts listed
+- {plugin_root}/reference/workflows/release-procedures.md reference
+- {plugin_root}/skills/mastering-engineer/SKILL.md reference
 
 ### TEST: Explicit content word list documented
-Read CLAUDE.md "Explicit Content Guidelines" section.
+Read AGENTS.md "Explicit Content Guidelines" section.
 Verify explicit words table exists.
 
 ### TEST: /explicit-checker skill exists
@@ -519,8 +521,8 @@ Verify it has "Artist/Band Name Warning" section that:
 - Lists examples of forbidden names
 - Provides style description alternatives
 
-### TEST: CLAUDE.md mentions artist names forbidden
-Verify CLAUDE.md Suno Reference section mentions artist names are forbidden.
+### TEST: AGENTS.md mentions artist names forbidden
+Verify AGENTS.md Suno Reference section mentions artist names are forbidden.
 
 ### TEST: No band names in Suno example prompts (regression)
 Search skills/suno-engineer/SKILL.md for common band/artist name patterns in example prompts.
@@ -573,17 +575,17 @@ Glob: skills/document-hunter/SKILL.md
 ```
 
 ### TEST: Source verification workflow documented
-Read CLAUDE.md "Sources & Verification" section.
+Read AGENTS.md "Sources & Verification" section.
 Verify it documents:
 - Source hierarchy
 - Track status workflow (Pending → Verified)
 - Human verification handoff triggers
 
 ### TEST: documents_root path documented
-Verify CLAUDE.md and config docs explain `{documents_root}` path variable.
+Verify AGENTS.md and config docs explain `{documents_root}` path variable.
 
 ### TEST: Research files must be saved to album directory (regression)
-Read CLAUDE.md "Sources & Verification" section.
+Read AGENTS.md "Sources & Verification" section.
 Verify it includes:
 1. Rule about saving RESEARCH.md and SOURCES.md to album directory
 2. Path format: `{content_root}/artists/{artist}/albums/{genre}/{album}/`
@@ -646,7 +648,7 @@ Glob: skills/import-audio/SKILL.md
 ### TEST: /import-audio skill reads config first
 Read skills/import-audio/SKILL.md.
 Verify it includes:
-1. Step to read `~/.bitwize-music/config.yaml` marked as REQUIRED
+1. Step to read `~/.maxinger15-music/config.yaml` marked as REQUIRED
 2. Extracts `paths.audio_root` and `artist.name`
 3. CRITICAL warning about including artist folder
 4. Example showing correct path structure
@@ -670,7 +672,7 @@ Glob: skills/import-track/SKILL.md
 ### TEST: /import-track skill reads config first
 Read skills/import-track/SKILL.md.
 Verify it includes:
-1. Step to read `~/.bitwize-music/config.yaml` marked as REQUIRED
+1. Step to read `~/.maxinger15-music/config.yaml` marked as REQUIRED
 2. Extracts `paths.content_root` and `artist.name`
 3. Finds album to determine genre folder
 4. Example showing correct path: `{content_root}/artists/{artist}/albums/{genre}/{album}/tracks/`
@@ -695,7 +697,7 @@ Glob: skills/import-art/SKILL.md
 ### TEST: /import-art skill handles both destinations
 Read skills/import-art/SKILL.md.
 Verify it includes:
-1. Step to read `~/.bitwize-music/config.yaml` marked as REQUIRED
+1. Step to read `~/.maxinger15-music/config.yaml` marked as REQUIRED
 2. Copies to audio folder: `{audio_root}/artists/{artist}/albums/{genre}/{album}/`
 3. Copies to content folder: `{content_root}/artists/{artist}/albums/{genre}/{album}/`
 4. CRITICAL warning about including artist folder in audio path
@@ -720,7 +722,7 @@ Glob: skills/new-album/SKILL.md
 ### TEST: /new-album skill reads config first
 Read skills/new-album/SKILL.md.
 Verify it includes:
-1. Step to read `~/.bitwize-music/config.yaml` marked as REQUIRED
+1. Step to read `~/.maxinger15-music/config.yaml` marked as REQUIRED
 2. Extracts `paths.content_root` and `artist.name`
 3. Creates correct path: `{content_root}/artists/{artist}/albums/{genre}/{album}/tracks/`
 4. Copies templates from plugin directory
@@ -746,10 +748,10 @@ Verify it includes:
 
 ### TEST: Shared venv path documented correctly
 Search for mastering venv references.
-All should point to `~/.bitwize-music/venv` (not per-folder venv).
+All should point to `~/.maxinger15-music/venv` (not per-folder venv).
 
 ### TEST: Target loudness documented
-Read CLAUDE.md mastering section or reference/mastering/.
+Read AGENTS.md mastering section or reference/mastering/.
 Verify it specifies:
 - LUFS target: -14
 - True Peak: -1.0 dBTP
@@ -793,8 +795,8 @@ Verify it has `requirements:` section with:
 - `external:` listing AnthemScore and MuseScore
 - `python:` listing pypdf, reportlab, pyyaml
 
-### TEST: Sheet music requirements documented in CLAUDE.md
-Read CLAUDE.md "Sheet Music Generation (Optional)" section.
+### TEST: Sheet music requirements documented in AGENTS.md
+Read AGENTS.md "Sheet Music Generation (Optional)" section.
 Verify it documents:
 - AnthemScore requirement ($42 Professional)
 - MuseScore requirement (Free)
@@ -806,7 +808,7 @@ Read tools/sheet-music/transcribe.py.
 Verify it includes:
 1. `read_config()` function
 2. `resolve_album_path()` function
-3. Reads `~/.bitwize-music/config.yaml`
+3. Reads `~/.maxinger15-music/config.yaml`
 4. Extracts `paths.audio_root` and `artist.name`
 
 Read tools/sheet-music/create_songbook.py.
@@ -836,19 +838,19 @@ Verify output directory is constructed as:
 
 Verify it INCLUDES artist folder (not `{audio_root}/{album}/sheet-music/`)
 
-### TEST: Sheet music documented in CLAUDE.md workflow
-Read CLAUDE.md.
+### TEST: Sheet music documented in AGENTS.md workflow
+Read AGENTS.md.
 Verify "Sheet Music Generation (Optional)" section exists.
 Verify it shows workflow position: "Generate → Master → [Sheet Music] → Release"
 
 ### TEST: Sheet music in Album Completion Checklist
-Read CLAUDE.md "Album Completion Checklist" section.
+Read AGENTS.md "Album Completion Checklist" section.
 Verify it includes:
 `- [ ] Sheet music generated (optional)`
 
 ### TEST: Sheet music skill in skills table
-Read CLAUDE.md skills table.
-Verify `/bitwize-music:sheet-music-publisher` is listed.
+Read AGENTS.md skills table.
+Verify `$maxinger15-music:sheet-music-publisher` is listed.
 
 ### TEST: Config has sheet_music section
 Read config/config.example.yaml.
@@ -885,19 +887,19 @@ Glob: skills/release-director/SKILL.md
 ```
 
 ### TEST: Album completion checklist documented
-Read CLAUDE.md "Album Completion Checklist" section.
+Read AGENTS.md "Album Completion Checklist" section.
 Verify checklist items exist.
 
 ### TEST: Post-release actions documented
-Read CLAUDE.md "Post-Release Immediate Actions" section.
+Read AGENTS.md "Post-Release Immediate Actions" section.
 Verify it documents SoundCloud upload, announcements.
 
 ### TEST: Streaming lyrics format documented
-Read CLAUDE.md "Streaming Lyrics Format" section.
+Read AGENTS.md "Streaming Lyrics Format" section.
 Verify format rules are documented.
 
 ### TEST: Album art workflow documented
-Read CLAUDE.md "Album Art Generation" section.
+Read AGENTS.md "Album Art Generation" section.
 Verify it documents:
 - When to generate
 - Prompt location
@@ -917,11 +919,11 @@ $PYTHON "$PLUGIN_DIR/tools/validate_help_completeness.py"
 
 This checks:
 1. All skills have SKILL.md file
-2. All skills are listed in CLAUDE.md skills table
+2. All skills are listed in AGENTS.md skills table
 3. All skills are listed in skills/help/SKILL.md
 
 If this test fails:
-- Add missing skill to CLAUDE.md skills table (alphabetically)
+- Add missing skill to AGENTS.md skills table (alphabetically)
 - Add missing skill to skills/help/SKILL.md (in appropriate category)
 - Update CHANGELOG.md
 
@@ -938,14 +940,14 @@ Verify these path variables are used consistently:
 - `{audio_root}`
 - `{documents_root}`
 - `{tools_root}`
-- `${CLAUDE_PLUGIN_ROOT}`
+- `{plugin_root}`
 
 ### TEST: All internal markdown links valid
 Search for markdown links `[text](path)` where path starts with `/` or `./`.
 Verify target files exist.
 
 ### TEST: plugin.json matches documentation
-Read .claude-plugin/plugin.json.
+Read .codex-plugin/plugin.json.
 Verify `name` and `author.name` match README install command.
 
 ### TEST: .gitignore has required entries
@@ -973,7 +975,7 @@ This test was added after an accidental skill.json was found in the resume skill
 2. Search for genre references in templates and documentation:
    - `templates/album.md` - genre field examples
    - `skills/new-album/SKILL.md` - genre parameter
-   - `CLAUDE.md` - genre examples
+   - `AGENTS.md` - genre examples
 3. Any genre referenced in examples must exist in `genres/` directory
 4. Common issues to catch:
    - `hiphop` vs `hip-hop` (hyphenation)
@@ -988,7 +990,7 @@ Consistent language across docs.
 
 ### TEST: Casing preservation instruction exists
 Search for "Preserve exact casing" or "preserve.*casing" in:
-- CLAUDE.md
+- AGENTS.md
 - skills/configure/SKILL.md
 - skills/tutorial/SKILL.md
 
@@ -1005,12 +1007,13 @@ All references should use `suno` (lowercase) not `Suno` when referring to the co
 
 ### TEST: Consistent plugin name
 Plugin should be referred to as:
-- `claude-ai-music-skills` (in plugin.json name)
-- `bitwize-music@claude-ai-music-skills` (install command)
+- `maxinger15-music` (in `.codex-plugin/plugin.json` `name` and the marketplace plugin entry)
+- `maxinger15-music@maxinger15-local` (local install command)
+- `Maxinger15/chatgpt-ai-music-skills` (GitHub repo path for remote marketplace add)
 
 ### TEST: Consistent brand casing
-Search for "Bitwize Music" (title case) - should not exist.
-Brand should always be "bitwize-music" (lowercase with hyphen).
+Search for "Maxinger15 Music" (title case) - should not exist.
+Brand should always be "maxinger15-music" (lowercase with hyphen).
 
 ---
 
@@ -1019,18 +1022,18 @@ Brand should always be "bitwize-music" (lowercase with hyphen).
 Scenario-based tests verifying correct instructions.
 
 ### TEST: Missing config recommends /configure
-Read CLAUDE.md session start section.
+Read AGENTS.md session start section.
 Verify it mentions `/configure` as Option 1 when config missing.
 
 Read skills/tutorial/SKILL.md.
 Verify it mentions `/configure` when config missing.
 
 ### TEST: Album creation requires planning phases first
-Read CLAUDE.md "Building a New Album" section.
+Read AGENTS.md "Building a New Album" section.
 Verify it states planning phases must complete before writing.
 
 ### TEST: Source verification required before generation
-Read CLAUDE.md "Sources & Verification" section.
+Read AGENTS.md "Sources & Verification" section.
 Verify it states human verification required before production.
 
 ### TEST: Tutorial skill checks config first
@@ -1038,7 +1041,7 @@ Read skills/tutorial/SKILL.md.
 Verify it reads config as first step.
 
 ### TEST: Automatic lyrics review documented
-Read CLAUDE.md "Automatic Lyrics Review" section.
+Read AGENTS.md "Automatic Lyrics Review" section.
 Verify it lists all check types:
 - Rhyme check
 - Prosody check
@@ -1056,7 +1059,7 @@ Code quality and best practices.
 
 ### TEST: No TODO/FIXME in production files
 Search for `TODO|FIXME|XXX|HACK` in:
-- CLAUDE.md
+- AGENTS.md
 - README.md
 - config/README.md
 - skills/*/SKILL.md
@@ -1111,7 +1114,7 @@ Verify it includes:
 - Edit config step
 - Optional mastering dependencies step
 - Optional document hunter dependencies step
-- Start Claude and begin step
+- Start Codex and begin step
 
 ### TEST: README has Model Strategy section (quick win #5)
 Read README.md.
@@ -1137,8 +1140,8 @@ Verify it includes ASCII box diagram showing:
 
 This test was added after the README claimed 32 skills when there were actually 38.
 
-### TEST: CLAUDE.md has required sections
-Read CLAUDE.md and verify these sections exist:
+### TEST: AGENTS.md has required sections
+Read AGENTS.md and verify these sections exist:
 - Project Overview
 - Configuration
 - Session Start
@@ -1159,7 +1162,7 @@ End-to-end integration test that creates a test album and exercises the full wor
 
 #### Phase 1: Setup
 ```
-1. Read ~/.bitwize-music/config.yaml
+1. Read ~/.maxinger15-music/config.yaml
 2. Extract content_root, audio_root, artist
 3. Run: /new-album _e2e-test-album electronic
 4. Verify: {content_root}/artists/{artist}/albums/electronic/_e2e-test-album/ exists
@@ -1282,7 +1285,7 @@ Glob: skills/validate-album/SKILL.md
 ### TEST: /validate-album reads config first
 Read skills/validate-album/SKILL.md.
 Verify it includes:
-1. Step to read `~/.bitwize-music/config.yaml` marked as REQUIRED
+1. Step to read `~/.maxinger15-music/config.yaml` marked as REQUIRED
 2. Extracts content_root, audio_root, and artist
 3. Checks audio path includes artist folder
 4. Reports actionable fix commands for issues

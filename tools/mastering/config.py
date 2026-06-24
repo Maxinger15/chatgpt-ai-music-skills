@@ -1,6 +1,6 @@
 """Config loader for the mastering pipeline.
 
-Layers a ``mastering:`` block from ``~/.bitwize-music/config.yaml`` on top of
+Layers a ``mastering:`` block from ``~/.maxinger15-music/config.yaml`` on top of
 hardcoded defaults. Kept separate from ``tools/shared/config.py`` so the
 mastering-specific schema evolves without coupling to generic config helpers.
 

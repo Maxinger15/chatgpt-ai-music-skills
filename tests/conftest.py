@@ -101,11 +101,11 @@ def all_skill_frontmatter(all_skill_dirs) -> Dict[str, Dict[str, Any]]:
 
 
 @pytest.fixture(scope="session")
-def claude_md_content(project_root) -> str:
-    """Contents of CLAUDE.md."""
-    claude_file = project_root / "CLAUDE.md"
-    if claude_file.exists():
-        return claude_file.read_text()
+def agents_md_content(project_root) -> str:
+    """Contents of AGENTS.md."""
+    codex_file = project_root / "AGENTS.md"
+    if codex_file.exists():
+        return codex_file.read_text()
     return ""
 
 

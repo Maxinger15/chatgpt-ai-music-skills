@@ -1,4 +1,4 @@
-"""Logging configuration for bitwize-music tools."""
+"""Logging configuration for maxinger15-music tools."""
 
 from __future__ import annotations
 
@@ -96,7 +96,7 @@ def configure_file_logging(config: dict[str, Any] | None) -> RotatingFileHandler
     level_str = log_config.get("level", "debug").upper()
     level = getattr(logging, level_str, logging.DEBUG)
     log_file = os.path.expanduser(
-        log_config.get("file", "~/.bitwize-music/logs/debug.log")
+        log_config.get("file", "~/.maxinger15-music/logs/debug.log")
     )
     max_bytes = log_config.get("max_size_mb", 5) * 1024 * 1024
     backup_count = log_config.get("backup_count", 3)
@@ -128,7 +128,7 @@ def configure_file_logging(config: dict[str, Any] | None) -> RotatingFileHandler
         root.setLevel(level)
 
     _file_logging_configured = True
-    logging.getLogger("bitwize-music").debug(
+    logging.getLogger("maxinger15-music").debug(
         "File logging enabled: %s (level=%s)", log_file, level_str
     )
 

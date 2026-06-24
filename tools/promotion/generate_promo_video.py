@@ -77,11 +77,11 @@ def _cleanup_temp_files() -> None:
 
 atexit.register(_cleanup_temp_files)
 
-_DEFAULT_CONFIG = {"artist": {"name": "bitwize"}}
+_DEFAULT_CONFIG = {"artist": {"name": "maxinger15"}}
 
 
 def load_config() -> dict[str, Any]:
-    """Load bitwize-music config file."""
+    """Load maxinger15-music config file."""
     return _load_config(fallback=_DEFAULT_CONFIG) or _DEFAULT_CONFIG
 
 
@@ -112,7 +112,7 @@ def generate_waveform_video(
     duration: int = DEFAULT_DURATION,
     style: str = "bars",
     start_time: float | None = None,
-    artist_name: str = "bitwize",
+    artist_name: str = "maxinger15",
     font_path: str | None = None,
     color_hex: str = "",
     glow: float = 0.6,
@@ -400,7 +400,7 @@ def batch_process_album(
     output_dir: Path,
     duration: int = DEFAULT_DURATION,
     style: str = "bars",
-    artist_name: str = "bitwize",
+    artist_name: str = "maxinger15",
     font_path: str | None = None,
     content_dir: Path | None = None,
     jobs: int = 1,
@@ -558,7 +558,7 @@ Examples:
 
     # Load config for artist name
     config = load_config()
-    artist_name = args.artist or config.get('artist', {}).get('name', 'bitwize')
+    artist_name = args.artist or config.get('artist', {}).get('name', 'maxinger15')
 
     # Find font
     font_path = find_font()
@@ -623,7 +623,7 @@ Examples:
                 if args.album:
                     logger.error("    - content directory for album '%s'", args.album)
                 logger.error("  Specify with: --batch-artwork /path/to/artwork.png")
-                logger.error("  Or use: /bitwize-music:import-art to copy artwork to audio folder")
+                logger.error("  Or use: $maxinger15-music:import-art to copy artwork to audio folder")
                 sys.exit(1)
 
         output_dir = args.output or args.batch / 'promo_videos'

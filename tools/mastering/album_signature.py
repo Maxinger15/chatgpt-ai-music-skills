@@ -2,7 +2,7 @@
 
 Pure-Python module — no I/O, no MCP coupling. The
 ``measure_album_signature`` handler in
-``servers/bitwize-music-server/handlers/processing/audio.py`` calls
+``servers/maxinger15-music-server/handlers/processing/audio.py`` calls
 ``build_signature`` on a list of ``analyze_track`` results, then
 (optionally) ``compute_anchor_deltas`` once an anchor index is known.
 

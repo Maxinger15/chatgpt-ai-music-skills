@@ -4,7 +4,7 @@ Visual examples and technical details of generated promo videos.
 
 ## Overview
 
-This document shows what to expect when generating promo videos with the `/bitwize-music:promo-director` skill.
+This document shows what to expect when generating promo videos with the `$maxinger15-music:promo-director` skill.
 
 ## Example: Test Album
 
@@ -65,7 +65,7 @@ This document shows what to expect when generating promo videos with the `/bitwi
 ├─────────────────┤
 │                 │  Bottom: Text overlays
 │  "Track Title"  │  - Title: 64pt, white, drop shadow
-│     "bitwize"   │  - Artist: 48pt, white 80% opacity
+│     "maxinger15"   │  - Artist: 48pt, white 80% opacity
 │                 │
 └─────────────────┘
 ```

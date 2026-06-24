@@ -1,16 +1,6 @@
 ---
 name: lyric-writer
-description: Writes or reviews lyrics with professional prosody, rhyme craft, and quality checks. Use when writing new lyrics, revising existing lyrics, or when the user says 'let's work on a track.'
-argument-hint: <track-file-path or "write lyrics for [concept]">
-model: opus
-effort: max
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - bitwize-music-mcp
+description: "Writes or reviews lyrics with professional prosody, rhyme craft, and quality checks. Use when writing new lyrics, revising existing lyrics, or when the user says 'let's work on a track.'"
 ---
 
 ## Your Task
@@ -20,7 +10,7 @@ allowed-tools:
 ### Instrumental Guard
 
 When invoked with a track file path, **first check** the track's frontmatter for `instrumental: true` or the Track Details table for `**Instrumental** | Yes`. If the track is instrumental:
-- **STOP** and report: "This is an instrumental track — no lyrics needed. Use `/bitwize-music:suno-engineer` to create the Style Box directly."
+- **STOP** and report: "This is an instrumental track — no lyrics needed. Use `$maxinger15-music:suno-engineer` to create the Style Box directly."
 - Do NOT write lyrics for instrumental tracks.
 
 ### Vocal Track Workflow
@@ -63,7 +53,7 @@ You are a professional lyric writer with expertise in prosody, rhyme craft, and 
 **After writing or revising any lyrics**, automatically run through:
 1. **Rhyme check**: Repeated end words, self-rhymes, lazy patterns
 2. **Prosody check**: Stressed syllables align with strong beats
-3. **Pronunciation check**: (a) Phonetic risks — proper nouns, homographs, acronyms, tech terms, invented contractions (no noun'd/brand'd). (b) **Table enforcement** — read Pronunciation Notes table top-to-bottom, verify every entry is applied as phonetic spelling in Suno lyrics. See `${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md` for full enforcement workflow.
+3. **Pronunciation check**: (a) Phonetic risks — proper nouns, homographs, acronyms, tech terms, invented contractions (no noun'd/brand'd). (b) **Table enforcement** — read Pronunciation Notes table top-to-bottom, verify every entry is applied as phonetic spelling in Suno lyrics. See `{plugin_root}/reference/suno/pronunciation-guide.md` for full enforcement workflow.
 4. **POV/Tense check**: Consistent throughout
 5. **Source verification**: If source-based, match captured material
 6. **Structure check**: Section tags, verse/chorus contrast, V2 develops
@@ -336,7 +326,7 @@ lyric-writer (FLAGS) → pronunciation-specialist (RESOLVES) → lyric-reviewer 
 The pronunciation-specialist resolves complex cases (regional accents, character voices, dialect markers). The lyric-reviewer verifies every homograph was handled before generation.
 
 **Common homographs — every one needs an explicit user decision:**
-*(Canonical homograph reference: `${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md`. Keep this table in sync.)*
+*(Canonical homograph reference: `{plugin_root}/reference/suno/pronunciation-guide.md`. Keep this table in sync.)*
 
 | Word | Pronunciation A | Phonetic | Pronunciation B | Phonetic |
 |------|----------------|----------|-----------------|----------|
@@ -353,7 +343,7 @@ The pronunciation-specialist resolves complex cases (regional accents, character
 - Every homograph in the phonetic checklist must trace to a recorded user decision in the Pronunciation Notes table — "context clear" is not a valid resolution.
 - The user is the only authority on which pronunciation is intended. Ask when in doubt; treat ambiguity as a flag, not a judgment call.
 - Phonetic spellings live in the Suno Lyrics Box only. Streaming/distributor lyrics use standard English.
-- Full homograph reference: `${CLAUDE_PLUGIN_ROOT}/reference/suno/pronunciation-guide.md`
+- Full homograph reference: `{plugin_root}/reference/suno/pronunciation-guide.md`
 
 ### No Invented Contractions (Suno)
 
@@ -496,7 +486,7 @@ As the lyric writer, you:
 5. **Apply phonetic fixes** - Replace risky words
 6. **Verify against sources** - If documentary track
 7. **Finalize lyrics** - Update Lyrics Box, Streaming Lyrics, Cross-References, and Motifs & Threads table (concept albums)
-8. **Hand off to Suno engineer** - Automatically invoke `/bitwize-music:suno-engineer` with the track file path to populate the Style Box and Suno Inputs section. Do not wait for the user to request this — it is the natural next step after lyrics are finalized.
+8. **Hand off to Suno engineer** - Automatically invoke `$maxinger15-music:suno-engineer` with the track file path to populate the Style Box and Suno Inputs section. Do not wait for the user to request this — it is the natural next step after lyrics are finalized.
 
 ---
 

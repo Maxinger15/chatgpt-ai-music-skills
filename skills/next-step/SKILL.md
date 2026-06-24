@@ -1,15 +1,6 @@
 ---
 name: next-step
-description: Analyzes album state and recommends the optimal next action. Use when the user asks "what should I do next?" or "what's left to do?"
-argument-hint: [album-name]
-model: haiku
-prerequisites:
-  - resume
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - bitwize-music-mcp
+description: "Analyzes album state and recommends the optimal next action. Use when the user asks \"what should I do next?\" or \"what's left to do?\""
 ---
 
 ## Your Task
@@ -47,42 +38,42 @@ You analyze the current state of albums and tracks and recommend the optimal nex
 
 Analyze album and track statuses to determine the optimal next action.
 
-**Instrumental detection**: Check each track's frontmatter for `instrumental: true` or Track Details table for `**Instrumental** | Yes`. Instrumental tracks bypass the lyrics workflow (lyric-writer, pronunciation-specialist, lyric-reviewer) and go directly to `/bitwize-music:suno-engineer` for Style Box creation.
+**Instrumental detection**: Check each track's frontmatter for `instrumental: true` or Track Details table for `**Instrumental** | Yes`. Instrumental tracks bypass the lyrics workflow (lyric-writer, pronunciation-specialist, lyric-reviewer) and go directly to `$maxinger15-music:suno-engineer` for Style Box creation.
 
 ```
 Album Status = "Concept"
-  → "Define the album concept. Run the 7 Planning Phases with /bitwize-music:album-conceptualizer"
+  → "Define the album concept. Run the 7 Planning Phases with $maxinger15-music:album-conceptualizer"
 
 Album Status = "Research Complete"
   → Any tracks Sources Pending?
     YES → "Sources need verification. Review SOURCES.md and verify each source."
     NO  → First "Not Started" track instrumental?
-      YES → "Create Style Box for instrumental track [name]. Use /bitwize-music:suno-engineer"
-      NO  → "Ready to write! Pick a track and use /bitwize-music:lyric-writer"
+      YES → "Create Style Box for instrumental track [name]. Use $maxinger15-music:suno-engineer"
+      NO  → "Ready to write! Pick a track and use $maxinger15-music:lyric-writer"
 
 Album has tracks with status "Not Started"
   → First not-started track instrumental?
-    YES → "Create Style Box for instrumental track [name]. Use /bitwize-music:suno-engineer directly"
-    NO  → "Write lyrics for track [first not-started track]. Use /bitwize-music:lyric-writer"
+    YES → "Create Style Box for instrumental track [name]. Use $maxinger15-music:suno-engineer directly"
+    NO  → "Write lyrics for track [first not-started track]. Use $maxinger15-music:lyric-writer"
 
 Album has tracks with status "In Progress" (lyrics partially written)
-  → "Finish lyrics for track [first in-progress track]. Use /bitwize-music:lyric-writer"
+  → "Finish lyrics for track [first in-progress track]. Use $maxinger15-music:lyric-writer"
 
 Album has tracks with status "Sources Pending"
   → "Verify sources for track [name]. Check SOURCES.md, then update sources_verified field."
 
 All tracks have lyrics (or Style Box for instrumentals), none generated
   → Has vocal tracks?
-    YES → "Run /bitwize-music:pronunciation-specialist on vocal tracks, then /bitwize-music:lyric-reviewer for final QC, then /bitwize-music:pre-generation-check to validate all gates (instrumental tracks auto-skip lyrics gates)."
-    NO (all instrumental) → "All Style Boxes ready! Run /bitwize-music:pre-generation-check to validate gates before generating on Suno."
+    YES → "Run $maxinger15-music:pronunciation-specialist on vocal tracks, then $maxinger15-music:lyric-reviewer for final QC, then $maxinger15-music:pre-generation-check to validate all gates (instrumental tracks auto-skip lyrics gates)."
+    NO (all instrumental) → "All Style Boxes ready! Run $maxinger15-music:pre-generation-check to validate gates before generating on Suno."
 
 Some tracks generated, some not
   → Any Generated tracks without ✓ in Generation Log Rating?
     YES → "Track [name] needs review. Listen and approve (mark ✓ in Generation Log) or regenerate.
-           Style issue → /bitwize-music:suno-engineer to revise Style Box, then regenerate
-           Lyrics issue → /bitwize-music:lyric-writer to fix lyrics, then regenerate
+           Style issue → $maxinger15-music:suno-engineer to revise Style Box, then regenerate
+           Lyrics issue → $maxinger15-music:lyric-writer to fix lyrics, then regenerate
            Bad luck → Regenerate on Suno (non-deterministic, same settings may give better result)"
-    NO  → "Generate track [first un-generated track] on Suno. Use /bitwize-music:suno-engineer"
+    NO  → "Generate track [first un-generated track] on Suno. Use $maxinger15-music:suno-engineer"
 
 All tracks generated, none Final
   → "All tracks generated! Review each track:
@@ -95,17 +86,17 @@ All tracks generated, some Final
   → Any Generated (non-Final) without ✓?
     YES → "Review track [name] — approve (✓) or regenerate"
     NO  → "All reviewed! Batch-approve remaining: update_track_field(album_slug, track_slug, 'status', 'Final') for each.
-           Then import audio with /bitwize-music:import-audio, then master with /bitwize-music:mastering-engineer"
+           Then import audio with $maxinger15-music:import-audio, then master with $maxinger15-music:mastering-engineer"
 
 All tracks Final
-  → "All tracks approved! Import audio with /bitwize-music:import-audio, then master with /bitwize-music:mastering-engineer"
+  → "All tracks approved! Import audio with $maxinger15-music:import-audio, then master with $maxinger15-music:mastering-engineer"
 
 Album Status = "Complete"
-  → "Album is complete! Release with /bitwize-music:release-director"
+  → "Album is complete! Release with $maxinger15-music:release-director"
 
 Album Status = "Released"
-  → "This album is released! Consider promotional content with /bitwize-music:promo-director"
-  → Also suggest: "Start a new album? Check your ideas with /bitwize-music:album-ideas list"
+  → "This album is released! Consider promotional content with $maxinger15-music:promo-director"
+  → Also suggest: "Start a new album? Check your ideas with $maxinger15-music:album-ideas list"
 ```
 
 ---
@@ -148,8 +139,8 @@ Also in progress:
   - [album-3] — [brief status]
 
 Or start something new:
-  - /bitwize-music:album-ideas list (X ideas pending)
-  - /bitwize-music:new-album
+  - $maxinger15-music:album-ideas list (X ideas pending)
+  - $maxinger15-music:new-album
 ```
 
 ---
@@ -168,7 +159,7 @@ When multiple albums are in progress, prioritize:
 ## Remember
 
 1. **One clear recommendation** — Don't list 5 options. Pick the best one.
-2. **Include the skill name** — "/bitwize-music:lyric-writer" not "write lyrics"
+2. **Include the skill name** — "$maxinger15-music:lyric-writer" not "write lyrics"
 3. **Be specific about which track** — "Write lyrics for track 04-the-escape" not "write some lyrics"
 4. **Explain why briefly** — Users trust recommendations they understand
 5. **Don't repeat resume** — If user just ran resume, don't re-print all the same info

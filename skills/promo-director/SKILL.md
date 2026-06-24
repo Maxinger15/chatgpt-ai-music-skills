@@ -1,26 +1,6 @@
 ---
 name: promo-director
-description: Generates 15-second vertical promo videos for social media from mastered audio. Use after mastering is complete and before release, when the user wants social media content.
-model: sonnet
-effort: low
-prerequisites:
-  - mastering-engineer
-  - album-art-director
-allowed-tools:
-  - Read
-  - Bash
-  - Glob
-  - bitwize-music-mcp
-requirements:
-  external:
-    - name: ffmpeg
-      purpose: Video generation and audio visualization
-      install: "brew install ffmpeg (macOS) or apt install ffmpeg (Linux)"
-      notes: "Requires showwaves, showfreqs, drawtext, gblur filters"
-  python:
-    - pillow
-    - librosa
-    - pyyaml
+description: "Generates 15-second vertical promo videos for social media from mastered audio. Use after mastering is complete and before release, when the user wants social media content."
 ---
 
 # Promo Director Skill
@@ -74,7 +54,7 @@ After installing, run this command again.
 
 **Check Python dependencies:**
 
-Call `get_python_command()` to verify the venv exists. If `venv_exists` is false, show the warning and suggest `/bitwize-music:setup`.
+Call `get_python_command()` to verify the venv exists. If `venv_exists` is false, show the warning and suggest `$maxinger15-music:setup`.
 
 ### 2. Album Detection
 
@@ -82,7 +62,7 @@ Call `get_python_command()` to verify the venv exists. If `venv_exists` is false
 
 Call `resolve_path("audio", album_slug)` — returns the full audio directory path including artist folder.
 
-Example result: `~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/`
+Example result: `~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/`
 
 **Verify contents:**
 - ✓ Mastered audio files (.wav, .mp3, .flac, .m4a)
@@ -95,7 +75,7 @@ Error: No album artwork found in {audio_root}/artists/{artist}/albums/{genre}/{a
 Expected: album.png or album.jpg
 
 Options:
-  1. Use /bitwize-music:import-art to place artwork
+  1. Use $maxinger15-music:import-art to place artwork
   2. Specify path manually: --artwork /path/to/art.png
 
 Which option?
@@ -105,7 +85,7 @@ Which option?
 
 **Check config defaults first:**
 
-Read `promotion` section from `~/.bitwize-music/config.yaml` for defaults:
+Read `promotion` section from `~/.maxinger15-music/config.yaml` for defaults:
 - `promotion.default_style` - Default visualization style
 - `promotion.duration` - Default clip duration
 - `promotion.include_sampler` - Whether to generate album sampler by default
@@ -222,8 +202,8 @@ Common issues:
 1. Review videos: Open promo_videos/ folder
 2. Test on phone: Transfer one video and verify quality
 3. Populate social copy: Fill in promo/ templates (twitter.md, instagram.md, etc.)
-4. [Optional] Upload to cloud: /bitwize-music:cloud-uploader {album}
-5. Ready for release workflow: /bitwize-music:release-director {album}
+4. [Optional] Upload to cloud: $maxinger15-music:cloud-uploader {album}
+5. Ready for release workflow: $maxinger15-music:release-director {album}
 ```
 
 

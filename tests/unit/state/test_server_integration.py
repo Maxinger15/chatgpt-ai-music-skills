@@ -71,7 +71,7 @@ except ImportError:
 # Import modules
 import tools.state.indexer as indexer
 
-SERVER_PATH = PROJECT_ROOT / "servers" / "bitwize-music-server" / "server.py"
+SERVER_PATH = PROJECT_ROOT / "servers" / "maxinger15-music-server" / "server.py"
 
 
 def _import_server():
@@ -311,7 +311,7 @@ SKILL_OPUS = """\
 name: lyric-writer
 description: Writes or reviews lyrics with professional prosody and quality checks.
 argument-hint: <track-file-path or "write lyrics for [concept]">
-model: claude-opus-4-6
+model: codex-opus-4-6
 allowed-tools:
   - Read
   - Edit
@@ -326,7 +326,7 @@ SKILL_SONNET = """\
 name: suno-engineer
 description: Constructs technical Suno V5 style prompts and optimizes generation settings.
 argument-hint: <track-file-path>
-model: claude-sonnet-4-5-20250929
+model: codex-sonnet-4-5-20250929
 prerequisites:
   - lyric-writer
 allowed-tools:
@@ -345,7 +345,7 @@ SKILL_HAIKU = """\
 ---
 name: help
 description: Shows available skills and quick reference for the plugin.
-model: claude-haiku-4-5-20251001
+model: codex-haiku-4-5-20251001
 allowed-tools: []
 ---
 
@@ -356,7 +356,7 @@ SKILL_INTERNAL = """\
 ---
 name: researchers-legal
 description: Researches court documents and indictments for documentary albums.
-model: claude-sonnet-4-5-20250929
+model: codex-sonnet-4-5-20250929
 user-invocable: false
 context: fork
 allowed-tools:
@@ -384,7 +384,7 @@ EXPLICIT_WORDS_OVERRIDE = """\
 def content_dir(tmp_path):
     """Create a fully populated content directory with config, album, and tracks."""
     # Config
-    config_dir = tmp_path / ".bitwize-music"
+    config_dir = tmp_path / ".maxinger15-music"
     config_dir.mkdir()
     cache_dir = config_dir / "cache"
     cache_dir.mkdir()
@@ -422,7 +422,7 @@ def content_dir(tmp_path):
     # Overrides directory
     overrides_dir = content_root / "overrides"
     overrides_dir.mkdir(parents=True)
-    (overrides_dir / "CLAUDE.md").write_text("# Custom Rules\n\n- Always use dark themes\n")
+    (overrides_dir / "AGENTS.md").write_text("# Custom Rules\n\n- Always use dark themes\n")
     (overrides_dir / "explicit-words.md").write_text(EXPLICIT_WORDS_OVERRIDE)
 
     # Promo directory
@@ -1004,7 +1004,7 @@ class TestRemainingToolsCoverage:
 
     def test_load_override(self, integration_env):
         """load_override reads a real override file from disk."""
-        result = json.loads(_run(server.load_override("CLAUDE.md")))
+        result = json.loads(_run(server.load_override("AGENTS.md")))
         assert result["found"] is True
         assert "Custom Rules" in result["content"]
         assert "dark themes" in result["content"]
@@ -1898,12 +1898,12 @@ class TestLoadOverrideExtended:
 
     def test_content_size(self, integration_env):
         """load_override returns accurate size."""
-        result = json.loads(_run(server.load_override("CLAUDE.md")))
+        result = json.loads(_run(server.load_override("AGENTS.md")))
         assert result["size"] == len(result["content"])
 
     def test_path_is_absolute(self, integration_env):
         """load_override returns absolute path."""
-        result = json.loads(_run(server.load_override("CLAUDE.md")))
+        result = json.loads(_run(server.load_override("AGENTS.md")))
         assert Path(result["path"]).is_absolute()
 
 
@@ -2042,24 +2042,24 @@ class TestListSkillsIntegration:
         assert "help" in names
         assert "researchers-legal" in names
 
-    def test_model_counts(self, integration_env):
-        """list_skills returns correct model_counts."""
+    def test_complexity_counts(self, integration_env):
+        """list_skills returns correct complexity_counts."""
         result = json.loads(_run(server.list_skills()))
-        counts = result["model_counts"]
+        counts = result["complexity_counts"]
         assert counts.get("opus", 0) == 1   # lyric-writer
         assert counts.get("sonnet", 0) == 2  # suno-engineer + researchers-legal
         assert counts.get("haiku", 0) == 1   # help
 
     def test_filter_by_model_opus(self, integration_env):
         """list_skills filters by opus tier."""
-        result = json.loads(_run(server.list_skills(model_filter="opus")))
+        result = json.loads(_run(server.list_skills(complexity_filter="opus")))
         assert result["count"] == 1
         assert result["skills"][0]["name"] == "lyric-writer"
-        assert result["skills"][0]["model_tier"] == "opus"
+        assert result["skills"][0]["complexity_tier"] == "opus"
 
     def test_filter_by_model_sonnet(self, integration_env):
         """list_skills filters by sonnet tier."""
-        result = json.loads(_run(server.list_skills(model_filter="sonnet")))
+        result = json.loads(_run(server.list_skills(complexity_filter="sonnet")))
         assert result["count"] == 2
         names = [s["name"] for s in result["skills"]]
         assert "suno-engineer" in names
@@ -2067,7 +2067,7 @@ class TestListSkillsIntegration:
 
     def test_filter_by_model_haiku(self, integration_env):
         """list_skills filters by haiku tier."""
-        result = json.loads(_run(server.list_skills(model_filter="haiku")))
+        result = json.loads(_run(server.list_skills(complexity_filter="haiku")))
         assert result["count"] == 1
         assert result["skills"][0]["name"] == "help"
 
@@ -2086,14 +2086,14 @@ class TestListSkillsIntegration:
     def test_combined_filter_model_and_category(self, integration_env):
         """list_skills combined model + category filter."""
         result = json.loads(_run(server.list_skills(
-            model_filter="sonnet", category="court"
+            complexity_filter="sonnet", category="court"
         )))
         assert result["count"] == 1
         assert result["skills"][0]["name"] == "researchers-legal"
 
     def test_no_match(self, integration_env):
         """list_skills returns empty for non-matching filter."""
-        result = json.loads(_run(server.list_skills(model_filter="opus", category="nonexistent")))
+        result = json.loads(_run(server.list_skills(complexity_filter="opus", category="nonexistent")))
         assert result["count"] == 0
         assert result["skills"] == []
 
@@ -2101,12 +2101,12 @@ class TestListSkillsIntegration:
         """list_skills entries have all expected fields."""
         result = json.loads(_run(server.list_skills()))
         for skill in result["skills"]:
-            for key in ("name", "description", "model", "model_tier", "user_invocable"):
+            for key in ("name", "description", "model", "complexity_tier", "user_invocable"):
                 assert key in skill, f"Missing field: {key}"
 
     def test_total_reflects_unfiltered(self, integration_env):
         """list_skills total always reflects unfiltered total."""
-        result = json.loads(_run(server.list_skills(model_filter="opus")))
+        result = json.loads(_run(server.list_skills(complexity_filter="opus")))
         assert result["count"] == 1
         assert result["total"] == 4  # total remains unfiltered
 
@@ -2122,8 +2122,8 @@ class TestGetSkillIntegration:
         assert result["name"] == "lyric-writer"
         skill = result["skill"]
         assert skill["description"].startswith("Writes or reviews lyrics")
-        assert skill["model"] == "claude-opus-4-6"
-        assert skill["model_tier"] == "opus"
+        assert skill["model"] == "codex-opus-4-6"
+        assert skill["complexity_tier"] == "opus"
 
     def test_fuzzy_match(self, integration_env):
         """get_skill fuzzy match works with partial name."""

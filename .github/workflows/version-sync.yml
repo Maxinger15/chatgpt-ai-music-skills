@@ -1,44 +1,43 @@
-name: Version Sync Check
+name: Codex Plugin Metadata Check
 
 on:
   pull_request:
     paths:
-      - '.claude-plugin/plugin.json'
-      - '.claude-plugin/marketplace.json'
+      - '.codex-plugin/plugin.json'
+      - '.agents/plugins/marketplace.json'
       - 'skills/*/SKILL.md'
+      - 'skills/*/agents/openai.yaml'
+      - 'skills/metadata.yaml'
       - 'tests/**'
 
 permissions:
   contents: read
 
 jobs:
-  check-version-sync:
+  check-plugin-metadata:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
-    - name: Verify version files are in sync
+    - name: Verify Codex plugin metadata
       run: |
-        PLUGIN_VERSION=$(jq -r '.version' .claude-plugin/plugin.json)
-        MARKETPLACE_VERSION=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+        PLUGIN_VERSION=$(jq -r '.version' .codex-plugin/plugin.json)
+        PLUGIN_NAME=$(jq -r '.name' .codex-plugin/plugin.json)
+        MARKETPLACE_MATCHES=$(jq --arg name "$PLUGIN_NAME" '[.plugins[] | select(.name == $name)] | length' .agents/plugins/marketplace.json)
 
+        echo "plugin.json name:         $PLUGIN_NAME"
         echo "plugin.json version:      $PLUGIN_VERSION"
-        echo "marketplace.json version: $MARKETPLACE_VERSION"
 
-        if [ "$PLUGIN_VERSION" != "$MARKETPLACE_VERSION" ]; then
-          echo ""
-          echo "[FAIL] ERROR: Version files are out of sync!"
-          echo ""
-          echo "Please update both:"
-          echo "  - .claude-plugin/plugin.json"
-          echo "  - .claude-plugin/marketplace.json"
-          echo ""
-          echo "to the same version number."
+        if ! echo "$PLUGIN_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+          echo "[FAIL] ERROR: Invalid plugin version: $PLUGIN_VERSION"
           exit 1
         fi
 
-        echo ""
-        echo "[OK] Version files are in sync: $PLUGIN_VERSION"
+        if [ "$MARKETPLACE_MATCHES" -lt 1 ]; then
+          echo "[FAIL] ERROR: .agents/plugins/marketplace.json is missing $PLUGIN_NAME"
+          exit 1
+        fi
 
+        echo "[OK] Codex plugin metadata is valid: $PLUGIN_NAME $PLUGIN_VERSION"

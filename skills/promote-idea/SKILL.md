@@ -1,11 +1,6 @@
 ---
 name: promote-idea
-description: Converts an album idea from IDEAS.md into an actual album project in one step. Use when the user says "promote [idea title]", "turn idea into album", or "start working on [idea]".
-argument-hint: <"idea title"> [album-slug-override]
-model: haiku
-allowed-tools:
-  - Read
-  - bitwize-music-mcp
+description: "Converts an album idea from IDEAS.md into an actual album project in one step. Use when the user says \"promote [idea title]\", \"turn idea into album\", or \"start working on [idea]\"."
 ---
 
 ## Your Task
@@ -107,14 +102,14 @@ On success, report:
 ```
 Promoted "Kleine Welt" → album "kleine-welt"
 
-Location: ~/bitwize-music/artists/bitwize/albums/electronic/kleine-welt/
+Location: ~/maxinger15-music/artists/maxinger15/albums/electronic/kleine-welt/
 Files:    README.md, tracks/
 
 Concept block injected into README.md from idea.
 Idea status: Pending → In Progress
 
 Next step:
-  /bitwize-music:album-conceptualizer
+  $maxinger15-music:album-conceptualizer
 
   This walks through the 7 Planning Phases (Vision, Identity, Sonic
   Direction, Structure, Tracks, Content, Approval) to develop the concept
@@ -137,7 +132,7 @@ For documentary albums, add:
 ```
 Error: Idea "Nonexistent" not found in IDEAS.md.
 
-Check available ideas: /bitwize-music:album-ideas list
+Check available ideas: $maxinger15-music:album-ideas list
 ```
 
 **Idea already promoted:**
@@ -145,7 +140,7 @@ Check available ideas: /bitwize-music:album-ideas list
 ```
 Error: Idea "Already Active" is already promoted (status: In Progress).
 
-If you want to rename or re-scaffold, use /bitwize-music:rename on the
+If you want to rename or re-scaffold, use $maxinger15-music:rename on the
 existing album instead.
 ```
 
@@ -154,7 +149,7 @@ existing album instead.
 ```
 Error: Idea "No Genre" has no **Genre** field in IDEAS.md.
 
-Set the genre first: /bitwize-music:album-ideas edit "No Genre"
+Set the genre first: $maxinger15-music:album-ideas edit "No Genre"
 ```
 
 **Invalid genre:**
@@ -171,8 +166,8 @@ Fix the genre in IDEAS.md, then retry.
 Error: Album "kleine-welt" already exists.
 
 Options:
-1. Supply a different slug: /bitwize-music:promote-idea "Kleine Welt" kleine-welt-2
-2. Resume the existing album: /bitwize-music:resume kleine-welt
+1. Supply a different slug: $maxinger15-music:promote-idea "Kleine Welt" kleine-welt-2
+2. Resume the existing album: $maxinger15-music:resume kleine-welt
 ```
 
 ---
@@ -182,7 +177,7 @@ Options:
 ### Simple title
 
 ```
-/bitwize-music:promote-idea "Kleine Welt"
+$maxinger15-music:promote-idea "Kleine Welt"
 ```
 
 Auto-derives slug `kleine-welt`, asks about documentary flag, calls
@@ -191,7 +186,7 @@ Auto-derives slug `kleine-welt`, asks about documentary flag, calls
 ### Explicit slug override
 
 ```
-/bitwize-music:promote-idea "The Great Molasses Flood" molasses-1919
+$maxinger15-music:promote-idea "The Great Molasses Flood" molasses-1919
 ```
 
 Uses `molasses-1919` instead of the auto-derived `the-great-molasses-flood`.
@@ -199,7 +194,7 @@ Uses `molasses-1919` instead of the auto-derived `the-great-molasses-flood`.
 ### Documentary album
 
 ```
-/bitwize-music:promote-idea "The Great Molasses Flood" documentary
+$maxinger15-music:promote-idea "The Great Molasses Flood" documentary
 ```
 
 Creates `RESEARCH.md` and `SOURCES.md` in addition to the standard README
@@ -212,7 +207,7 @@ and tracks directory.
 The manual workflow required three steps in sequence:
 
 1. `get_ideas` to find the idea's genre
-2. `/bitwize-music:new-album <slug> <genre>` with a slug the user invented
+2. `$maxinger15-music:new-album <slug> <genre>` with a slug the user invented
 3. `update_idea("<title>", "status", "In Progress")`
 
 Problems this skill solves:
@@ -233,7 +228,7 @@ Problems this skill solves:
 1. **Pending-only** — Only `Pending` ideas can be promoted. `In Progress`
    and `Complete` ideas return an error.
 2. **One-way operation** — Promotion creates files and updates state. There
-   is no "unpromote"; use `/bitwize-music:rename` or manual cleanup if you
+   is no "unpromote"; use `$maxinger15-music:rename` or manual cleanup if you
    need to redo.
 3. **Concept is preserved** — The idea's concept survives in two places
    after promotion: the idea's entry in `IDEAS.md` (historical record) and

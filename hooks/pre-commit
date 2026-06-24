@@ -32,15 +32,15 @@ except ImportError:
 
 # Validate plugin.json
 try:
-    with open('.claude-plugin/plugin.json') as f:
+    with open('.codex-plugin/plugin.json') as f:
         json.load(f)
 except Exception as e:
     print(f'      ✗ plugin.json invalid: {e}')
     sys.exit(1)
 
-# Validate marketplace.json
+# Validate Codex marketplace.json
 try:
-    with open('.claude-plugin/marketplace.json') as f:
+    with open('.agents/plugins/marketplace.json') as f:
         json.load(f)
 except Exception as e:
     print(f'      ✗ marketplace.json invalid: {e}')
@@ -59,39 +59,48 @@ print('      ✓ Config files valid')
 "
 echo ""
 
-# 3. CLAUDE.md size check (characters, not bytes - better approximates tokens)
-echo "[3/11] Checking CLAUDE.md size..."
+# 3. AGENTS.md size check (characters, not bytes - better approximates tokens)
+echo "[3/11] Checking AGENTS.md size..."
 MAX_CHARS=40000  # 40K characters
-CLAUDE_CHARS=$(wc -m < CLAUDE.md 2>/dev/null || echo 0)
-if [ "$CLAUDE_CHARS" -gt "$MAX_CHARS" ]; then
-    SIZE_K=$(echo "scale=1; $CLAUDE_CHARS / 1000" | bc)
-    echo "      ✗ CLAUDE.md is ${SIZE_K}K chars (max 40.0K)"
+AGENTS_CHARS=$(wc -m < AGENTS.md 2>/dev/null || echo 0)
+if [ "$AGENTS_CHARS" -gt "$MAX_CHARS" ]; then
+    SIZE_K=$(echo "scale=1; $AGENTS_CHARS / 1000" | bc)
+    echo "      ✗ AGENTS.md is ${SIZE_K}K chars (max 40.0K)"
     exit 1
 else
-    SIZE_K=$(echo "scale=1; $CLAUDE_CHARS / 1000" | bc)
-    echo "      ✓ CLAUDE.md is ${SIZE_K}K chars (max 40.0K)"
+    SIZE_K=$(echo "scale=1; $AGENTS_CHARS / 1000" | bc)
+    echo "      ✓ AGENTS.md is ${SIZE_K}K chars (max 40.0K)"
 fi
 echo ""
 
-# 4. Version sync check
-echo "[4/11] Checking version sync..."
+# 4. Codex plugin metadata check
+echo "[4/11] Checking Codex plugin metadata..."
 python3 -c "
 import json
 import sys
+import re
 
-with open('.claude-plugin/plugin.json') as f:
-    plugin_version = json.load(f)['version']
+with open('.codex-plugin/plugin.json') as f:
+    plugin = json.load(f)
 
-with open('.claude-plugin/marketplace.json') as f:
-    marketplace_version = json.load(f)['plugins'][0]['version']
+with open('.agents/plugins/marketplace.json') as f:
+    marketplace = json.load(f)
 
-if plugin_version != marketplace_version:
-    print(f'      ✗ Version mismatch!')
-    print(f'        plugin.json:      {plugin_version}')
-    print(f'        marketplace.json: {marketplace_version}')
+plugin_name = plugin.get('name')
+plugin_version = plugin.get('version', '')
+entries = marketplace.get('plugins', [])
+
+if plugin_name != 'maxinger15-music':
+    print(f'      ✗ Unexpected plugin name: {plugin_name}')
+    sys.exit(1)
+if not re.match(r'^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$', plugin_version):
+    print(f'      ✗ Invalid plugin version: {plugin_version}')
+    sys.exit(1)
+if not any(entry.get('name') == plugin_name for entry in entries):
+    print('      ✗ Marketplace missing maxinger15-music entry')
     sys.exit(1)
 
-print(f'      ✓ Versions match ({plugin_version})')
+print(f'      ✓ Codex plugin metadata valid ({plugin_version})')
 "
 echo ""
 
@@ -108,9 +117,10 @@ except ImportError:
     print('      ⚠ pyyaml not installed, skipping')
     sys.exit(0)
 
-REQUIRED_FIELDS = ['name', 'description', 'model']
-# Pattern: claude-{tier}-{major}-{minor}[-{date}] e.g. claude-opus-4-6 or claude-opus-4-5-20251101
-MODEL_PATTERN = r'^claude-(opus|sonnet|haiku)-\d+(-\d+)?(-\d{8})?$'
+REQUIRED_FIELDS = ['name', 'description']
+LEGACY_FIELDS = {'model', 'effort', 'allowed-tools', 'argument-hint', 'context'}
+VALID_COMPLEXITY_TIERS = {'opus', 'sonnet', 'haiku'}
+VALID_EFFORT = {'low', 'medium', 'high', 'xhigh', 'max'}
 
 errors = []
 skill_count = 0
@@ -139,8 +149,30 @@ for skill_dir in os.listdir('skills'):
         if field not in fm:
             errors.append(f'{skill_dir}: missing \"{field}\"')
 
-    if 'model' in fm and not re.match(MODEL_PATTERN, fm['model']):
-        errors.append(f'{skill_dir}: invalid model format \"{fm[\"model\"]}\"')
+    legacy_present = LEGACY_FIELDS & set(fm)
+    if legacy_present:
+        errors.append(f'{skill_dir}: legacy frontmatter fields {sorted(legacy_present)}')
+
+    openai_yaml = f'skills/{skill_dir}/agents/openai.yaml'
+    if not os.path.exists(openai_yaml):
+        errors.append(f'{skill_dir}: missing agents/openai.yaml')
+
+with open('skills/metadata.yaml') as f:
+    metadata = yaml.safe_load(f) or {}
+skill_metadata = metadata.get('skills', {})
+if set(skill_metadata) != {
+    d for d in os.listdir('skills')
+    if os.path.isdir(f'skills/{d}') and os.path.exists(f'skills/{d}/SKILL.md')
+}:
+    errors.append('skills/metadata.yaml does not match on-disk skills')
+
+for skill_name, meta in skill_metadata.items():
+    tier = meta.get('complexity_tier')
+    effort = meta.get('complexity_effort')
+    if tier not in VALID_COMPLEXITY_TIERS:
+        errors.append(f'{skill_name}: invalid complexity_tier \"{tier}\"')
+    if effort is not None and effort not in VALID_EFFORT:
+        errors.append(f'{skill_name}: invalid complexity_effort \"{effort}\"')
 
 if errors:
     print('      ✗ Frontmatter errors:')

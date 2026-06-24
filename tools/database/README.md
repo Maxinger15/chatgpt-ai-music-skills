@@ -7,7 +7,7 @@ PostgreSQL integration for social media post management. The database complement
 ### 1. Install dependencies
 
 ```bash
-~/.bitwize-music/venv/bin/pip install psycopg2-binary
+~/.maxinger15-music/venv/bin/pip install psycopg2-binary
 ```
 
 ### 2. Create the database
@@ -25,7 +25,7 @@ db_init
 
 ### 3. Configure credentials
 
-Add a `database:` section to `~/.bitwize-music/config.yaml`:
+Add a `database:` section to `~/.maxinger15-music/config.yaml`:
 
 ```yaml
 database:

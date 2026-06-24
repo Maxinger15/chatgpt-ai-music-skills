@@ -12,7 +12,7 @@ Step-by-step for creating documentary or narrative albums based on real events.
 
 Before you begin:
 
-1. **Standard prerequisites** - Suno account, Claude Code, config file
+1. **Standard prerequisites** - Suno account, Codex, config file
 2. **Research topic** - A real event, person, or case you want to document
 3. **Time for verification** - Human review of sources is required
 
@@ -23,7 +23,7 @@ Before you begin:
 ### Step 1: Create Album with Research Templates
 
 ```
-/bitwize-music:new-album my-true-story hip-hop documentary
+$maxinger15-music:new-album my-true-story hip-hop documentary
 ```
 
 The `documentary` flag creates additional files:
@@ -69,7 +69,7 @@ This is the critical phase that distinguishes true-story albums.
 ### Step 1: Invoke the Researcher
 
 ```
-/bitwize-music:researcher "your topic keywords"
+$maxinger15-music:researcher "your topic keywords"
 ```
 
 The researcher:
@@ -80,17 +80,17 @@ The researcher:
 
 ### Step 2: Use Specialized Researchers (Optional)
 
-For deep dives, Claude coordinates specialists:
+For deep dives, Codex coordinates specialists:
 
 | Topic | Invoke |
 |-------|--------|
-| Court documents | `/bitwize-music:researchers-legal` |
-| DOJ/FBI releases | `/bitwize-music:researchers-gov` |
-| Investigative journalism | `/bitwize-music:researchers-journalism` |
-| SEC filings | `/bitwize-music:researchers-financial` |
-| Security incidents | `/bitwize-music:researchers-security` |
-| Historical events | `/bitwize-music:researchers-historical` |
-| Personal backgrounds | `/bitwize-music:researchers-biographical` |
+| Court documents | `$maxinger15-music:researchers-legal` |
+| DOJ/FBI releases | `$maxinger15-music:researchers-gov` |
+| Investigative journalism | `$maxinger15-music:researchers-journalism` |
+| SEC filings | `$maxinger15-music:researchers-financial` |
+| Security incidents | `$maxinger15-music:researchers-security` |
+| Historical events | `$maxinger15-music:researchers-historical` |
+| Personal backgrounds | `$maxinger15-music:researchers-biographical` |
 
 ### Step 3: Document Everything
 
@@ -98,7 +98,7 @@ Research outputs go to your album directory:
 - `RESEARCH.md` - Findings with verification status
 - `SOURCES.md` - Full academic citations
 
-**Reference**: See [CLAUDE.md > Sources & Verification](../../CLAUDE.md#sources--verification)
+**Reference**: See [AGENTS.md > Sources & Verification](../../AGENTS.md#sources--verification)
 
 ### Source Hierarchy
 
@@ -133,16 +133,16 @@ For each track's source material:
 
 ### Step 2: Report Verification
 
-Tell Claude which tracks you've verified:
+Tell Codex which tracks you've verified:
 ```
 Tracks 1-5 sources verified
 ```
 
-Claude updates status from `Pending` to `Verified (DATE)`.
+Codex updates status from `Pending` to `Verified (DATE)`.
 
 ### Verification Rules
 
-- **You cannot skip this** - Claude will block generation
+- **You cannot skip this** - Codex will block generation
 - **Visual confirmation required** - Actually click the URLs
 - **Document discrepancies** - If something doesn't match, report it
 
@@ -175,11 +175,11 @@ For each track:
 Let's write lyrics for track 01 based on the research
 ```
 
-Claude uses the verified research to draft lyrics.
+Codex uses the verified research to draft lyrics.
 
 ### Step 2: Source Check
 
-After writing, Claude automatically verifies:
+After writing, Codex automatically verifies:
 - All facts match RESEARCH.md
 - No claims exceed source material
 - Chronology is accurate
@@ -189,7 +189,7 @@ After writing, Claude automatically verifies:
 Stop here until:
 - [ ] All tracks have lyrics
 - [ ] All claims verified against sources
-- [ ] `/bitwize-music:lyric-reviewer` passed
+- [ ] `$maxinger15-music:lyric-reviewer` passed
 
 ---
 
@@ -200,7 +200,7 @@ Same as standard album. See [first-album.md](first-album.md#phase-4-suno-generat
 ### True Story Specific Tips
 
 - **Pronunciation critical** - Names must be correct
-- **Run `/bitwize-music:pronunciation-specialist`** on all tracks
+- **Run `$maxinger15-music:pronunciation-specialist`** on all tracks
 - **Phonetic spelling** - Use for all proper nouns
 
 ---
@@ -222,13 +222,13 @@ Additional items:
 ## Complete Workflow Summary
 
 ```
-1. /bitwize-music:new-album name genre documentary
+1. $maxinger15-music:new-album name genre documentary
 2. Complete 7 Planning Phases
-3. /bitwize-music:researcher "topic"
+3. $maxinger15-music:researcher "topic"
    (Uses specialized researchers as needed)
 4. HUMAN VERIFICATION - You verify all sources
 5. Write lyrics based on verified research
-6. /bitwize-music:lyric-reviewer (verify sources match)
+6. $maxinger15-music:lyric-reviewer (verify sources match)
 7. Generate on Suno
 8. Master audio
 9. Create album art
@@ -241,12 +241,12 @@ Additional items:
 
 | Task | Command |
 |------|---------|
-| Start research | `/bitwize-music:researcher "topic"` |
-| Find court docs | `/bitwize-music:researchers-legal` |
-| Find gov releases | `/bitwize-music:researchers-gov` |
-| Find journalism | `/bitwize-music:researchers-journalism` |
-| Verify research | `/bitwize-music:researchers-verifier` |
-| Check pronunciation | `/bitwize-music:pronunciation-specialist` |
+| Start research | `$maxinger15-music:researcher "topic"` |
+| Find court docs | `$maxinger15-music:researchers-legal` |
+| Find gov releases | `$maxinger15-music:researchers-gov` |
+| Find journalism | `$maxinger15-music:researchers-journalism` |
+| Verify research | `$maxinger15-music:researchers-verifier` |
+| Check pronunciation | `$maxinger15-music:pronunciation-specialist` |
 
 ---
 
@@ -254,10 +254,10 @@ Additional items:
 
 **"Cannot proceed - verification required"**
 - You have `Pending` sources
-- Click the URLs, verify quotes, then tell Claude they're verified
+- Click the URLs, verify quotes, then tell Codex they're verified
 
 **Source not found?**
-- Try `/bitwize-music:document-hunter` for automated search
+- Try `$maxinger15-music:document-hunter` for automated search
 - Check free sources in researcher's `free-sources.md`
 
 **Conflicting sources?**
@@ -267,7 +267,7 @@ Additional items:
 
 **Name pronunciation wrong?**
 - Add to phonetic guide
-- Use `/bitwize-music:pronunciation-specialist`
+- Use `$maxinger15-music:pronunciation-specialist`
 
 ---
 

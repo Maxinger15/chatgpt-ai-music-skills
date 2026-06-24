@@ -68,7 +68,7 @@ PAGE_SIZES = {
 
 
 def read_config() -> dict[str, Any] | None:
-    """Read ~/.bitwize-music/config.yaml"""
+    """Read ~/.maxinger15-music/config.yaml"""
     # Late import to avoid requiring project root on sys.path at module load
     from tools.shared.config import load_config
     return load_config()

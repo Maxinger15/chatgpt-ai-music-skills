@@ -1,4 +1,4 @@
-# Contributing to claude-ai-music-skills
+# Contributing to chatgpt-ai-music-skills
 
 Thank you for contributing! This document explains our development workflow.
 
@@ -11,9 +11,9 @@ We use a **two-branch model** with `develop` as the integration branch and `main
 
 CI runs on pushes to `develop` and on PRs into both branches. **PRs targeting `main` must come from `develop`** — PRs from feature branches or forks into `main` will be blocked by the "PR Target Gate" check. Always target `develop` for contributions.
 
-**Plugin distribution channels** (both use `marketplace.json`, branch separation handles the split):
-- Stable: `/plugin marketplace add bitwize-music-studio/claude-ai-music-skills` (from `main`)
-- Dev: `/plugin marketplace add https://github.com/bitwize-music-studio/claude-ai-music-skills.git#develop`
+**Plugin distribution channels** (both use `.agents/plugins/marketplace.json`, branch separation handles the split):
+- Stable: `codex plugin marketplace add Maxinger15/chatgpt-ai-music-skills` (from `main`)
+- Dev: `codex plugin marketplace add Maxinger15/chatgpt-ai-music-skills --ref develop`
 
 ## Development Workflow
 
@@ -54,7 +54,7 @@ Follow the existing code patterns and documentation style.
 
 **Key files to update:**
 - If adding a skill: Create `/skills/your-skill/SKILL.md`
-- If changing workflow: Update `CLAUDE.md`
+- If changing workflow: Update `AGENTS.md`
 - If user-facing: Update `README.md`
 - Always: Update `CHANGELOG.md` under "Unreleased"
 
@@ -64,30 +64,30 @@ When adding a new skill, you MUST update all of these files:
 
 **Required (skill won't work without these):**
 - [ ] Create `/skills/your-skill/SKILL.md` with skill documentation
-- [ ] Add entry to `CLAUDE.md` skills table (alphabetically in correct category)
+- [ ] Add entry to `AGENTS.md` skills table (alphabetically in correct category)
 - [ ] Add entry to `skills/help/SKILL.md` in appropriate category
 - [ ] Add entry to `skills/help/SKILL.md` Common Workflows section (if applicable)
 - [ ] Update `CHANGELOG.md` under "Unreleased" → "Added"
 
 **Recommended:**
 - [ ] Add entry to `reference/SKILL_INDEX.md` (alphabetical table + decision tree + skill categories)
-- [ ] Add entry to `reference/model-strategy.md` under appropriate model tier
+- [ ] Add entry to `reference/complexity-strategy.md` under appropriate complexity tier
 - [ ] Add quick tip to `skills/help/SKILL.md` Quick Tips section (if relevant)
-- [ ] Update workflow diagram in `CLAUDE.md` (if part of main workflow)
-- [ ] Add to Album Completion Checklist in `CLAUDE.md` (if part of release)
+- [ ] Update workflow diagram in `AGENTS.md` (if part of main workflow)
+- [ ] Add to Album Completion Checklist in `AGENTS.md` (if part of release)
 - [ ] Add reference docs in `/reference/` if complex
 - [ ] Update `README.md` Skills Reference tables (add to appropriate section: Core Production, Research, Quality Control, Release, or Setup & Maintenance)
 
 **Testing:**
-- [ ] Run `/bitwize-music:test all` to ensure no regressions
-- [ ] Test skill invocation: `/bitwize-music:your-skill`
-- [ ] Verify skill appears in `/bitwize-music:help` output
+- [ ] Run `$maxinger15-music:test all` to ensure no regressions
+- [ ] Test skill invocation: `$maxinger15-music:your-skill`
+- [ ] Verify skill appears in `$maxinger15-music:help` output
 - [ ] Check skill in skills table works as expected
 
 **Common mistakes to avoid:**
 - ❌ Forgetting to add skill to help system
 - ❌ Not updating CHANGELOG.md
-- ❌ Adding to CLAUDE.md but not help/SKILL.md
+- ❌ Adding to AGENTS.md but not help/SKILL.md
 - ❌ Inconsistent naming between files
 - ❌ Breaking alphabetical order in lists
 
@@ -109,7 +109,7 @@ We use [Conventional Commits](https://conventionalcommits.org/).
 
 <body>
 
-Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
+Co-Authored-By: Codex <noreply@openai.com>
 ```
 
 **Examples:**
@@ -118,13 +118,13 @@ git commit -m "feat: add sheet-music-publisher skill
 
 Add comprehensive sheet music generation workflow...
 
-Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
+Co-Authored-By: Codex <noreply@openai.com>"
 
 git commit -m "fix: correct audio path in import-audio skill
 
 Was missing artist folder in path construction.
 
-Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
+Co-Authored-By: Codex <noreply@openai.com>"
 ```
 
 **Commit types:**
@@ -153,7 +153,7 @@ Then create a PR targeting **`develop`** (not `main`).
 
 **Required before merge to `develop`:**
 - [ ] All automated checks pass
-- [ ] `/bitwize-music:test all` passes locally (run before submitting PR)
+- [ ] `$maxinger15-music:test all` passes locally (run before submitting PR)
 - [ ] Follows Conventional Commits
 - [ ] CHANGELOG.md updated under "Unreleased"
 - [ ] Documentation updated
@@ -174,9 +174,7 @@ If your PR introduces filesystem changes (new directories, moved files), depende
 When `develop` is ready to release:
 
 1. Create a PR from `develop` → `main`
-2. Update version files (drop `-dev` suffix):
-   - `.claude-plugin/plugin.json`
-   - `.claude-plugin/marketplace.json`
+2. Update `.codex-plugin/plugin.json` version (drop `-dev` suffix)
 3. Move CHANGELOG.md entries from "Unreleased" to a versioned heading
 4. Merge PR to `main`
 5. After merge, bump `develop` to the next `-dev` version (e.g., `0.63.0-dev`)
@@ -186,9 +184,8 @@ When `develop` is ready to release:
 - `fix:` → Increment PATCH (0.3.0 → 0.3.1)
 - `feat!:` → Increment MAJOR (0.3.0 → 1.0.0)
 
-**Files that must stay in sync:**
-- `.claude-plugin/plugin.json` — plugin version
-- `.claude-plugin/marketplace.json` — marketplace version
+**Version file:**
+- `.codex-plugin/plugin.json` — plugin version
 
 ## Testing
 
@@ -203,12 +200,12 @@ make clean    # remove .venv and caches
 
 The Makefile manages a `.venv/` directory automatically. If dependencies in `requirements.txt` or `requirements-test.txt` change, `make test` will reinstall them.
 
-You can also use the `/bitwize-music:test` skill inside a Claude Code session:
+You can also use the `$maxinger15-music:test` skill inside a Codex session:
 
 ```bash
-/bitwize-music:test all         # all categories
-/bitwize-music:test skills      # skill structure tests
-/bitwize-music:test consistency # cross-reference checks
+$maxinger15-music:test all         # all categories
+$maxinger15-music:test skills      # skill structure tests
+$maxinger15-music:test consistency # cross-reference checks
 ```
 
 ### Adding New Tests
@@ -221,27 +218,26 @@ When fixing bugs, add a regression test:
 4. Verify it fails before your fix
 5. Verify it passes after your fix
 
-## Development Mode (--plugin-dir)
+## Development Mode (Local Marketplace)
 
-When developing with `--plugin-dir`, Claude Code sets `CLAUDE_PLUGIN_ROOT` to your local repo, so `run.py` launches the dev `server.py`. However, if the plugin is also **installed** (cached at `~/.claude/plugins/cache/bitwize-music/`), the cached MCP server may run instead of (or alongside) the dev one, since both register the same `bitwize-music-mcp` server ID.
+When developing locally, add this checkout as a Codex marketplace source and install `maxinger15-music` from that source. `run.py` derives the plugin root from its own path, so the MCP server runs from the local checkout.
 
-**Before testing with `--plugin-dir`:**
+**Before testing the local marketplace:**
 
 ```bash
 # Option A: Remove the cached plugin
-rm -rf ~/.claude/plugins/cache/bitwize-music
+rm -rf ~/.codex/plugins/cache/maxinger15-music
 
 # Option B: Uninstall first
-/plugin uninstall bitwize-music
+codex plugin remove maxinger15-music
 ```
 
-**Then run Claude with your dev repo:**
+**Then install from the local checkout:**
 
 ```bash
-claude --plugin-dir /path/to/claude-ai-music-skills
+codex plugin marketplace add /path/to/chatgpt-ai-music-skills
+codex plugin add maxinger15-music@maxinger15-local
 ```
-
-`CLAUDE_PLUGIN_ROOT` will point to your dev repo and `run.py` will use the dev `server.py`.
 
 **After dev testing**, re-install the plugin normally to restore the cached version.
 
@@ -255,7 +251,7 @@ claude --plugin-dir /path/to/claude-ai-music-skills
 ## Questions?
 
 - Check existing skills in `/skills/` for examples
-- Read `CLAUDE.md` for workflow documentation
+- Read `AGENTS.md` for workflow documentation
 - Open an issue for clarification
 
 ## License

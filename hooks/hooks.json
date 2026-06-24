@@ -1,19 +1,21 @@
 {
-  "description": "Bitwize Music plugin hooks for quality enforcement",
+  "description": "Maxinger15 Music Codex plugin hooks for quality enforcement",
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|apply_patch",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/validate_track.py",
-            "timeout": 5
+            "command": "python3 \"$(git rev-parse --show-toplevel)/hooks/validate_track.py\"",
+            "timeout": 5,
+            "statusMessage": "Validating track frontmatter"
           },
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/check_version_sync.py",
-            "timeout": 5
+            "command": "python3 \"$(git rev-parse --show-toplevel)/hooks/check_version_sync.py\"",
+            "timeout": 5,
+            "statusMessage": "Checking Codex plugin version metadata"
           }
         ]
       }

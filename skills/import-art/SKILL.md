@@ -1,13 +1,6 @@
 ---
 name: import-art
-description: Places album art files in the correct audio and content directory locations. Use when the user has generated or downloaded album artwork that needs to be saved.
-argument-hint: <file-path> <album-name>
-model: haiku
-allowed-tools:
-  - Read
-  - Bash
-  - Glob
-  - bitwize-music-mcp
+description: "Places album art files in the correct audio and content directory locations. Use when the user has generated or downloaded album artwork that needs to be saved."
 ---
 
 ## Your Task
@@ -91,7 +84,7 @@ Error: File not found: {source_file}
 
 **Config file missing:**
 ```
-Error: Config not found at ~/.bitwize-music/config.yaml
+Error: Config not found at ~/.maxinger15-music/config.yaml
 Run /configure to set up.
 ```
 
@@ -120,21 +113,21 @@ Continue anyway? (y/n)
 Config has:
 ```yaml
 paths:
-  content_root: ~/bitwize-music
-  audio_root: ~/bitwize-music/audio
+  content_root: ~/maxinger15-music
+  audio_root: ~/maxinger15-music/audio
 artist:
-  name: bitwize
+  name: maxinger15
 ```
 
-Album found at: `~/bitwize-music/artists/bitwize/albums/electronic/sample-album/`
+Album found at: `~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/`
 
 Result:
 ```
 Album art imported for: sample-album
 
 Copied to:
-1. ~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/album.png (for platforms)
-2. ~/bitwize-music/artists/bitwize/albums/electronic/sample-album/album-art.jpg (for docs)
+1. ~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/album.png (for platforms)
+2. ~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/album-art.jpg (for docs)
 ```
 
 ---
@@ -145,7 +138,7 @@ Copied to:
 
 **Wrong:**
 ```bash
-cat ~/.bitwize-music/config.yaml
+cat ~/.maxinger15-music/config.yaml
 cp art.png ~/music-projects/audio/sample-album/
 ```
 

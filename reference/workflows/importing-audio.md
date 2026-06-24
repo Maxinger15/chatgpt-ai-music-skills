@@ -25,8 +25,8 @@ Audio files MUST go to:
 
 | Type | Path Structure | Example |
 |------|----------------|---------|
-| Audio | `{audio_root}/artists/{artist}/albums/{genre}/{album}/` | `~/music/audio/artists/bitwize/albums/electronic/sample-album/` |
-| Content | `{content_root}/artists/{artist}/albums/{genre}/{album}/` | `~/music/artists/bitwize/albums/electronic/sample-album/` |
+| Audio | `{audio_root}/artists/{artist}/albums/{genre}/{album}/` | `~/music/audio/artists/maxinger15/albums/electronic/sample-album/` |
+| Content | `{content_root}/artists/{artist}/albums/{genre}/{album}/` | `~/music/artists/maxinger15/albums/electronic/sample-album/` |
 
 Note: Audio and content paths both use the mirrored structure with artist and genre folders.
 
@@ -34,10 +34,10 @@ Note: Audio and content paths both use the mirrored structure with artist and ge
 
 ### Step 1: Use the Import Skill
 
-**Recommended**: Use `/bitwize-music:import-audio` skill:
+**Recommended**: Use `$maxinger15-music:import-audio` skill:
 
 ```
-/bitwize-music:import-audio ~/Downloads/03-t-day-beach.wav sample-album
+$maxinger15-music:import-audio ~/Downloads/03-t-day-beach.wav sample-album
 ```
 
 The skill automatically:
@@ -63,29 +63,29 @@ Expected output shows your file in the correct location.
 **Config:**
 ```yaml
 paths:
-  audio_root: ~/bitwize-music/audio
+  audio_root: ~/maxinger15-music/audio
 artist:
-  name: bitwize
+  name: maxinger15
 ```
 
 **Command:**
 ```
-/bitwize-music:import-audio ~/Downloads/03-t-day-beach.wav sample-album
+$maxinger15-music:import-audio ~/Downloads/03-t-day-beach.wav sample-album
 ```
 
 **Result:**
 ```
 Moved: ~/Downloads/03-t-day-beach.wav
-   To: ~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/03-t-day-beach.wav
+   To: ~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/03-t-day-beach.wav
 ```
 
 ### Correct vs Incorrect Paths
 
 | Status | Path |
 |--------|------|
-| CORRECT | `~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/03-track.wav` |
-| WRONG | `~/bitwize-music/audio/sample-album/03-track.wav` |
-| WRONG | `~/bitwize-music/artists/bitwize/albums/electronic/sample-album/03-track.wav` |
+| CORRECT | `~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/03-track.wav` |
+| WRONG | `~/maxinger15-music/audio/sample-album/03-track.wav` |
+| WRONG | `~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/03-track.wav` |
 | WRONG | `./audio/sample-album/03-track.wav` |
 
 ## Common Mistakes
@@ -97,13 +97,13 @@ Moved: ~/Downloads/03-t-day-beach.wav
 Wrong:
 ```
 {audio_root}/{album}/file.wav
-~/bitwize-music/audio/sample-album/03-track.wav
+~/maxinger15-music/audio/sample-album/03-track.wav
 ```
 
 Correct:
 ```
 {audio_root}/artists/{artist}/albums/{genre}/{album}/file.wav
-~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/03-track.wav
+~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/03-track.wav
 ```
 
 **Why it matters:** Mastering scripts and other tools expect the full mirrored path. Missing segments breaks the workflow.
@@ -113,13 +113,13 @@ Correct:
 Wrong:
 ```bash
 # Assuming paths
-mv file.wav ~/music-projects/audio/artists/bitwize/albums/electronic/sample-album/
+mv file.wav ~/music-projects/audio/artists/maxinger15/albums/electronic/sample-album/
 ```
 
 Correct:
 ```bash
 # Always read config first
-cat ~/.bitwize-music/config.yaml
+cat ~/.maxinger15-music/config.yaml
 # Use paths.audio_root from config
 ```
 
@@ -148,7 +148,7 @@ mv ~/Downloads/track.wav ./sample-album/
 
 Correct:
 ```
-/bitwize-music:import-audio ~/Downloads/track.wav sample-album
+$maxinger15-music:import-audio ~/Downloads/track.wav sample-album
 ```
 
 **Why it matters:** The skill reads config fresh, ensuring correct paths even after context changes.
@@ -175,10 +175,10 @@ Error: File not found: ~/Downloads/track.wav
 ### Config Missing Error
 
 ```
-Error: Config not found at ~/.bitwize-music/config.yaml
+Error: Config not found at ~/.maxinger15-music/config.yaml
 ```
 
-**Solution:** Run `/bitwize-music:configure` to set up config.
+**Solution:** Run `$maxinger15-music:configure` to set up config.
 
 ### Destination Already Exists
 
@@ -196,9 +196,9 @@ Warning: File already exists at destination.
 For multiple files from the same album:
 
 ```
-/bitwize-music:import-audio ~/Downloads/01-track.wav sample-album
-/bitwize-music:import-audio ~/Downloads/02-track.wav sample-album
-/bitwize-music:import-audio ~/Downloads/03-track.wav sample-album
+$maxinger15-music:import-audio ~/Downloads/01-track.wav sample-album
+$maxinger15-music:import-audio ~/Downloads/02-track.wav sample-album
+$maxinger15-music:import-audio ~/Downloads/03-track.wav sample-album
 ```
 
-Or tell Claude: "Import all WAV files from Downloads to sample-album album"
+Or tell Codex: "Import all WAV files from Downloads to sample-album album"

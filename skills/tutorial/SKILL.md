@@ -1,18 +1,6 @@
 ---
 name: tutorial
-description: Provides interactive guided album creation for new users. Use when the user is new to the plugin or asks for a walkthrough of the album creation process.
-argument-hint: <new-album | resume | help>
-model: sonnet
-effort: low
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Glob
-  - Grep
-  - Bash
-  - AskUserQuestion
-  - bitwize-music-mcp
+description: "Provides interactive guided album creation for new users. Use when the user is new to the plugin or asks for a walkthrough of the album creation process."
 ---
 
 ## Your Task
@@ -176,7 +164,7 @@ See [phases.md](phases.md) for the complete reference.
    mkdir -p {content_root}/artists/[artist]/albums/[genre]/[album-name]/tracks
    ```
 
-2. Create album README from template (read `${CLAUDE_PLUGIN_ROOT}/templates/album.md` first)
+2. Create album README from template (read `{plugin_root}/templates/album.md` first)
 
 3. Tell user: "I've created the album folder at `{content_root}/artists/...`. We'll fill in the details as we go."
 
@@ -242,8 +230,8 @@ Option 1 - Interactive setup:
   Run /configure
 
 Option 2 - Manual setup:
-  mkdir -p ~/.bitwize-music
-  cp config/config.example.yaml ~/.bitwize-music/config.yaml
+  mkdir -p ~/.maxinger15-music
+  cp config/config.example.yaml ~/.maxinger15-music/config.yaml
   # Then edit the file with your settings
 
 Let me know when you're ready!
@@ -322,7 +310,7 @@ Want to continue there? Run:
 
 ## Remember
 
-- **Preserve exact casing** - If user says "bitwize", use "bitwize" not "Bitwize"
+- **Preserve exact casing** - If user says "maxinger15", use "maxinger15" not "Maxinger15"
 - The README tutorial is comprehensive but static
 - You make it interactive and context-aware
 - Meet users where they are - new album or mid-project

@@ -1,1 +1,1 @@
-# Shared utilities for bitwize-music tools
+# Shared utilities for maxinger15-music tools

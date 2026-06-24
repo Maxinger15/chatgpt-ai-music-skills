@@ -1,4 +1,4 @@
-"""PostgreSQL database connection helper for bitwize-music tools."""
+"""PostgreSQL database connection helper for maxinger15-music tools."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Any, cast
 
 logger = logging.getLogger(__name__)
 
-CONFIG_PATH = Path.home() / ".bitwize-music" / "config.yaml"
+CONFIG_PATH = Path.home() / ".maxinger15-music" / "config.yaml"
 
 
 def check_db_deps() -> str | None:
@@ -24,7 +24,7 @@ def check_db_deps() -> str | None:
 
 
 def get_db_config() -> dict[str, Any] | None:
-    """Read database config from ~/.bitwize-music/config.yaml.
+    """Read database config from ~/.maxinger15-music/config.yaml.
 
     Returns:
         Database config dict with host/port/name/user/password,

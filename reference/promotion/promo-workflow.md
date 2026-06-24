@@ -46,7 +46,7 @@ Generate professional 15-second vertical promo videos (9:16) from mastered audio
 
 **Import if needed:**
 ```
-/bitwize-music:import-art ~/Downloads/album-art.png my-album
+$maxinger15-music:import-art ~/Downloads/album-art.png my-album
 ```
 
 ### Step 2: Choose Visualization Style
@@ -86,7 +86,7 @@ View on phone to check:
 **Option A: Use skill (recommended)**
 
 ```
-/bitwize-music:promo-director my-album
+$maxinger15-music:promo-director my-album
 ```
 
 Skill handles:
@@ -208,7 +208,7 @@ Upload promo videos to cloud storage for hosting and CDN distribution.
 
 **Use skill:**
 ```
-/bitwize-music:cloud-uploader my-album
+$maxinger15-music:cloud-uploader my-album
 ```
 
 **Or run script directly:**
@@ -435,10 +435,10 @@ After generating promo videos:
 1. **Review all videos** - Quality check
 2. **Select key tracks** - Which to promote where
 3. **Fill in promo/ copy** - Populate per-platform templates in album's `promo/` directory
-4. **Review promo copy** - `/bitwize-music:promo-reviewer` — interactive post-by-post review and polish
-5. **[Optional] Upload to cloud** - `/bitwize-music:cloud-uploader`
+4. **Review promo copy** - `$maxinger15-music:promo-reviewer` — interactive post-by-post review and polish
+5. **[Optional] Upload to cloud** - `$maxinger15-music:cloud-uploader`
 6. **Schedule posts** - Plan timing using `promo/campaign.md`
-7. **Continue to release workflow** - `/bitwize-music:release-director`
+7. **Continue to release workflow** - `$maxinger15-music:release-director`
 
 ## Related Documentation
 

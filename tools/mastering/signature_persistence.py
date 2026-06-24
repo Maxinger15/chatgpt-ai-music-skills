@@ -59,7 +59,7 @@ import yaml
 
 # Allow ``handlers._atomic`` import when run as a pure-Python module
 # (mastering tests don't boot the MCP server).
-_SERVER_DIR = Path(__file__).resolve().parent.parent.parent / "servers" / "bitwize-music-server"
+_SERVER_DIR = Path(__file__).resolve().parent.parent.parent / "servers" / "maxinger15-music-server"
 if str(_SERVER_DIR) not in sys.path:
     sys.path.insert(0, str(_SERVER_DIR))
 

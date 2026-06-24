@@ -32,13 +32,13 @@ def test_embed_wav_metadata_basic(tmp_path: Path) -> None:
     embed_wav_metadata(
         wav,
         title="My Track",
-        artist="bitwize",
+        artist="maxinger15",
         album="My Album",
     )
     tags = WAVE(str(wav)).tags
     assert tags is not None
     assert str(tags.get("TIT2")) == "My Track"
-    assert str(tags.get("TPE1")) == "bitwize"
+    assert str(tags.get("TPE1")) == "maxinger15"
     assert str(tags.get("TALB")) == "My Album"
 
 
@@ -48,11 +48,11 @@ def test_embed_wav_metadata_copyright(tmp_path: Path) -> None:
     from mutagen.wave import WAVE
 
     wav = _write_wav(tmp_path / "track.wav")
-    embed_wav_metadata(wav, copyright_text="2026 bitwize", label="bitwize records")
+    embed_wav_metadata(wav, copyright_text="2026 maxinger15", label="maxinger15 records")
     tags = WAVE(str(wav)).tags
     assert tags is not None
-    assert "2026 bitwize" in str(tags.get("TCOP"))
-    assert "bitwize records" in str(tags.get("TPUB"))
+    assert "2026 maxinger15" in str(tags.get("TCOP"))
+    assert "maxinger15 records" in str(tags.get("TPUB"))
 
 
 def test_embed_wav_metadata_isrc(tmp_path: Path) -> None:

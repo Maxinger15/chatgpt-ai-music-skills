@@ -50,7 +50,7 @@
       "credentials": {
         "postgres": {
           "id": "<your-credential-id>",
-          "name": "PostgreSQL Bitwizemusic"
+          "name": "PostgreSQL Maxinger15"
         }
       }
     },
@@ -345,7 +345,7 @@
       "credentials": {
         "postgres": {
           "id": "<your-credential-id>",
-          "name": "PostgreSQL Bitwizemusic"
+          "name": "PostgreSQL Maxinger15"
         }
       }
     },
@@ -399,7 +399,7 @@
       "credentials": {
         "postgres": {
           "id": "<your-credential-id>",
-          "name": "PostgreSQL Bitwizemusic"
+          "name": "PostgreSQL Maxinger15"
         }
       }
     },

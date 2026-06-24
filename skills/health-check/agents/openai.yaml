@@ -1,0 +1,15 @@
+interface:
+  display_name: "Health Check"
+  short_description: "Runs plugin health checks (venv packages and skill..."
+  brand_color: "#2563EB"
+  default_prompt: "Use $maxinger15-music:health-check for this music workflow task."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "maxinger15-music-mcp"
+      description: "Structured album, track, config, and processing tools for maxinger15 Music."
+      transport: "stdio"
+
+policy:
+  allow_implicit_invocation: true

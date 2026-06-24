@@ -1,13 +1,6 @@
 ---
 name: import-track
-description: Moves track markdown files to the correct album location. Use when the user has track files in Downloads or other locations that need to be placed in an album.
-argument-hint: <file-path> <album-name> [track-number]
-model: haiku
-allowed-tools:
-  - Read
-  - Bash
-  - Glob
-  - bitwize-music-mcp
+description: "Moves track markdown files to the correct album location. Use when the user has track files in Downloads or other locations that need to be placed in an album."
 ---
 
 ## Your Task
@@ -62,8 +55,8 @@ The target path is **ALWAYS**:
 ```
 
 Example with:
-- `content_root: ~/bitwize-music`
-- `artist: bitwize`
+- `content_root: ~/maxinger15-music`
+- `artist: maxinger15`
 - `genre: electronic` (found from album location)
 - `album: sample-album`
 - `track-number: 03`
@@ -71,7 +64,7 @@ Example with:
 
 Result:
 ```
-~/bitwize-music/artists/bitwize/albums/electronic/sample-album/tracks/03-t-day-beach.md
+~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/tracks/03-t-day-beach.md
 ```
 
 **Track numbering**:
@@ -102,7 +95,7 @@ Error: File not found: {source_file}
 
 **Config file missing:**
 ```
-Error: Config not found at ~/.bitwize-music/config.yaml
+Error: Config not found at ~/.maxinger15-music/config.yaml
 Run /configure to set up.
 ```
 
@@ -129,17 +122,17 @@ Overwrite? (The original was not moved)
 Config has:
 ```yaml
 paths:
-  content_root: ~/bitwize-music
+  content_root: ~/maxinger15-music
 artist:
-  name: bitwize
+  name: maxinger15
 ```
 
-Album found at: `~/bitwize-music/artists/bitwize/albums/electronic/sample-album/`
+Album found at: `~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/`
 
 Result:
 ```
 Moved: ~/Downloads/t-day-beach.md
-   To: ~/bitwize-music/artists/bitwize/albums/electronic/sample-album/tracks/03-t-day-beach.md
+   To: ~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/tracks/03-t-day-beach.md
 ```
 
 ---
@@ -150,7 +143,7 @@ Moved: ~/Downloads/t-day-beach.md
 
 **Wrong:**
 ```bash
-cat ~/.bitwize-music/config.yaml
+cat ~/.maxinger15-music/config.yaml
 find . -name "README.md" -path "*albums/$album_name*"
 ```
 
@@ -168,13 +161,13 @@ resolve_path("tracks", album_slug) → returns full tracks directory path
 **Wrong destination:**
 ```
 {album_path}/01-track.md
-# Example: ~/bitwize-music/artists/bitwize/albums/electronic/sample-album/01-track.md
+# Example: ~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/01-track.md
 ```
 
 **Correct destination:**
 ```
 {album_path}/tracks/01-track.md
-# Example: ~/bitwize-music/artists/bitwize/albums/electronic/sample-album/tracks/01-track.md
+# Example: ~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/tracks/01-track.md
 ```
 
 **Why it matters:** Tracks always go in the `tracks/` subdirectory within the album folder.
@@ -203,7 +196,7 @@ mv track.md {album_path}/tracks/$track_num-track.md
 **Wrong:**
 ```bash
 # Guessing album is in electronic genre
-mv track.md ~/music-projects/artists/bitwize/albums/electronic/sample-album/tracks/
+mv track.md ~/music-projects/artists/maxinger15/albums/electronic/sample-album/tracks/
 ```
 
 **Right:**

@@ -1,18 +1,6 @@
 ---
 name: lyric-refiner
-description: Autonomous multi-pass lyric refinement for tightening, cohesion, and album unity. Use after lyrics are written to polish a track or entire album through iterative passes.
-argument-hint: <album-name | track-path> [--passes N]
-model: opus
-effort: max
-prerequisites:
-  - lyric-writer
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - bitwize-music-mcp
+description: "Autonomous multi-pass lyric refinement for tightening, cohesion, and album unity. Use after lyrics are written to polish a track or entire album through iterative passes."
 ---
 
 ## Your Task
@@ -31,7 +19,7 @@ allowed-tools:
 
 When invoked with a **single-track** path, **first check** the track's frontmatter for `instrumental: true` or the Track Details table for `**Instrumental** | Yes`. If the track is instrumental:
 
-- **STOP** and report: "This is an instrumental track — no lyrics to refine. Use `/bitwize-music:suno-engineer` for Style Box work."
+- **STOP** and report: "This is an instrumental track — no lyrics to refine. Use `$maxinger15-music:suno-engineer` for Style Box work."
 - Do NOT attempt to refine instrumental tracks.
 
 In **album mode**, instrumental tracks are **silently skipped with a one-line note** (not blocking) — see the triage in "Resolve Album & Tracks" below. A mix of instrumental and vocal tracks on the same album is the normal case, not an error.

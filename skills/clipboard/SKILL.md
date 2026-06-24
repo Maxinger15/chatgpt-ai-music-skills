@@ -1,12 +1,6 @@
 ---
 name: clipboard
-description: Copies track content (lyrics, style prompts, streaming lyrics) to the system clipboard. Use when the user needs to paste lyrics or style prompts into Suno or other external tools.
-argument-hint: <content-type> <album-name> <track-number>
-model: haiku
-allowed-tools:
-  - Read
-  - Bash
-  - bitwize-music-mcp
+description: "Copies track content (lyrics, style prompts, streaming lyrics) to the system clipboard. Use when the user needs to paste lyrics or style prompts into Suno or other external tools."
 ---
 
 ## Your Task
@@ -133,7 +127,7 @@ The track file may not have this section yet.
 
 **Config missing:**
 ```
-Error: Config not found at ~/.bitwize-music/config.yaml
+Error: Config not found at ~/.maxinger15-music/config.yaml
 Run /configure to set up.
 ```
 

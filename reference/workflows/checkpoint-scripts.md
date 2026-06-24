@@ -1,9 +1,9 @@
 # Checkpoint Scripts
 
-This document contains the detailed example messages for workflow checkpoints. CLAUDE.md references these scripts but keeps only triggers and action lists for brevity.
+This document contains the detailed example messages for workflow checkpoints. AGENTS.md references these scripts but keeps only triggers and action lists for brevity.
 
 > **Related docs**: [release-procedures.md](release-procedures.md), [error-recovery.md](error-recovery.md)
-> **Related skills**: `/bitwize-music:release-director` (release coordination), `/bitwize-music:validate-album` (structure validation)
+> **Related skills**: `$maxinger15-music:release-director` (release coordination), `$maxinger15-music:validate-album` (structure validation)
 
 ## Ready to Generate Checkpoint
 
@@ -12,7 +12,7 @@ This document contains the detailed example messages for workflow checkpoints. C
 **Required Actions (before presenting to user):**
 1. Review all track statuses — confirm every track has lyrics written
 2. Verify Suno Style Box and Lyrics Box are filled in each track
-3. Run `/bitwize-music:explicit-checker` on all tracks
+3. Run `$maxinger15-music:explicit-checker` on all tracks
 4. Verify phonetic review: pronunciation tables complete, phonetic spellings applied in Suno lyrics
 5. For source-based albums: confirm all sources are `✅ Verified`
 
@@ -99,7 +99,7 @@ I'll set up mastering workflow once files are ready.
 **Trigger**: After mastering complete and album art generated
 
 **Required Actions (before presenting to user):**
-1. Review full Album Completion Checklist (see CLAUDE.md) — verify all items checked
+1. Review full Album Completion Checklist (see AGENTS.md) — verify all items checked
 2. Confirm mastered audio meets targets (-14 LUFS, -1.0 dBTP)
 3. Confirm album art is generated and saved
 4. Verify streaming lyrics are filled in each track (if using distributor)
@@ -153,9 +153,9 @@ Confirm to proceed with release.
 
 If you used this plugin to make your album, I'd love to hear about it.
 
-[Click to tweet about your release](https://twitter.com/intent/tweet?text=Just%20released%20%22{URL_ENCODED_NAME}%22%20🎵%20Made%20with%20Claude%20AI%20Music%20Skills%20%23ClaudeCode%20%23SunoAI%20%23AIMusic%20%40bitwizemusic)
+[Click to tweet about your release](https://twitter.com/intent/tweet?text=Just%20released%20%22{URL_ENCODED_NAME}%22%20Made%20with%20Codex%20AI%20Music%20Skills%20%23Codex%20%23SunoAI%20%23AIMusic%20%40yourhandle)
 
-Or manually: #ClaudeCode #SunoAI #AIMusic @bitwizemusic
+Or manually: #Codex #SunoAI #AIMusic @yourhandle
 
 Not required, just curious what people create with this. 🎵
 ```

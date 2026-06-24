@@ -11,8 +11,8 @@ Complete guide for creating your first album from scratch.
 Before you begin:
 
 1. **Suno account** - Sign up at [suno.com](https://suno.com)
-2. **Claude Code** - With this plugin installed
-3. **Config file** - Run `/bitwize-music:configure` if not set up
+2. **Codex** - With this plugin installed
+3. **Config file** - Run `$maxinger15-music:configure` if not set up
 
 ---
 
@@ -21,7 +21,7 @@ Before you begin:
 ### Step 1: Create the Album
 
 ```
-/bitwize-music:new-album my-first-album electronic
+$maxinger15-music:new-album my-first-album electronic
 ```
 
 Replace `my-first-album` with your album name (use hyphens, lowercase).
@@ -38,7 +38,7 @@ The skill reports the album location and creates:
 
 ## Phase 2: Planning (30-60 minutes)
 
-Work through the 7 Planning Phases with Claude. Answer one question at a time.
+Work through the 7 Planning Phases with Codex. Answer one question at a time.
 
 ### The 7 Phases
 
@@ -52,7 +52,7 @@ Work through the 7 Planning Phases with Claude. Answer one question at a time.
 | 6. Practical | Titles, explicit content, distributor genres |
 | 7. Confirmation | Review plan, confirm "ready to write" |
 
-**Reference**: See [CLAUDE.md > Building a New Album](../../CLAUDE.md#building-a-new-album)
+**Reference**: See [AGENTS.md > Building a New Album](../../AGENTS.md#building-a-new-album)
 
 ### CHECKPOINT: Do Not Skip Planning
 
@@ -76,12 +76,12 @@ Or use the import skill if you've written tracks elsewhere.
 
 ### Step 2: Write Lyrics
 
-For each track, Claude helps you write:
+For each track, Codex helps you write:
 - Lyrics with section tags (`[Verse]`, `[Chorus]`, etc.)
 - Style prompt for Suno
 - Phonetic fixes for tricky words
 
-**Tip**: Use `/bitwize-music:lyric-writer` for dedicated lyric help.
+**Tip**: Use `$maxinger15-music:lyric-writer` for dedicated lyric help.
 
 ### Step 3: Review Before Generation
 
@@ -102,7 +102,7 @@ Stop here until:
 - [ ] All track files created with lyrics
 - [ ] Style prompts filled in
 - [ ] Lyric review complete (no issues)
-- [ ] `/bitwize-music:explicit-checker` run (if needed)
+- [ ] `$maxinger15-music:explicit-checker` run (if needed)
 
 ---
 
@@ -111,19 +111,19 @@ Stop here until:
 ### Step 1: Copy to Suno
 
 For each track:
-1. Tell Claude: "Copy track 01 to clipboard"
+1. Tell Codex: "Copy track 01 to clipboard"
 2. Open Suno, paste into Custom mode
 3. Generate 2-3 variations
 
 ### Step 2: Log Results
 
-After each generation, tell Claude:
+After each generation, tell Codex:
 ```
 Track 01 attempt 1: [paste Suno link]
 Good vocals but structure off
 ```
 
-Claude logs it in the track's Generation Log.
+Codex logs it in the track's Generation Log.
 
 ### Step 3: Find Keepers
 
@@ -132,7 +132,7 @@ When you find a keeper:
 Track 01 keeper: [paste Suno link]
 ```
 
-Claude marks the track as `Generated`.
+Codex marks the track as `Generated`.
 
 ### Generation Tips
 
@@ -146,7 +146,7 @@ Stop here until:
 - [ ] All tracks have Status: `Generated`
 - [ ] All tracks have Suno Links
 - [ ] You've listened through the full album
-- [ ] Tell Claude: "Album QA approved" or "Track X needs regen"
+- [ ] Tell Codex: "Album QA approved" or "Track X needs regen"
 
 ---
 
@@ -158,12 +158,12 @@ From Suno, download all keeper tracks as WAV files.
 
 ### Step 2: Run Mastering
 
-Tell Claude where the files are:
+Tell Codex where the files are:
 ```
 Master the tracks in ~/Downloads/my-album-wavs/
 ```
 
-Claude runs the mastering workflow:
+Codex runs the mastering workflow:
 - Analyzes loudness
 - Applies genre-appropriate EQ
 - Normalizes to streaming standards (-14 LUFS)
@@ -177,17 +177,17 @@ Claude runs the mastering workflow:
 ### Step 1: Get Art Prompt
 
 ```
-/bitwize-music:album-art-director my-first-album
+$maxinger15-music:album-art-director my-first-album
 ```
 
 ### Step 2: Generate Image
 
-Use ChatGPT/DALL-E with the prompt Claude provides.
+Use ChatGPT/DALL-E with the prompt Codex provides.
 
 ### Step 3: Import Art
 
 ```
-/bitwize-music:import-art ~/Downloads/album-art.png my-first-album
+$maxinger15-music:import-art ~/Downloads/album-art.png my-first-album
 ```
 
 ---
@@ -196,7 +196,7 @@ Use ChatGPT/DALL-E with the prompt Claude provides.
 
 ### Step 1: Final Checklist
 
-Ask Claude: "Run release checklist"
+Ask Codex: "Run release checklist"
 
 Verify:
 - [ ] All tracks Final
@@ -206,9 +206,9 @@ Verify:
 
 ### Step 2: Release
 
-Tell Claude: "Release the album"
+Tell Codex: "Release the album"
 
-Claude updates status to `Released` and provides upload instructions.
+Codex updates status to `Released` and provides upload instructions.
 
 ### Step 3: Upload
 
@@ -221,15 +221,15 @@ Claude updates status to `Released` and provides upload instructions.
 
 | Task | Command |
 |------|---------|
-| Create album | `/bitwize-music:new-album name genre` |
-| Resume work | `/bitwize-music:resume album-name` |
-| Write lyrics | `/bitwize-music:lyric-writer` |
-| Review lyrics | `/bitwize-music:lyric-reviewer` |
-| Check explicit | `/bitwize-music:explicit-checker` |
-| Copy to clipboard | `/bitwize-music:clipboard track-name` |
-| Create album art | `/bitwize-music:album-art-director` |
-| Import art | `/bitwize-music:import-art path album` |
-| Validate album | `/bitwize-music:validate-album` |
+| Create album | `$maxinger15-music:new-album name genre` |
+| Resume work | `$maxinger15-music:resume album-name` |
+| Write lyrics | `$maxinger15-music:lyric-writer` |
+| Review lyrics | `$maxinger15-music:lyric-reviewer` |
+| Check explicit | `$maxinger15-music:explicit-checker` |
+| Copy to clipboard | `$maxinger15-music:clipboard track-name` |
+| Create album art | `$maxinger15-music:album-art-director` |
+| Import art | `$maxinger15-music:import-art path album` |
+| Validate album | `$maxinger15-music:validate-album` |
 
 ---
 
@@ -237,13 +237,13 @@ Claude updates status to `Released` and provides upload instructions.
 
 **Suno mispronounces words?**
 - Use phonetic spelling in lyrics
-- Run `/bitwize-music:pronunciation-specialist`
+- Run `$maxinger15-music:pronunciation-specialist`
 
 **Lost track of progress?**
-- Run `/bitwize-music:resume album-name`
+- Run `$maxinger15-music:resume album-name`
 
 **Config issues?**
-- Run `/bitwize-music:configure`
+- Run `$maxinger15-music:configure`
 
 **Need more guidance?**
-- Run `/bitwize-music:tutorial new-album` for step-by-step walkthrough
+- Run `$maxinger15-music:tutorial new-album` for step-by-step walkthrough

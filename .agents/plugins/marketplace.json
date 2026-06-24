@@ -1,0 +1,20 @@
+{
+  "name": "maxinger15-local",
+  "interface": {
+    "displayName": "maxinger15 Local"
+  },
+  "plugins": [
+    {
+      "name": "maxinger15-music",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

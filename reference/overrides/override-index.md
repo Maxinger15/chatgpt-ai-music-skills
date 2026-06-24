@@ -1,12 +1,12 @@
 # Override Index
 
-Complete reference for all override files. Each override customizes a specific aspect of Claude's behavior.
+Complete reference for all override files. Each override customizes a specific aspect of Codex's behavior.
 
 ## Overview
 
 | # | Override File | Used By | Purpose |
 |---|---------------|---------|---------|
-| 1 | `CLAUDE.md` | Main workflow | General workflow instructions |
+| 1 | `AGENTS.md` | Main workflow | General workflow instructions |
 | 2 | `pronunciation-guide.md` | `/pronunciation-specialist` | Phonetic spellings for Suno |
 | 3 | `explicit-words.md` | `/explicit-checker` | Explicit content word list |
 | 4 | `lyric-writing-guide.md` | `/lyric-writer` | Lyric style preferences |
@@ -21,7 +21,7 @@ Complete reference for all override files. Each override customizes a specific a
 
 ---
 
-## 1. CLAUDE.md
+## 1. AGENTS.md
 
 **Purpose:** Add your own workflow rules and preferences that supplement the base instructions.
 
@@ -30,7 +30,7 @@ Complete reference for all override files. Each override customizes a specific a
 **Merge behavior:** Supplements (additive) - your instructions are added to base behavior
 
 ### Default Behavior
-Claude follows the workflow defined in the plugin's CLAUDE.md.
+Codex follows the workflow defined in the plugin's AGENTS.md.
 
 ### With Override
 Your custom workflow preferences are loaded in addition to base instructions.
@@ -63,7 +63,7 @@ Your custom workflow preferences are loaded in addition to base instructions.
 
 **Purpose:** Define phonetic spellings for artist names, album titles, character names, and other terms Suno might mispronounce.
 
-**Used by:** `/bitwize-music:pronunciation-specialist`
+**Used by:** `$maxinger15-music:pronunciation-specialist`
 
 **Merge behavior:** Merged with base guide - custom entries take precedence
 
@@ -77,7 +77,7 @@ Your custom pronunciations are merged with the base guide. If the same word appe
 
 | Category | Examples |
 |----------|----------|
-| Artist names | `bitwize` -> `bit-wize` |
+| Artist names | `maxinger15` -> `bit-wize` |
 | Album titles | `samplealbum` -> `sample-album` |
 | Character names | `Larocca` -> `Luh-rock-uh` |
 | Location names | `Sinaloa` -> `Sin-ah-lo-ah` |
@@ -87,7 +87,7 @@ Your custom pronunciations are merged with the base guide. If the same word appe
 ```markdown
 | Standard | Phonetic | Notes |
 |----------|----------|-------|
-| bitwize | bit-wize | Artist name |
+| maxinger15 | bit-wize | Artist name |
 | Finnerty | Finn-er-tee | Character in documentary album |
 ```
 
@@ -102,7 +102,7 @@ Your custom pronunciations are merged with the base guide. If the same word appe
 
 **Purpose:** Add or remove words from the explicit content scanner.
 
-**Used by:** `/bitwize-music:explicit-checker`
+**Used by:** `$maxinger15-music:explicit-checker`
 
 **Merge behavior:** Additive/subtractive - add new words, remove base words
 
@@ -136,12 +136,12 @@ Your additions are added to the list. Your removals are removed from the list.
 
 **Purpose:** Define your personal lyric writing style, vocabulary preferences, and thematic focus.
 
-**Used by:** `/bitwize-music:lyric-writer`
+**Used by:** `$maxinger15-music:lyric-writer`
 
 **Merge behavior:** Adds context - used when writing lyrics
 
 ### Default Behavior
-Claude uses general lyric writing best practices.
+Codex uses general lyric writing best practices.
 
 ### With Override
 Your style preferences guide lyric creation and revision.
@@ -181,12 +181,12 @@ Your style preferences guide lyric creation and revision.
 
 **Purpose:** Customize Suno prompt generation with your genre mappings, vocal preferences, and avoidances.
 
-**Used by:** `/bitwize-music:suno-engineer`
+**Used by:** `$maxinger15-music:suno-engineer`
 
 **Merge behavior:** Adds context - used when generating style prompts
 
 ### Default Behavior
-Claude uses general Suno best practices from `/reference/suno/`.
+Codex uses general Suno best practices from `/reference/suno/`.
 
 ### With Override
 Your mappings and preferences are applied to style prompt generation.
@@ -224,12 +224,12 @@ Your mappings and preferences are applied to style prompt generation.
 
 **Purpose:** Define your album structure preferences, track counts, and thematic focus.
 
-**Used by:** `/bitwize-music:album-conceptualizer`
+**Used by:** `$maxinger15-music:album-conceptualizer`
 
 **Merge behavior:** Adds context - used when planning albums
 
 ### Default Behavior
-Claude uses general album planning best practices.
+Codex uses general album planning best practices.
 
 ### With Override
 Your preferences guide the album conceptualization process.
@@ -268,12 +268,12 @@ Your preferences guide the album conceptualization process.
 
 **Purpose:** Define your visual style guidelines for album artwork and AI art generation.
 
-**Used by:** `/bitwize-music:album-art-director`
+**Used by:** `$maxinger15-music:album-art-director`
 
 **Merge behavior:** Adds context - used when developing visual concepts
 
 ### Default Behavior
-Claude provides general album art concepts based on the album theme.
+Codex provides general album art concepts based on the album theme.
 
 ### With Override
 Your visual preferences guide artwork concept development.
@@ -315,12 +315,12 @@ Your visual preferences guide artwork concept development.
 
 **Purpose:** Define your research standards, source priorities, and verification requirements.
 
-**Used by:** `/bitwize-music:researcher` and specialized researcher skills
+**Used by:** `$maxinger15-music:researcher` and specialized researcher skills
 
 **Merge behavior:** Adds context - applied to source selection and verification
 
 ### Default Behavior
-Claude uses the standard source hierarchy: Court docs > Government > Journalism > News > Wikipedia.
+Codex uses the standard source hierarchy: Court docs > Government > Journalism > News > Wikipedia.
 
 ### With Override
 Your source priorities and verification standards are applied.
@@ -358,12 +358,12 @@ Your source priorities and verification standards are applied.
 
 **Purpose:** Define your release workflow, QA requirements, and platform priorities.
 
-**Used by:** `/bitwize-music:release-director`
+**Used by:** `$maxinger15-music:release-director`
 
 **Merge behavior:** Adds context - applied to QA checklist and platform workflow
 
 ### Default Behavior
-Claude uses the standard release checklist and platform workflow.
+Codex uses the standard release checklist and platform workflow.
 
 ### With Override
 Your QA requirements and platform priorities are applied.
@@ -393,7 +393,7 @@ Your QA requirements and platform priorities are applied.
 | 3 | Spotify/Apple | Via DistroKid, 1 week after |
 
 ## Metadata Standards
-- Artist name format: lowercase (bitwize not Bitwize)
+- Artist name format: lowercase (maxinger15 not Maxinger15)
 - Tags to always include: ai-music, suno, electronic
 ```
 
@@ -403,7 +403,7 @@ Your QA requirements and platform priorities are applied.
 
 **Purpose:** Override default genre presets for audio mastering with custom EQ and dynamics settings.
 
-**Used by:** `/bitwize-music:mastering-engineer`
+**Used by:** `$maxinger15-music:mastering-engineer`
 
 **Merge behavior:** Overrides - replaces default presets for specified genres
 
@@ -448,7 +448,7 @@ defaults:
 
 **Purpose:** Define page layout, notation preferences, and songbook formatting for sheet music generation.
 
-**Used by:** `/bitwize-music:sheet-music-publisher`
+**Used by:** `$maxinger15-music:sheet-music-publisher`
 
 **Merge behavior:** Adds context - applied to PDF generation and songbook creation
 
@@ -491,12 +491,12 @@ Your formatting preferences are applied to sheet music generation.
 
 **Purpose:** Define your social media copy tone, platform priorities, messaging themes, and hashtag preferences.
 
-**Used by:** `/bitwize-music:promo-writer`, `/bitwize-music:promo-director`
+**Used by:** `$maxinger15-music:promo-writer`, `$maxinger15-music:promo-director`
 
 **Merge behavior:** Adds context - applied to copy generation and platform selection
 
 ### Default Behavior
-Claude generates social media copy using general best practices from copy-formulas.md and social-media-best-practices.md.
+Codex generates social media copy using general best practices from copy-formulas.md and social-media-best-practices.md.
 
 ### With Override
 Your tone, platform, and messaging preferences guide copy generation.

@@ -31,13 +31,13 @@ class TestTemplateExistence:
     def test_required_template_exists(self, templates_dir, template):
         assert (templates_dir / template).exists(), f"Required template missing: {template}"
 
-    def test_referenced_templates_exist(self, templates_dir, claude_md_content):
-        template_refs = re.findall(r'/templates/([a-zA-Z0-9_-]+\.md)', claude_md_content)
+    def test_referenced_templates_exist(self, templates_dir, agents_md_content):
+        template_refs = re.findall(r'/templates/([a-zA-Z0-9_-]+\.md)', agents_md_content)
         missing = [
             ref for ref in set(template_refs)
             if not (templates_dir / ref).exists()
         ]
-        assert not missing, f"Templates referenced in CLAUDE.md but missing: {missing}"
+        assert not missing, f"Templates referenced in AGENTS.md but missing: {missing}"
 
 
 class TestTrackTemplate:

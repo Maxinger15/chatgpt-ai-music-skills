@@ -1,26 +1,6 @@
 ---
 name: mastering-engineer
-description: Guides audio mastering for streaming platforms including loudness optimization and tonal balance. Use when the user has approved tracks and wants to master audio files.
-argument-hint: <folder-path or "master for [platform]">
-model: sonnet
-effort: low
-prerequisites:
-  - import-audio
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - Bash
-  - bitwize-music-mcp
-requirements:
-  python:
-    - matchering
-    - pyloudnorm
-    - scipy
-    - numpy
-    - soundfile
+description: "Guides audio mastering for streaming platforms including loudness optimization and tonal balance. Use when the user has approved tracks and wants to master audio files."
 ---
 
 ## Your Task
@@ -145,7 +125,7 @@ Before mastering, resolve audio path via MCP:
 
 1. Call `resolve_path("audio", album_slug)` — returns the full audio directory path
 
-**Example**: For album "my-album", returns `~/bitwize-music/audio/artists/bitwize/albums/electronic/my-album/`.
+**Example**: For album "my-album", returns `~/maxinger15-music/audio/artists/maxinger15/albums/electronic/my-album/`.
 
 **Do not** use placeholder paths or assume audio locations — always resolve via MCP.
 
@@ -325,7 +305,7 @@ reset_mastering(album_slug, subfolders=["mastering_samples"], dry_run=False)
 
 Configurable thresholds live in `tools/mastering/genre-presets.yaml`
 under `defaults:` (`mono_fold_band_drop_fail_db`, etc.) — override per-user
-in `~/.bitwize-music/overrides/mastering-presets.yaml`.
+in `~/.maxinger15-music/overrides/mastering-presets.yaml`.
 
 ---
 

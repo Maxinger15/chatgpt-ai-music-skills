@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.claude-plugin/plugin.json'
+      - '.codex-plugin/plugin.json'
 
 jobs:
   create-release:
@@ -22,7 +22,7 @@ jobs:
     - name: Extract version
       id: version
       run: |
-        VERSION=$(jq -r '.version' .claude-plugin/plugin.json)
+        VERSION=$(jq -r '.version' .codex-plugin/plugin.json)
         {
           echo "version<<GHEOF"
           echo "$VERSION"
@@ -117,17 +117,16 @@ jobs:
         git checkout develop
 
         # Check if develop already has this or a higher dev version
-        CURRENT_DEV=$(jq -r '.version' .claude-plugin/plugin.json)
+        CURRENT_DEV=$(jq -r '.version' .codex-plugin/plugin.json)
         if [ "$CURRENT_DEV" = "$DEV_VERSION" ]; then
           echo "develop is already at $DEV_VERSION, skipping bump"
           exit 0
         fi
 
-        # Update version files
-        jq ".version = \"$DEV_VERSION\"" .claude-plugin/plugin.json > /tmp/plugin.json && mv /tmp/plugin.json .claude-plugin/plugin.json
-        jq ".plugins[0].version = \"$DEV_VERSION\"" .claude-plugin/marketplace.json > /tmp/marketplace.json && mv /tmp/marketplace.json .claude-plugin/marketplace.json
+        # Update Codex plugin version
+        jq ".version = \"$DEV_VERSION\"" .codex-plugin/plugin.json > /tmp/plugin.json && mv /tmp/plugin.json .codex-plugin/plugin.json
 
-        git add .claude-plugin/plugin.json .claude-plugin/marketplace.json
+        git add .codex-plugin/plugin.json
         git diff --cached --quiet && { echo "No version change needed, skipping"; exit 0; }
         git commit -m "chore: bump develop to $DEV_VERSION"
         git push origin develop

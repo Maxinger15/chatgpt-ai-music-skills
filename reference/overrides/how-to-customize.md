@@ -1,6 +1,6 @@
 # How to Customize the Plugin
 
-The override system lets you personalize Claude's behavior without modifying plugin files. Your customizations are stored separately and survive plugin updates.
+The override system lets you personalize Codex's behavior without modifying plugin files. Your customizations are stored separately and survive plugin updates.
 
 ## Quick Start
 
@@ -16,7 +16,7 @@ cp /path/to/plugin/config/overrides.example/suno-preferences.md ~/music-projects
 nano ~/music-projects/overrides/pronunciation-guide.md
 
 # 4. Verify config points to your overrides
-# In ~/.bitwize-music/config.yaml:
+# In ~/.maxinger15-music/config.yaml:
 # paths:
 #   overrides: "~/music-projects/overrides"
 ```
@@ -25,7 +25,7 @@ nano ~/music-projects/overrides/pronunciation-guide.md
 
 | Override File | What It Controls |
 |---------------|------------------|
-| `CLAUDE.md` | Workflow instructions, general behavior |
+| `AGENTS.md` | Workflow instructions, general behavior |
 | `pronunciation-guide.md` | Artist/album-specific pronunciations |
 | `explicit-words.md` | Custom explicit content word list |
 | `lyric-writing-guide.md` | Lyric style, vocabulary, themes |
@@ -51,7 +51,7 @@ See [override-index.md](override-index.md) for detailed descriptions of each ove
 
 ### Don't use overrides when:
 
-- **One-time exceptions** - Just tell Claude in the conversation
+- **One-time exceptions** - Just tell Codex in the conversation
 - **Album-specific details** - Put these in the album README instead
 - **Experimentation** - Try things in conversation first, then codify what works
 
@@ -59,7 +59,7 @@ See [override-index.md](override-index.md) for detailed descriptions of each ove
 
 ### Loading Process
 
-1. At session start, Claude reads `~/.bitwize-music/config.yaml`
+1. At session start, Codex reads `~/.maxinger15-music/config.yaml`
 2. Gets `paths.overrides` (defaults to `{content_root}/overrides`)
 3. Checks for each override file
 4. If found: loads and merges with base behavior
@@ -71,7 +71,7 @@ Different overrides merge differently:
 
 | Override | Merge Behavior |
 |----------|----------------|
-| `CLAUDE.md` | **Supplements** base instructions (additive) |
+| `AGENTS.md` | **Supplements** base instructions (additive) |
 | `pronunciation-guide.md` | **Merges** with base guide, custom takes precedence |
 | `explicit-words.md` | **Adds/removes** from base word list |
 | `mastering-presets.yaml` | **Overrides** specific genre presets |
@@ -86,7 +86,7 @@ Base guide (`/reference/suno/pronunciation-guide.md`):
 
 Your override (`{overrides}/pronunciation-guide.md`):
 ```markdown
-| bitwize | bitwize | bit-wize | Artist name |
+| maxinger15 | maxinger15 | bit-wize | Artist name |
 ```
 
 Result: Both entries are available. Your custom pronunciations take precedence if there's a conflict.
@@ -97,7 +97,7 @@ Result: Both entries are available. Your custom pronunciations take precedence i
 
 Begin with one or two overrides:
 - `pronunciation-guide.md` - Almost always useful
-- `CLAUDE.md` - If you have specific workflow preferences
+- `AGENTS.md` - If you have specific workflow preferences
 
 Add more as you discover patterns in your work.
 
@@ -146,7 +146,7 @@ Default location (recommended):
 ~/music-projects/           # {content_root}
 ├── artists/
 ├── overrides/              # Your customizations
-│   ├── CLAUDE.md
+│   ├── AGENTS.md
 │   ├── pronunciation-guide.md
 │   └── suno-preferences.md
 └── IDEAS.md
@@ -154,7 +154,7 @@ Default location (recommended):
 
 Custom location (set in config):
 ```yaml
-# ~/.bitwize-music/config.yaml
+# ~/.maxinger15-music/config.yaml
 paths:
   content_root: "~/music-projects"
   overrides: "~/my-custom-overrides"  # Different location
@@ -183,13 +183,13 @@ If an override seems to have no effect:
 
 1. The skill may not support that specific customization yet
 2. Check the override file format matches the example
-3. Try restarting the Claude session
+3. Try restarting the Codex session
 
 ### Conflicting Instructions
 
 If your override conflicts with base behavior:
 
-- `CLAUDE.md` supplements (both apply)
+- `AGENTS.md` supplements (both apply)
 - Pronunciation guide: your entries take precedence
 - Other overrides: varies by skill
 

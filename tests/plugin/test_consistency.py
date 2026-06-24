@@ -1,9 +1,10 @@
-"""Tests for cross-reference consistency: versions, skill counts, model tiers, .gitignore."""
+"""Tests for cross-reference consistency: plugin metadata, skill counts, complexity tiers, .gitignore."""
 
 import json
 import re
 
 import pytest
+import yaml
 
 pytestmark = pytest.mark.plugin
 
@@ -32,23 +33,25 @@ class TestSkillCount:
 
 
 class TestVersionSync:
-    """plugin.json and marketplace.json versions must match."""
+    """Codex plugin metadata must be internally coherent."""
 
-    def test_version_files_match(self, project_root):
-        plugin_json = project_root / ".claude-plugin" / "plugin.json"
-        marketplace_json = project_root / ".claude-plugin" / "marketplace.json"
+    def test_plugin_metadata_valid(self, project_root):
+        plugin_json = project_root / ".codex-plugin" / "plugin.json"
+        marketplace_json = project_root / ".agents" / "plugins" / "marketplace.json"
 
         if not plugin_json.exists() or not marketplace_json.exists():
-            pytest.skip("Version files not found")
+            pytest.skip("Codex plugin metadata files not found")
 
-        with open(plugin_json) as f:
-            plugin_version = json.load(f).get('version', 'unknown')
-        with open(marketplace_json) as f:
-            marketplace_data = json.load(f)
-            marketplace_version = marketplace_data.get('plugins', [{}])[0].get('version', 'unknown')
+        plugin_data = json.loads(plugin_json.read_text())
+        marketplace_data = json.loads(marketplace_json.read_text())
 
-        assert plugin_version == marketplace_version, (
-            f"plugin.json: {plugin_version}, marketplace.json: {marketplace_version}"
+        plugin_name = plugin_data.get("name")
+        assert plugin_name == "maxinger15-music"
+        assert re.match(r"^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$", plugin_data.get("version", ""))
+
+        entries = marketplace_data.get("plugins", [])
+        assert any(entry.get("name") == plugin_name for entry in entries), (
+            "Codex marketplace must include the maxinger15-music plugin entry"
         )
 
 
@@ -62,15 +65,20 @@ class TestNoSkillJson:
         )
 
 
-class TestModelTierConsistency:
-    """Model tiers in SKILL.md must match model-strategy.md."""
+class TestComplexityTierConsistency:
+    """Complexity tiers in metadata must match complexity-strategy.md."""
 
-    def test_model_strategy_alignment(self, project_root, all_skill_frontmatter):
-        strategy_path = project_root / "reference" / "model-strategy.md"
+    def test_complexity_strategy_alignment(self, project_root):
+        strategy_path = project_root / "reference" / "complexity-strategy.md"
+        metadata_path = project_root / "skills" / "metadata.yaml"
         if not strategy_path.exists():
-            pytest.skip("model-strategy.md not found")
+            pytest.skip("complexity-strategy.md not found")
+        if not metadata_path.exists():
+            pytest.skip("skills/metadata.yaml not found")
 
         strategy_content = strategy_path.read_text()
+        metadata = yaml.safe_load(metadata_path.read_text()) or {}
+        skill_metadata = metadata.get("skills", {})
 
         tier_sections = {
             'opus': r'## Opus.*?(?=## Sonnet|## Haiku|## Decision|$)',
@@ -79,19 +87,8 @@ class TestModelTierConsistency:
         }
 
         mismatches = []
-        for skill_name, fm in all_skill_frontmatter.items():
-            if '_error' in fm:
-                continue
-            model = fm.get('model', '')
-            if not model:
-                continue
-
-            # Determine actual tier
-            actual_tier = None
-            for tier in ('opus', 'sonnet', 'haiku'):
-                if tier in model:
-                    actual_tier = tier
-                    break
+        for skill_name, meta in skill_metadata.items():
+            actual_tier = meta.get("complexity_tier")
             if not actual_tier:
                 continue
 
@@ -106,10 +103,10 @@ class TestModelTierConsistency:
 
             if documented_tier and documented_tier != actual_tier:
                 mismatches.append(
-                    f"{skill_name}: SKILL.md says {actual_tier}, model-strategy.md says {documented_tier}"
+                    f"{skill_name}: metadata says {actual_tier}, complexity-strategy.md says {documented_tier}"
                 )
 
-        assert not mismatches, "Model tier mismatches:\n" + "\n".join(mismatches)
+        assert not mismatches, "Complexity tier mismatches:\n" + "\n".join(mismatches)
 
 
 class TestNoDisableModelInvocation:

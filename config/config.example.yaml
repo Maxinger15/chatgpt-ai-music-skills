@@ -1,5 +1,5 @@
 # =============================================================================
-# bitwize-music Plugin Configuration
+# maxinger15-music Plugin Configuration
 # =============================================================================
 #
 # QUICK START — Only 3 required fields:
@@ -12,18 +12,18 @@
 #     documents_root: "~/music-projects/documents"
 #
 # That's it! Everything else below is optional. Copy this file to
-# ~/.bitwize-music/config.yaml and fill in the 3 fields above.
+# ~/.maxinger15-music/config.yaml and fill in the 3 fields above.
 #
 # =============================================================================
 #
 # SETUP:
-#   mkdir -p ~/.bitwize-music
-#   cp config/config.example.yaml ~/.bitwize-music/config.yaml
-#   # Edit ~/.bitwize-music/config.yaml with your settings
+#   mkdir -p ~/.maxinger15-music
+#   cp config/config.example.yaml ~/.maxinger15-music/config.yaml
+#   # Edit ~/.maxinger15-music/config.yaml with your settings
 #
-# Or use the interactive setup: /bitwize-music:configure
+# Or use the interactive setup: $maxinger15-music:configure
 #
-# WHY ~/.bitwize-music/?
+# WHY ~/.maxinger15-music/?
 #   - Survives plugin updates (your config is never overwritten)
 #   - Same location whether you cloned the repo or installed as plugin
 #   - Easy to backup and version control separately
@@ -54,18 +54,18 @@ artist:
   # Your artist or project name. Used in directory paths.
   #
   # IMPORTANT:
-  #   - Case-sensitive: "bitwize" and "Bitwize" create different folders
+  #   - Case-sensitive: "maxinger15" and "Maxinger15" create different folders
   #   - Use lowercase-with-hyphens for consistency: "my-band" not "My Band"
   #   - No spaces - use hyphens: "dj-shadow-clone" not "dj shadow clone"
   #
   # Examples:
-  #   name: "bitwize"           # Solo artist
+  #   name: "maxinger15"           # Solo artist
   #   name: "the-synthetics"    # Band name
   #   name: "dj-neon"           # DJ alias
   #
   # Creates paths like:
-  #   {content_root}/artists/bitwize/albums/electronic/my-album/
-  #   {audio_root}/artists/bitwize/albums/{genre}/my-album/
+  #   {content_root}/artists/maxinger15/albums/electronic/my-album/
+  #   {audio_root}/artists/maxinger15/albums/{genre}/my-album/
   #
   name: "your-artist-name"
 
@@ -91,7 +91,7 @@ artist:
   # ---------------------------
   # style [optional]
   # ---------------------------
-  # Brief description of your sound. Helps Claude understand your aesthetic
+  # Brief description of your sound. Helps Codex understand your aesthetic
   # and make better suggestions for lyrics, production, and prompts.
   #
   # Be specific about:
@@ -139,29 +139,29 @@ artist:
 #
 # IMPORTANT: All paths mirror the content structure with artists/[artist]/albums/[genre]/
 # Wrong: {audio_root}/my-album/
-# Right: {audio_root}/artists/bitwize/albums/hip-hop/my-album/
+# Right: {audio_root}/artists/maxinger15/albums/hip-hop/my-album/
 #
 # PLATFORM-SPECIFIC EXAMPLES:
 #
 # macOS:
-#   content_root: "~/Music/bitwize-music"
-#   audio_root: "~/Music/bitwize-music/audio"
-#   documents_root: "~/Documents/bitwize-music"
+#   content_root: "~/Music/maxinger15-music"
+#   audio_root: "~/Music/maxinger15-music/audio"
+#   documents_root: "~/Documents/maxinger15-music"
 #
 # Linux:
-#   content_root: "~/music/bitwize-music"
-#   audio_root: "~/music/bitwize-music/audio"
-#   documents_root: "~/documents/bitwize-music"
+#   content_root: "~/music/maxinger15-music"
+#   audio_root: "~/music/maxinger15-music/audio"
+#   documents_root: "~/documents/maxinger15-music"
 #
 # WSL (Windows Subsystem for Linux):
-#   content_root: "/mnt/c/Users/YourName/Music/bitwize-music"
-#   audio_root: "/mnt/c/Users/YourName/Music/bitwize-music/audio"
-#   documents_root: "/mnt/c/Users/YourName/Documents/bitwize-music"
+#   content_root: "/mnt/c/Users/YourName/Music/maxinger15-music"
+#   audio_root: "/mnt/c/Users/YourName/Music/maxinger15-music/audio"
+#   documents_root: "/mnt/c/Users/YourName/Documents/maxinger15-music"
 #
 # Shared location (all in one folder):
-#   content_root: "~/bitwize-music"
-#   audio_root: "~/bitwize-music/audio"
-#   documents_root: "~/bitwize-music/documents"
+#   content_root: "~/maxinger15-music"
+#   audio_root: "~/maxinger15-music/audio"
+#   documents_root: "~/maxinger15-music/documents"
 
 paths:
   # ---------------------------
@@ -211,7 +211,7 @@ paths:
   #
   # COMMON MISTAKE: Using a flat path without the full structure!
   #   Wrong path: ~/music-projects/audio/my-album/
-  #   Right path: ~/music-projects/audio/artists/bitwize/albums/{genre}/my-album/
+  #   Right path: ~/music-projects/audio/artists/maxinger15/albums/{genre}/my-album/
   #
   # Size considerations:
   #   - Each mastered WAV: ~50-100 MB
@@ -257,7 +257,7 @@ paths:
   # ideas_file [optional]
   # ---------------------------
   # File for tracking album concepts before creating album directories.
-  # Managed by /bitwize-music:album-ideas skill.
+  # Managed by $maxinger15-music:album-ideas skill.
   #
   # Default (if omitted): {content_root}/IDEAS.md
   #
@@ -269,11 +269,11 @@ paths:
   # ---------------------------
   # tools_root (automatic)
   # ---------------------------
-  # Always ~/.bitwize-music (where this config lives).
+  # Always ~/.maxinger15-music (where this config lives).
   # Contains shared tools, not user-configurable.
   #
   # Structure:
-  #   ~/.bitwize-music/
+  #   ~/.maxinger15-music/
   #   ├── config.yaml       # This file
   #   ├── venv/             # Python venv for plugin tools
   #   └── cache/            # Temporary files
@@ -333,7 +333,7 @@ generation:
   #   soundraw - SoundRaw
   #
   # Each service has dedicated reference docs in /reference/{service}/
-  # and a specialized skill: /bitwize-music:{service}-engineer
+  # and a specialized skill: $maxinger15-music:{service}-engineer
   #
   service: suno
 
@@ -403,7 +403,7 @@ generation:
 # =============================================================================
 # PROMO VIDEOS [optional]
 # =============================================================================
-# Settings for /bitwize-music:promo-director skill.
+# Settings for $maxinger15-music:promo-director skill.
 # Generate 15-second vertical videos (9:16) for social media.
 #
 # REQUIREMENTS:
@@ -475,7 +475,7 @@ generation:
 # =============================================================================
 # SHEET MUSIC [optional]
 # =============================================================================
-# Settings for /bitwize-music:sheet-music-publisher skill.
+# Settings for $maxinger15-music:sheet-music-publisher skill.
 # Convert audio to sheet music and create songbooks.
 #
 # REQUIREMENTS:
@@ -532,7 +532,7 @@ sheet_music:
   # Default (if omitted): auto-detected from urls section
   #
   # Examples:
-  #   footer_url: "https://www.bitwizemusic.com"
+  #   footer_url: "https://www.example.com"
   #   footer_url: "https://your-artist.com"
   #
   # footer_url: "https://www.your-website.com"
@@ -541,7 +541,7 @@ sheet_music:
 # =============================================================================
 # CLOUD STORAGE [optional]
 # =============================================================================
-# Settings for /bitwize-music:cloud-uploader skill.
+# Settings for $maxinger15-music:cloud-uploader skill.
 # Upload promo videos and assets to cloud storage for sharing.
 #
 # SUPPORTED PROVIDERS:
@@ -711,12 +711,12 @@ sheet_music:
 #   # level: "debug"
 #
 #   # ---------------------------
-#   # file [optional, default: "~/.bitwize-music/logs/debug.log"]
+#   # file [optional, default: "~/.maxinger15-music/logs/debug.log"]
 #   # ---------------------------
 #   # Path to the log file. Supports ~ for home directory.
 #   # The directory is auto-created if it doesn't exist.
 #   #
-#   # file: "~/.bitwize-music/logs/debug.log"
+#   # file: "~/.maxinger15-music/logs/debug.log"
 #
 #   # ---------------------------
 #   # max_size_mb [optional, default: 5]
@@ -892,22 +892,22 @@ sheet_music:
 # Good for: Power users, multiple release targets
 #
 # artist:
-#   name: "bitwize"
+#   name: "maxinger15"
 #   genres: ["electronic", "hip-hop", "industrial"]
 #   style: "dark industrial electronic with aggressive vocals and cyberpunk themes"
 #
 # paths:
-#   content_root: "~/bitwize-music"
-#   audio_root: "~/bitwize-music/audio"
-#   documents_root: "~/bitwize-music/documents"
-#   overrides: "~/bitwize-music/overrides"
-#   ideas_file: "~/bitwize-music/IDEAS.md"
+#   content_root: "~/maxinger15-music"
+#   audio_root: "~/maxinger15-music/audio"
+#   documents_root: "~/maxinger15-music/documents"
+#   overrides: "~/maxinger15-music/overrides"
+#   ideas_file: "~/maxinger15-music/IDEAS.md"
 #
 # urls:
-#   soundcloud: "https://soundcloud.com/bitwize"
+#   soundcloud: "https://soundcloud.com/maxinger15"
 #   spotify: "https://open.spotify.com/artist/abc123"
-#   bandcamp: "https://bitwize.bandcamp.com"
-#   twitter: "https://x.com/bitwize"
+#   bandcamp: "https://maxinger15.bandcamp.com"
+#   twitter: "https://x.com/maxinger15"
 #
 # generation:
 #   service: suno

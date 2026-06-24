@@ -109,14 +109,14 @@ Quick-reference guide for finding the right skill for any task.
 
 | Skill | Description | Primary Use Case |
 |-------|-------------|------------------|
-| [`about`](/skills/about/SKILL.md) | About bitwize and this plugin | Learning about the plugin creator |
+| [`about`](/skills/about/SKILL.md) | About maxinger15 and this plugin | Learning about the plugin creator |
 | [`album-art-director`](/skills/album-art-director/SKILL.md) | Visual concepts for album artwork and AI art prompts | Creating album cover concepts for DALL-E/ChatGPT |
 | [`album-conceptualizer`](/skills/album-conceptualizer/SKILL.md) | Album concepts, tracklist architecture, thematic planning | Planning a new album's structure and narrative |
 | [`album-dashboard`](/skills/album-dashboard/SKILL.md) | Visual album progress dashboard with completion percentages | Quick overview of album progress by phase |
 | [`album-ideas`](/skills/album-ideas/SKILL.md) | Track and manage album ideas | Brainstorming and planning future albums |
 | [`clipboard`](/skills/clipboard/SKILL.md) | Copy track content to system clipboard | Quickly copying lyrics/prompts for Suno |
 | [`cloud-uploader`](/skills/cloud-uploader/SKILL.md) | Upload promo videos to Cloudflare R2 or AWS S3 | Hosting promo videos for social sharing |
-| [`configure`](/skills/configure/SKILL.md) | Set up or edit plugin configuration | First-time setup of ~/.bitwize-music/config.yaml |
+| [`configure`](/skills/configure/SKILL.md) | Set up or edit plugin configuration | First-time setup of ~/.maxinger15-music/config.yaml |
 | [`document-hunter`](/skills/document-hunter/SKILL.md) | Automated browser-based document search from free archives | Finding court docs for true-story albums |
 | [`explicit-checker`](/skills/explicit-checker/SKILL.md) | Scan lyrics for explicit content, verify flags | Ensuring explicit flags match actual content |
 | [`genre-creator`](/skills/genre-creator/SKILL.md) | Create new genre documentation with consistent structure | Adding a new genre to the genre library |
@@ -257,7 +257,7 @@ Pre-generation-check auto-skips Gates 2 (Lyrics), 3 (Pronunciation), 4 (Explicit
 ### Resume Existing Work
 ```
 /resume <album-name>
-    -> [Claude reports status and next steps]
+    -> [Codex reports status and next steps]
     -> Continue from appropriate skill based on phase
 ```
 
@@ -345,7 +345,7 @@ Redundant or conflicting combinations:
 
 ## Skill Categories by Model
 
-Skills are assigned to models based on task complexity. See [model-strategy.md](model-strategy.md) for full rationale.
+Skills are assigned to models based on task complexity. See [complexity-strategy.md](complexity-strategy.md) for full rationale.
 
 ### Opus 4.6 (Critical Creative Work — 7 skills)
 - `/lyric-writer` - Core creative content

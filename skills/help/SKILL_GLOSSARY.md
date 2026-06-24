@@ -1,16 +1,16 @@
 # Skill Glossary
 
-Common terminology and frequently confused terms in the bitwize-music plugin.
+Common terminology and frequently confused terms in the maxinger15-music plugin.
 
 ---
 
 ## Core Concepts
 
 ### Skill
-A slash command that invokes specialized functionality. Skills are invoked with `/bitwize-music:skill-name`. Each skill has its own SKILL.md documentation in `${CLAUDE_PLUGIN_ROOT}/skills/[skill-name]/`.
+A slash command that invokes specialized functionality. Skills are invoked with `$maxinger15-music:skill-name`. Each skill has its own SKILL.md documentation in `{plugin_root}/skills/[skill-name]/`.
 
 ### Content Root
-The directory where albums, artists, and research files live. Set in `paths.content_root`. Example: `~/music-projects/artists/bitwize/albums/...`
+The directory where albums, artists, and research files live. Set in `paths.content_root`. Example: `~/music-projects/artists/maxinger15/albums/...`
 
 ### Audio Root
 The directory where mastered audio files are stored. Set in `paths.audio_root`. Mirrors the content structure: `{audio_root}/artists/{artist}/albums/{genre}/{album}/`.
@@ -136,14 +136,14 @@ Variables used in documentation that resolve from config:
 | `{content_root}` | `paths.content_root` | `~/music-projects` |
 | `{audio_root}` | `paths.audio_root` | `~/music-projects/audio` |
 | `{documents_root}` | `paths.documents_root` | `~/music-projects/documents` |
-| `${CLAUDE_PLUGIN_ROOT}` | (location of plugin) | `~/.claude/plugins/bitwize-music` |
+| `{plugin_root}` | (location of plugin) | `~/.codex/plugins/maxinger15-music` |
 | `{overrides}` | `paths.overrides` | `~/music-projects/overrides` |
-| `[artist]` | `artist.name` | `bitwize` |
+| `[artist]` | `artist.name` | `maxinger15` |
 
 ---
 
 ## See Also
 
 - [SKILL.md](SKILL.md) - Help skill documentation
-- [/CLAUDE.md](/CLAUDE.md) - Main workflow instructions
+- [/AGENTS.md](/AGENTS.md) - Main workflow instructions
 - [/README.md](/README.md) - Project overview

@@ -37,7 +37,7 @@ if str(PROJECT_ROOT) not in sys.path:
 # module so the import succeeds regardless.
 # ---------------------------------------------------------------------------
 
-SERVER_PATH = PROJECT_ROOT / "servers" / "bitwize-music-server" / "server.py"
+SERVER_PATH = PROJECT_ROOT / "servers" / "maxinger15-music-server" / "server.py"
 
 # Check if the real MCP SDK is available; if not, create a minimal mock.
 _mcp_was_mocked = False
@@ -1088,7 +1088,7 @@ class TestGetPythonCommand:
 
     def test_venv_exists(self, tmp_path):
         """When venv python3 exists, returns path and venv_exists=True."""
-        venv_python = tmp_path / ".bitwize-music" / "venv" / "bin" / "python3"
+        venv_python = tmp_path / ".maxinger15-music" / "venv" / "bin" / "python3"
         venv_python.parent.mkdir(parents=True)
         venv_python.touch()
         venv_python.chmod(0o755)
@@ -5345,12 +5345,12 @@ def _skills_state(**overrides):
     state = _fresh_state()
     state["skills"] = {
         "count": 5,
-        "model_counts": {"opus": 1, "sonnet": 3, "haiku": 1},
+        "complexity_counts": {"opus": 1, "sonnet": 3, "haiku": 1},
         "items": {
             "lyric-writer": {
                 "description": "Writes or reviews lyrics with professional prosody.",
-                "model": "claude-opus-4-6",
-                "model_tier": "opus",
+                "model": "codex-opus-4-6",
+                "complexity_tier": "opus",
                 "user_invocable": True,
                 "argument_hint": "<track-file-path>",
                 "path": "/tmp/skills/lyric-writer/SKILL.md",
@@ -5358,8 +5358,8 @@ def _skills_state(**overrides):
             },
             "suno-engineer": {
                 "description": "Constructs technical Suno V5 style prompts.",
-                "model": "claude-sonnet-4-5-20250929",
-                "model_tier": "sonnet",
+                "model": "codex-sonnet-4-5-20250929",
+                "complexity_tier": "sonnet",
                 "user_invocable": True,
                 "argument_hint": "<track-file-path>",
                 "prerequisites": ["lyric-writer"],
@@ -5368,8 +5368,8 @@ def _skills_state(**overrides):
             },
             "help": {
                 "description": "Shows available skills and quick reference.",
-                "model": "claude-haiku-4-5-20251001",
-                "model_tier": "haiku",
+                "model": "codex-haiku-4-5-20251001",
+                "complexity_tier": "haiku",
                 "user_invocable": True,
                 "argument_hint": None,
                 "path": "/tmp/skills/help/SKILL.md",
@@ -5377,8 +5377,8 @@ def _skills_state(**overrides):
             },
             "researchers-legal": {
                 "description": "Researches court documents and indictments.",
-                "model": "claude-sonnet-4-5-20250929",
-                "model_tier": "sonnet",
+                "model": "codex-sonnet-4-5-20250929",
+                "complexity_tier": "sonnet",
                 "user_invocable": False,
                 "context": "fork",
                 "path": "/tmp/skills/researchers-legal/SKILL.md",
@@ -5386,8 +5386,8 @@ def _skills_state(**overrides):
             },
             "researchers-biographical": {
                 "description": "Researches personal backgrounds and interviews.",
-                "model": "claude-sonnet-4-5-20250929",
-                "model_tier": "sonnet",
+                "model": "codex-sonnet-4-5-20250929",
+                "complexity_tier": "sonnet",
                 "user_invocable": False,
                 "context": "fork",
                 "path": "/tmp/skills/researchers-biographical/SKILL.md",
@@ -5417,7 +5417,7 @@ class TestListSkills:
         """Model filter returns only matching tier."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
-            result = json.loads(_run(server.list_skills(model_filter="opus")))
+            result = json.loads(_run(server.list_skills(complexity_filter="opus")))
         assert result["count"] == 1
         assert result["skills"][0]["name"] == "lyric-writer"
 
@@ -5425,7 +5425,7 @@ class TestListSkills:
         """Sonnet filter returns all sonnet skills."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
-            result = json.loads(_run(server.list_skills(model_filter="sonnet")))
+            result = json.loads(_run(server.list_skills(complexity_filter="sonnet")))
         assert result["count"] == 3
         names = {s["name"] for s in result["skills"]}
         assert names == {"suno-engineer", "researchers-legal", "researchers-biographical"}
@@ -5434,7 +5434,7 @@ class TestListSkills:
         """Haiku filter returns help skill only."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
-            result = json.loads(_run(server.list_skills(model_filter="haiku")))
+            result = json.loads(_run(server.list_skills(complexity_filter="haiku")))
         assert result["count"] == 1
         assert result["skills"][0]["name"] == "help"
 
@@ -5442,7 +5442,7 @@ class TestListSkills:
         """Model filter is case-insensitive."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
-            result = json.loads(_run(server.list_skills(model_filter="OPUS")))
+            result = json.loads(_run(server.list_skills(complexity_filter="OPUS")))
         assert result["count"] == 1
         assert result["skills"][0]["name"] == "lyric-writer"
 
@@ -5467,7 +5467,7 @@ class TestListSkills:
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
             result = json.loads(_run(server.list_skills(
-                model_filter="sonnet", category="court"
+                complexity_filter="sonnet", category="court"
             )))
         assert result["count"] == 1
         assert result["skills"][0]["name"] == "researchers-legal"
@@ -5477,16 +5477,16 @@ class TestListSkills:
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
             result = json.loads(_run(server.list_skills(
-                model_filter="opus", category="court"
+                complexity_filter="opus", category="court"
             )))
         assert result["count"] == 0
         assert result["skills"] == []
 
-    def test_unknown_model_filter(self):
+    def test_unknown_complexity_filter(self):
         """Model filter for nonexistent tier returns empty."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
-            result = json.loads(_run(server.list_skills(model_filter="gpt")))
+            result = json.loads(_run(server.list_skills(complexity_filter="gpt")))
         assert result["count"] == 0
         assert result["skills"] == []
 
@@ -5500,7 +5500,7 @@ class TestListSkills:
     def test_empty_skills_state(self):
         """No skills in state returns empty list."""
         state = _fresh_state()
-        state["skills"] = {"count": 0, "model_counts": {}, "items": {}}
+        state["skills"] = {"count": 0, "complexity_counts": {}, "items": {}}
         mock_cache = MockStateCache(state)
         with patch.object(_shared_mod, "cache", mock_cache):
             result = json.loads(_run(server.list_skills()))
@@ -5521,7 +5521,7 @@ class TestListSkills:
         """Total always shows unfiltered skill count, even when filtering."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
-            result = json.loads(_run(server.list_skills(model_filter="opus")))
+            result = json.loads(_run(server.list_skills(complexity_filter="opus")))
         assert result["count"] == 1  # filtered
         assert result["total"] == 5  # unfiltered
 
@@ -5534,7 +5534,7 @@ class TestListSkills:
             assert "name" in skill
             assert "description" in skill
             assert "model" in skill
-            assert "model_tier" in skill
+            assert "complexity_tier" in skill
             assert "user_invocable" in skill
 
     def test_user_invocable_default_true(self):
@@ -5547,14 +5547,14 @@ class TestListSkills:
         legal = [s for s in result["skills"] if s["name"] == "researchers-legal"][0]
         assert legal["user_invocable"] is True
 
-    def test_model_counts_in_response(self):
-        """model_counts shows per-tier breakdown."""
+    def test_complexity_counts_in_response(self):
+        """complexity_counts shows per-tier breakdown."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
             result = json.loads(_run(server.list_skills()))
-        assert result["model_counts"]["opus"] == 1
-        assert result["model_counts"]["sonnet"] == 3
-        assert result["model_counts"]["haiku"] == 1
+        assert result["complexity_counts"]["opus"] == 1
+        assert result["complexity_counts"]["sonnet"] == 3
+        assert result["complexity_counts"]["haiku"] == 1
 
     def test_skills_sorted_by_name(self):
         """Skills are returned sorted alphabetically."""
@@ -5568,7 +5568,7 @@ class TestListSkills:
         """Skill with no description doesn't crash."""
         state = _skills_state()
         state["skills"]["items"]["broken"] = {
-            "model_tier": "opus",
+            "complexity_tier": "opus",
         }
         state["skills"]["count"] = 5
         mock_cache = MockStateCache(state)
@@ -5577,18 +5577,18 @@ class TestListSkills:
         broken = [s for s in result["skills"] if s["name"] == "broken"][0]
         assert broken["description"] == ""
 
-    def test_skill_missing_model_tier(self):
-        """Skill with no model_tier gets 'unknown' default."""
+    def test_skill_missing_complexity_tier(self):
+        """Skill with no complexity_tier gets 'unknown' default."""
         state = _skills_state()
         state["skills"]["items"]["no-tier"] = {
-            "description": "A skill without model tier",
+            "description": "A skill without complexity tier",
         }
         state["skills"]["count"] = 5
         mock_cache = MockStateCache(state)
         with patch.object(_shared_mod, "cache", mock_cache):
             result = json.loads(_run(server.list_skills()))
         no_tier = [s for s in result["skills"] if s["name"] == "no-tier"][0]
-        assert no_tier["model_tier"] == "unknown"
+        assert no_tier["complexity_tier"] == "unknown"
 
 
 # =============================================================================
@@ -5744,8 +5744,8 @@ class TestSearchEdgeCases:
             result = json.loads(_run(server.search("court", scope="skills")))
         assert result["skills"][0]["name"] == "researchers-legal"
 
-    def test_search_skills_by_model_tier(self):
-        """Search finds skills by model_tier."""
+    def test_search_skills_by_complexity_tier(self):
+        """Search finds skills by complexity_tier."""
         mock_cache = MockStateCache(_skills_state())
         with patch.object(_shared_mod, "cache", mock_cache):
             result = json.loads(_run(server.search("haiku", scope="skills")))
@@ -6693,7 +6693,7 @@ class TestGetPluginVersion:
         state["plugin_version"] = "0.43.0"
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.44.0"}')
 
@@ -6710,7 +6710,7 @@ class TestGetPluginVersion:
         state["plugin_version"] = "0.44.0"
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.44.0"}')
 
@@ -6725,7 +6725,7 @@ class TestGetPluginVersion:
         state["plugin_version"] = None
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.44.0"}')
 
@@ -6753,7 +6753,7 @@ class TestGetPluginVersion:
         state["plugin_version"] = "0.43.0"
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text("{invalid json!")
 
@@ -6769,7 +6769,7 @@ class TestGetPluginVersion:
         state["plugin_version"] = "0.43.0"
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"name": "test"}')
 
@@ -6795,7 +6795,7 @@ class TestGetPluginVersion:
         state["plugin_version"] = "0.43.0"
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": ""}')
 
@@ -6810,7 +6810,7 @@ class TestGetPluginVersion:
         state["plugin_version"] = "0.43.0"
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         plugin_file = plugin_dir / "plugin.json"
         plugin_file.write_text('{"version": "0.44.0"}')
@@ -6924,7 +6924,7 @@ class TestCheckVenvHealth:
                 return versions[pkg]
             raise importlib.metadata.PackageNotFoundError(pkg)
 
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
 
@@ -6942,7 +6942,7 @@ class TestCheckVenvHealth:
         req = tmp_path / "requirements.txt"
         req.write_text("requests==2.31.0\n")
 
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
 
@@ -6961,7 +6961,7 @@ class TestCheckVenvHealth:
         req = tmp_path / "requirements.txt"
         req.write_text("requests==2.31.0\n")
 
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
 
@@ -6978,7 +6978,7 @@ class TestCheckVenvHealth:
 
     def test_no_venv_returns_no_venv(self, tmp_path):
         """Missing venv returns no_venv status."""
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music"
         venv_dir.mkdir(parents=True)
         # No venv/bin/python3
 
@@ -6988,7 +6988,7 @@ class TestCheckVenvHealth:
 
     def test_missing_requirements_returns_error(self, tmp_path):
         """Missing requirements.txt returns error status."""
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
         # No requirements.txt in PLUGIN_ROOT
@@ -7010,7 +7010,7 @@ class TestCheckVenvHealth:
                 return "1.9.0"  # mismatch
             raise importlib.metadata.PackageNotFoundError(pkg)  # ccc missing
 
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
 
@@ -7028,7 +7028,7 @@ class TestCheckVenvHealth:
         req = tmp_path / "requirements.txt"
         req.write_text("requests==2.31.0\n")
 
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
 
@@ -7041,7 +7041,7 @@ class TestCheckVenvHealth:
             result = json.loads(_run(server.check_venv_health()))
         assert result["status"] == "stale"
         assert str(tmp_path / "requirements.txt") in result["fix_command"]
-        assert "~/.bitwize-music/venv/bin/pip" in result["fix_command"]
+        assert "~/.maxinger15-music/venv/bin/pip" in result["fix_command"]
 
 
 # =============================================================================
@@ -7052,132 +7052,96 @@ class TestCheckVenvHealth:
 class TestCheckSkillRegistration:
     """Tests for the _check_skill_registration() helper."""
 
-    def _setup_skills(self, tmp_path, source_skills, cached_skills,
-                      cached_version="0.89.0"):
-        """Create source and cache skill directories for testing."""
-        # Source skills in PLUGIN_ROOT
+    def _setup_plugin(self, tmp_path, skills, *, marketplace=True,
+                      plugin_json=True, mcp_json=True):
+        """Create a Codex plugin directory for testing."""
         plugin_root = tmp_path / "plugin"
         skills_dir = plugin_root / "skills"
         skills_dir.mkdir(parents=True)
-        for name in source_skills:
+        for name in skills:
             skill_dir = skills_dir / name
             skill_dir.mkdir()
             (skill_dir / "SKILL.md").write_text(f"---\nname: {name}\n---\n")
 
-        # Cache directory
-        cache_dir = (tmp_path / "fakehome" / ".claude" / "plugins" / "cache"
-                     / "bitwize-music" / "bitwize-music" / cached_version)
-        cache_skills_dir = cache_dir / "skills"
-        cache_skills_dir.mkdir(parents=True)
-        for name in cached_skills:
-            skill_dir = cache_skills_dir / name
-            skill_dir.mkdir()
-            (skill_dir / "SKILL.md").write_text(f"---\nname: {name}\n---\n")
+        if plugin_json:
+            plugin_json_dir = plugin_root / ".codex-plugin"
+            plugin_json_dir.mkdir(parents=True)
+            (plugin_json_dir / "plugin.json").write_text(
+                json.dumps({"name": "maxinger15-music", "version": "0.92.0"})
+            )
 
-        # Write plugin.json in cache
-        plugin_json_dir = cache_dir / ".claude-plugin"
-        plugin_json_dir.mkdir(parents=True)
-        (plugin_json_dir / "plugin.json").write_text(
-            json.dumps({"version": cached_version})
-        )
+        if marketplace:
+            marketplace_dir = plugin_root / ".agents" / "plugins"
+            marketplace_dir.mkdir(parents=True)
+            (marketplace_dir / "marketplace.json").write_text(json.dumps({
+                "name": "maxinger15-local",
+                "plugins": [{"name": "maxinger15-music"}],
+            }))
+
+        if mcp_json:
+            (plugin_root / ".mcp.json").write_text(json.dumps({"mcpServers": {}}))
 
         return plugin_root
 
     def test_all_match_returns_ok(self, tmp_path):
-        """All skills matching returns status ok."""
+        """Complete Codex plugin metadata returns status ok."""
         skills = ["lyric-writer", "resume", "test"]
-        plugin_root = self._setup_skills(tmp_path, skills, skills)
+        plugin_root = self._setup_plugin(tmp_path, skills)
 
         with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
              patch.object(Path, "home", return_value=tmp_path / "fakehome"):
             result = _health_mod._check_skill_registration()
         assert result["status"] == "ok"
-        assert result["ok_count"] == 3
+        assert result["source_count"] == 3
         assert result["missing"] == []
-        assert result["ghost"] == []
+        assert result["manifest_version"] == "0.92.0"
+        assert result["marketplace_has_entry"] is True
 
-    def test_missing_skills_returns_stale(self, tmp_path):
-        """Skills on disk but not in cache are reported as missing."""
-        source = ["lyric-writer", "lyric-refiner", "voice-checker"]
-        cached = ["lyric-writer"]
-        plugin_root = self._setup_skills(tmp_path, source, cached)
-
-        with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
-             patch.object(Path, "home", return_value=tmp_path / "fakehome"):
-            result = _health_mod._check_skill_registration()
-        assert result["status"] == "stale"
-        assert "lyric-refiner" in result["missing"]
-        assert "voice-checker" in result["missing"]
-        assert result["ok_count"] == 1
-
-    def test_ghost_skills_returns_stale(self, tmp_path):
-        """Skills in cache but not on disk are reported as ghost."""
-        source = ["lyric-writer"]
-        cached = ["lyric-writer", "ship"]
-        plugin_root = self._setup_skills(tmp_path, source, cached)
+    def test_missing_manifest_returns_stale(self, tmp_path):
+        """Missing Codex manifest is reported as stale."""
+        plugin_root = self._setup_plugin(tmp_path, ["lyric-writer"], plugin_json=False)
 
         with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
              patch.object(Path, "home", return_value=tmp_path / "fakehome"):
             result = _health_mod._check_skill_registration()
         assert result["status"] == "stale"
-        assert result["ghost"] == ["ship"]
-        assert result["ok_count"] == 1
+        assert ".codex-plugin/plugin.json" in result["missing"]
 
-    def test_mixed_missing_and_ghost(self, tmp_path):
-        """Both missing and ghost skills detected."""
-        source = ["lyric-writer", "voice-checker"]
-        cached = ["lyric-writer", "ship"]
-        plugin_root = self._setup_skills(tmp_path, source, cached)
+    def test_missing_marketplace_entry_returns_stale(self, tmp_path):
+        """Marketplace without the plugin entry is reported as stale."""
+        plugin_root = self._setup_plugin(tmp_path, ["lyric-writer"], marketplace=False)
+        marketplace_dir = plugin_root / ".agents" / "plugins"
+        marketplace_dir.mkdir(parents=True)
+        (marketplace_dir / "marketplace.json").write_text(json.dumps({
+            "name": "maxinger15-local",
+            "plugins": [{"name": "other-plugin"}],
+        }))
 
         with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
              patch.object(Path, "home", return_value=tmp_path / "fakehome"):
             result = _health_mod._check_skill_registration()
         assert result["status"] == "stale"
-        assert result["missing"] == ["voice-checker"]
-        assert result["ghost"] == ["ship"]
-        assert result["ok_count"] == 1
+        assert ".agents/plugins/marketplace.json:maxinger15-music" in result["missing"]
 
-    def test_no_cache_returns_no_cache(self, tmp_path):
-        """No plugin cache directory returns no_cache status."""
-        plugin_root = tmp_path / "plugin"
-        skills_dir = plugin_root / "skills"
-        skills_dir.mkdir(parents=True)
-        skill_dir = skills_dir / "test-skill"
-        skill_dir.mkdir()
-        (skill_dir / "SKILL.md").write_text("---\nname: test-skill\n---\n")
-
-        # fakehome with no .claude directory
-        fakehome = tmp_path / "fakehome"
-        fakehome.mkdir()
-
-        with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
-             patch.object(Path, "home", return_value=fakehome):
-            result = _health_mod._check_skill_registration()
-        assert result["status"] == "no_cache"
-        assert result["source_count"] == 1
-
-    def test_cached_version_reported(self, tmp_path):
-        """Cached plugin version is included in result."""
-        skills = ["test-skill"]
-        plugin_root = self._setup_skills(tmp_path, skills, skills,
-                                         cached_version="0.69.0")
+    def test_missing_mcp_json_returns_stale(self, tmp_path):
+        """Missing .mcp.json is reported as stale."""
+        plugin_root = self._setup_plugin(tmp_path, ["test-skill"], mcp_json=False)
 
         with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
              patch.object(Path, "home", return_value=tmp_path / "fakehome"):
             result = _health_mod._check_skill_registration()
-        assert result["cached_version"] == "0.69.0"
+        assert result["status"] == "stale"
+        assert ".mcp.json" in result["missing"]
 
     def test_fix_message_on_stale(self, tmp_path):
         """Stale result includes a fix message."""
-        source = ["lyric-writer", "new-skill"]
-        cached = ["lyric-writer"]
-        plugin_root = self._setup_skills(tmp_path, source, cached)
+        plugin_root = self._setup_plugin(tmp_path, ["lyric-writer"], mcp_json=False)
 
         with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
              patch.object(Path, "home", return_value=tmp_path / "fakehome"):
             result = _health_mod._check_skill_registration()
         assert "fix_message" in result
-        assert "claude plugin update" in result["fix_message"]
+        assert "reinstall the local plugin" in result["fix_message"]
 
 
 # =============================================================================
@@ -7198,19 +7162,19 @@ class TestHealthCheck:
         skill_dir.mkdir()
         (skill_dir / "SKILL.md").write_text("---\nname: test-skill\n---\n")
 
-        cache_dir = (tmp_path / "fakehome" / ".claude" / "plugins" / "cache"
-                     / "bitwize-music" / "bitwize-music" / "1.0.0")
+        cache_dir = (tmp_path / "fakehome" / ".codex" / "plugins" / "cache"
+                     / "maxinger15-music" / "maxinger15-music" / "1.0.0")
         cache_skills_dir = cache_dir / "skills" / "test-skill"
         cache_skills_dir.mkdir(parents=True)
         (cache_skills_dir / "SKILL.md").write_text("---\nname: test-skill\n---\n")
-        pj = cache_dir / ".claude-plugin"
+        pj = cache_dir / ".codex-plugin"
         pj.mkdir(parents=True)
         (pj / "plugin.json").write_text('{"version": "1.0.0"}')
 
         # Set up venv
         req = plugin_root / "requirements.txt"
         req.write_text("requests==2.31.0\n")
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
 
@@ -7241,19 +7205,19 @@ class TestHealthCheck:
             d.mkdir(parents=True)
             (d / "SKILL.md").write_text(f"---\nname: {name}\n---\n")
 
-        cache_dir = (tmp_path / "fakehome" / ".claude" / "plugins" / "cache"
-                     / "bitwize-music" / "bitwize-music" / "1.0.0")
+        cache_dir = (tmp_path / "fakehome" / ".codex" / "plugins" / "cache"
+                     / "maxinger15-music" / "maxinger15-music" / "1.0.0")
         cache_skill = cache_dir / "skills" / "existing"
         cache_skill.mkdir(parents=True)
         (cache_skill / "SKILL.md").write_text("---\nname: existing\n---\n")
-        pj = cache_dir / ".claude-plugin"
+        pj = cache_dir / ".codex-plugin"
         pj.mkdir(parents=True)
         (pj / "plugin.json").write_text('{"version": "1.0.0"}')
 
         # Venv ok
         req = plugin_root / "requirements.txt"
         req.write_text("requests==2.31.0\n")
-        venv_dir = tmp_path / "fakehome" / ".bitwize-music" / "venv" / "bin"
+        venv_dir = tmp_path / "fakehome" / ".maxinger15-music" / "venv" / "bin"
         venv_dir.mkdir(parents=True)
         (venv_dir / "python3").touch()
 
@@ -7274,7 +7238,7 @@ class TestHealthCheck:
         skills_dir.mkdir(parents=True)
 
         fakehome = tmp_path / "fakehome"
-        (fakehome / ".bitwize-music").mkdir(parents=True)
+        (fakehome / ".maxinger15-music").mkdir(parents=True)
         # No venv
 
         with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
@@ -7292,7 +7256,7 @@ class TestHealthCheck:
         skills_dir.mkdir(parents=True)
 
         fakehome = tmp_path / "fakehome"
-        (fakehome / ".bitwize-music").mkdir(parents=True)
+        (fakehome / ".maxinger15-music").mkdir(parents=True)
 
         with patch.object(_shared_mod, "PLUGIN_ROOT", plugin_root), \
              patch.object(Path, "home", return_value=fakehome):
@@ -9412,7 +9376,7 @@ class TestSearchScopeFiltering:
         """Scope 'skills' only returns skill results."""
         state = _fresh_state()
         state["skills"] = {"items": {"lyric-writer": {
-            "description": "Write lyrics", "model_tier": "opus",
+            "description": "Write lyrics", "complexity_tier": "opus",
             "user_invocable": True,
         }}, "count": 1}
         mock_cache = MockStateCache(state)
@@ -14035,12 +13999,12 @@ class TestGetConfigEdgeCases:
     def test_config_with_partial_keys(self):
         """Config present but only has some keys — should still return it."""
         state = _fresh_state()
-        state["config"] = {"artist_name": "bitwize"}  # missing paths
+        state["config"] = {"artist_name": "maxinger15"}  # missing paths
         mock_cache = MockStateCache(state)
         with patch.object(_shared_mod, "cache", mock_cache):
             result = json.loads(_run(server.get_config()))
         assert "config" in result
-        assert result["config"]["artist_name"] == "bitwize"
+        assert result["config"]["artist_name"] == "maxinger15"
         # Missing keys just aren't present — no crash
         assert "content_root" not in result["config"]
 
@@ -14744,19 +14708,19 @@ class TestDiagnose:
         (tmp_path / "docs").mkdir()
 
         # State cache file (at patched home)
-        cache_dir = tmp_path / ".bitwize-music" / "cache"
+        cache_dir = tmp_path / ".maxinger15-music" / "cache"
         cache_dir.mkdir(parents=True)
         (cache_dir / "state.json").write_text(
             json.dumps({"schema_version": "1.2.0", "albums": {}})
         )
 
         # Fake venv (at patched home)
-        venv_bin = tmp_path / ".bitwize-music" / "venv" / "bin"
+        venv_bin = tmp_path / ".maxinger15-music" / "venv" / "bin"
         venv_bin.mkdir(parents=True)
         (venv_bin / "python3").touch()
 
         # Plugin version
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.84.0"}')
 
@@ -14780,7 +14744,7 @@ class TestDiagnose:
         state["config"] = {}  # empty config
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.84.0"}')
         (tmp_path / "requirements.txt").write_text("")
@@ -14831,7 +14795,7 @@ class TestDiagnose:
         state["config"]["artist_name"] = "test"
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.84.0"}')
         (tmp_path / "requirements.txt").write_text("")
@@ -14850,7 +14814,7 @@ class TestDiagnose:
         state["config"] = {}  # Will cause config fail
         mock_cache = MockStateCache(state)
 
-        plugin_dir = tmp_path / ".claude-plugin"
+        plugin_dir = tmp_path / ".codex-plugin"
         plugin_dir.mkdir()
         (plugin_dir / "plugin.json").write_text('{"version": "0.84.0"}')
         (tmp_path / "requirements.txt").write_text("")
@@ -14861,4 +14825,3 @@ class TestDiagnose:
             result = json.loads(_run(server.diagnose()))
         assert result["status"] == "fail"
         assert result["ok"] + result["warn"] + result["fail"] == result["total"]
-

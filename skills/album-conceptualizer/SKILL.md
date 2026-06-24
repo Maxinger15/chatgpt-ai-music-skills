@@ -1,18 +1,6 @@
 ---
 name: album-conceptualizer
-description: Designs album concepts, tracklist architecture, and thematic planning through 7 structured phases. Use when planning a new album or reworking an existing album concept.
-argument-hint: <"plan album about [topic]" or album-path>
-model: opus
-effort: max
-prerequisites:
-  - new-album
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - bitwize-music-mcp
+description: "Designs album concepts, tracklist architecture, and thematic planning through 7 structured phases. Use when planning a new album or reworking an existing album concept."
 ---
 
 ## Your Task
@@ -205,7 +193,7 @@ Balance heavy and light - serious → playful → serious creates palette cleans
 
 ## Building the Album: The 7 Planning Phases
 
-See also: `${CLAUDE_PLUGIN_ROOT}/reference/workflows/album-planning-phases.md`
+See also: `{plugin_root}/reference/workflows/album-planning-phases.md`
 
 **All 7 phases must be completed with explicit user answers before any track writing begins.**
 
@@ -261,7 +249,7 @@ See also: `${CLAUDE_PLUGIN_ROOT}/reference/workflows/album-planning-phases.md`
 
 ### Phase 5: Album Art
 
-Discuss visual concept early — actual generation happens later via `/bitwize-music:album-art-director`.
+Discuss visual concept early — actual generation happens later via `$maxinger15-music:album-art-director`.
 
 - What imagery represents the album?
 - Color palette?
@@ -334,7 +322,7 @@ Once concept is solid, create:
 4. `tracks/XX-track-name.md` - Individual track files
    - For instrumental tracks: set `instrumental: true` in frontmatter and `**Instrumental** | Yes` in Track Details
    - Instrumental tracks skip lyrics-related workflow sections (Streaming Lyrics, Pronunciation Notes, Phonetic Review Checklist)
-   - Workflow routing: instrumental tracks go directly to `/bitwize-music:suno-engineer` (no lyric-writer/reviewer/pronunciation)
+   - Workflow routing: instrumental tracks go directly to `$maxinger15-music:suno-engineer` (no lyric-writer/reviewer/pronunciation)
 
 ---
 

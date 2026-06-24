@@ -1,7 +1,7 @@
 """Album-mastering anchor selector (#290 pipeline step 2).
 
 Pure-Python scoring — no I/O, no MCP coupling. The handler in
-``servers/bitwize-music-server/handlers/processing/audio.py`` calls
+``servers/maxinger15-music-server/handlers/processing/audio.py`` calls
 ``select_anchor`` after Stage 2 (Analysis) with the list of
 ``analyze_track`` results plus the resolved genre preset.
 

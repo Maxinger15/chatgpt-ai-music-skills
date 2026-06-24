@@ -1,6 +1,6 @@
 # Tool Compatibility Matrix
 
-What works on each platform for the Claude AI Music Skills plugin.
+What works on each platform for the ChatGPT AI Music Skills plugin.
 
 ---
 

@@ -1,16 +1,6 @@
 ---
 name: album-ideas
-description: Tracks and manages album ideas including brainstorming, planning, and status updates. Use when the user wants to add, review, or organize their album idea backlog.
-argument-hint: <"list" or "add [title]" or "remove [title]" or "status [title] [status]">
-model: sonnet
-effort: medium
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - bitwize-music-mcp
+description: "Tracks and manages album ideas including brainstorming, planning, and status updates. Use when the user wants to add, review, or organize their album idea backlog."
 ---
 
 ## Your Task
@@ -58,7 +48,7 @@ Keep track of album concepts before they become actual album projects. This is t
 ```markdown
 # Album Ideas
 
-Backlog of album concepts. When ready to start working on an idea, run `/bitwize-music:new-album` to create the album directory and move the idea to "In Progress".
+Backlog of album concepts. When ready to start working on an idea, run `$maxinger15-music:new-album` to create the album directory and move the idea to "In Progress".
 
 ---
 
@@ -168,7 +158,7 @@ Notes (optional, press Enter to skip):
 ✓ Added "Album Title" to IDEAS.md (Pending)
 
 To start working on this album:
-  /bitwize-music:new-album "Album Title" [genre]
+  $maxinger15-music:new-album "Album Title" [genre]
 ```
 
 ### `remove [title]` - Remove Idea
@@ -196,7 +186,7 @@ Move an album between status sections.
 **Special case - In Progress:**
 When moving to "In Progress", check if album directory exists:
 - Call `find_album(album_title)` to check if album directory exists
-- If NOT found, suggest: "Run `/bitwize-music:new-album` to create the album structure"
+- If NOT found, suggest: "Run `$maxinger15-music:new-album` to create the album structure"
 
 ### `show [title]` - Show Details
 
@@ -221,7 +211,7 @@ Notes:
 
 ───────────────────────────────────────────
 To start working on this album:
-  /bitwize-music:new-album "[title]" [genre]
+  $maxinger15-music:new-album "[title]" [genre]
 ```
 
 ### `edit [title]` - Edit Idea
@@ -241,7 +231,7 @@ Edit an existing album idea interactively.
 
 ### Session Start
 
-CLAUDE.md already mentions checking IDEAS.md at session start. When Claude checks ideas:
+AGENTS.md already mentions checking IDEAS.md at session start. When Codex checks ideas:
 
 1. Read IDEAS.md
 2. Count ideas by status
@@ -253,7 +243,7 @@ CLAUDE.md already mentions checking IDEAS.md at session start. When Claude check
 
 When user says "let's work on [idea from IDEAS.md]":
 
-1. Run `/bitwize-music:new-album [title] [genre]`
+1. Run `$maxinger15-music:new-album [title] [genre]`
 2. After album created, update idea status to "In Progress"
 3. Tell user: "Album structure created. Updated IDEAS.md status."
 
@@ -300,7 +290,7 @@ If user has IDEAS.md in git and experiences conflicts:
 
 ### When to Move to In Progress
 
-- User runs `/bitwize-music:new-album`
+- User runs `$maxinger15-music:new-album`
 - Album directory structure created
 - Starting the 7 planning phases
 

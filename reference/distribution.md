@@ -2,7 +2,7 @@
 
 This document covers formatting and guidelines for distributing music to streaming platforms and digital distributors.
 
-> **Related skills**: `/bitwize-music:explicit-checker` (scan for explicit content), `/bitwize-music:release-director` (release coordination)
+> **Related skills**: `$maxinger15-music:explicit-checker` (scan for explicit content), `$maxinger15-music:release-director` (release coordination)
 > **Related docs**: [release/distributor-guide.md](release/distributor-guide.md), [release/platform-comparison.md](release/platform-comparison.md)
 
 ## Streaming Lyrics Format

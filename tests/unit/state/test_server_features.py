@@ -35,7 +35,7 @@ if str(PROJECT_ROOT) not in sys.path:
 # which may not be installed in the test environment.
 # ---------------------------------------------------------------------------
 
-SERVER_PATH = PROJECT_ROOT / "servers" / "bitwize-music-server" / "server.py"
+SERVER_PATH = PROJECT_ROOT / "servers" / "maxinger15-music-server" / "server.py"
 
 try:
     import mcp  # noqa: F401

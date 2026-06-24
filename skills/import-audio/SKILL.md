@@ -1,12 +1,6 @@
 ---
 name: import-audio
-description: Moves audio files to the correct album location with proper path structure. Use when the user has downloaded WAV files from Suno or other sources that need to be organized.
-argument-hint: <file-path> <album-name> [track-slug]
-model: haiku
-allowed-tools:
-  - Read
-  - Bash
-  - bitwize-music-mcp
+description: "Moves audio files to the correct album location with proper path structure. Use when the user has downloaded WAV files from Suno or other sources that need to be organized."
 ---
 
 ## Your Task
@@ -46,7 +40,7 @@ Examples:
 1. Call `resolve_path("audio", album_slug)` — returns the full audio directory path
 2. The resolved path uses the mirrored structure: `{audio_root}/artists/{artist}/albums/{genre}/{album}/`
 
-Example result: `~/bitwize-music/audio/artists/bitwize/albums/hip-hop/sample-album/`
+Example result: `~/maxinger15-music/audio/artists/maxinger15/albums/hip-hop/sample-album/`
 
 **CRITICAL**: Always use `resolve_path` — never construct paths manually.
 
@@ -128,7 +122,7 @@ Error: File not found: {source_file}
 
 **Config file missing:**
 ```
-Error: Config not found at ~/.bitwize-music/config.yaml
+Error: Config not found at ~/.maxinger15-music/config.yaml
 Run /configure to set up.
 ```
 
@@ -171,15 +165,15 @@ If WAV isn't available, this MP3 will work but mastering quality may be limited.
 Config has:
 ```yaml
 paths:
-  audio_root: ~/bitwize-music/audio
+  audio_root: ~/maxinger15-music/audio
 artist:
-  name: bitwize
+  name: maxinger15
 ```
 
 Result:
 ```
 Moved: ~/Downloads/03-t-day-beach.wav
-   To: ~/bitwize-music/audio/artists/bitwize/albums/hip-hop/sample-album/03-t-day-beach.wav
+   To: ~/maxinger15-music/audio/artists/maxinger15/albums/hip-hop/sample-album/03-t-day-beach.wav
 ```
 
 ### Stems import example
@@ -191,7 +185,7 @@ Moved: ~/Downloads/03-t-day-beach.wav
 Result:
 ```
 Extracted stems: ~/Downloads/stems.zip
-       To: ~/bitwize-music/audio/artists/bitwize/albums/hip-hop/sample-album/stems/01-first-taste/
+       To: ~/maxinger15-music/audio/artists/maxinger15/albums/hip-hop/sample-album/stems/01-first-taste/
     Files: 5 stem files extracted
   Updated: 01-first-taste stems → Yes
 ```
@@ -204,8 +198,8 @@ Extracted stems: ~/Downloads/stems.zip
 
 **Wrong:**
 ```bash
-cat ~/.bitwize-music/config.yaml
-mv file.wav ~/music-projects/audio/artists/bitwize/albums/electronic/sample-album/
+cat ~/.maxinger15-music/config.yaml
+mv file.wav ~/music-projects/audio/artists/maxinger15/albums/electronic/sample-album/
 ```
 
 **Right:**

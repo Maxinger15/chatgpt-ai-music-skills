@@ -156,12 +156,12 @@ Override the plugin's default promotion settings for this artist/project.
 
 ## Social Media Copy Preferences
 
-These settings are used by `/bitwize-music:promo-writer` when generating social media copy.
+These settings are used by `$maxinger15-music:promo-writer` when generating social media copy.
 
 ### Tone & Voice
 - **Default tone**: casual | professional | hype | mysterious | storytelling
 - **Emoji usage**: none | minimal | moderate | heavy
-- **Point of view**: first-person ("I made...") | third-person ("bitwize releases...") | collective ("We made...")
+- **Point of view**: first-person ("I made...") | third-person ("maxinger15 releases...") | collective ("We made...")
 
 ### Platform Priorities
 Ordered list of platforms to generate copy for. Remove platforms to skip them.
@@ -190,7 +190,7 @@ Ordered list of platforms to generate copy for. Remove platforms to skip them.
 ## Example Override for Specific Artist
 
 ```markdown
-# Promotion Preferences for "bitwize"
+# Promotion Preferences for "maxinger15"
 
 ## Style Defaults by Genre
 
@@ -212,7 +212,7 @@ Post schedule:
 
 ## Branding
 
-- Keep artist name lowercase: "bitwize" not "Bitwize"
+- Keep artist name lowercase: "maxinger15" not "Maxinger15"
 - Prefer dark backgrounds (matches aesthetic)
 - Let color extraction work (usually gets good results)
 
@@ -230,7 +230,7 @@ Before publishing:
 
 ## Usage by Promo Director Skill
 
-The `/bitwize-music:promo-director` skill checks for this file at:
+The `$maxinger15-music:promo-director` skill checks for this file at:
 1. `{overrides}/promotion-preferences.md`
 
 If file exists:

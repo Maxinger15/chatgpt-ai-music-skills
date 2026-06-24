@@ -4,7 +4,7 @@ Complete setup instructions for uploading promo videos to Cloudflare R2 or AWS S
 
 ## Overview
 
-The `/bitwize-music:cloud-uploader` skill uploads promo videos to cloud storage for hosting, sharing, and CDN distribution. Both Cloudflare R2 and AWS S3 are supported.
+The `$maxinger15-music:cloud-uploader` skill uploads promo videos to cloud storage for hosting, sharing, and CDN distribution. Both Cloudflare R2 and AWS S3 are supported.
 
 ## Provider Comparison
 
@@ -37,7 +37,7 @@ The `/bitwize-music:cloud-uploader` skill uploads promo videos to cloud storage 
 1. In R2 section, click **Manage R2 API Tokens**
 2. Click **Create API token**
 3. Configure:
-   - **Token name:** `bitwize-music-uploader`
+   - **Token name:** `maxinger15-music-uploader`
    - **Permissions:** Object Read & Write
    - **Specify bucket(s):** Select your bucket (or All buckets)
    - **TTL:** Optional (leave blank for no expiry)
@@ -55,7 +55,7 @@ The `/bitwize-music:cloud-uploader` skill uploads promo videos to cloud storage 
 
 ### Step 4: Configure Plugin
 
-Add to `~/.bitwize-music/config.yaml`:
+Add to `~/.maxinger15-music/config.yaml`:
 
 ```yaml
 cloud:
@@ -106,7 +106,7 @@ Or use a custom domain:
 1. Go to **IAM** service
 2. Click **Users** → **Create user**
 3. Configure:
-   - **User name:** `bitwize-music-uploader`
+   - **User name:** `maxinger15-music-uploader`
    - **Access type:** Programmatic access
 4. Click **Next: Permissions**
 
@@ -139,7 +139,7 @@ Or use a custom domain:
 
 4. Replace `your-bucket-name` with your actual bucket name
 5. Click **Next** → **Create policy**
-6. Name it `BitwizeMusicUploaderPolicy`
+6. Name it `Maxinger15MusicUploaderPolicy`
 
 ### Step 4: Attach Policy and Create Keys
 
@@ -155,7 +155,7 @@ Or use a custom domain:
 
 ### Step 5: Configure Plugin
 
-Add to `~/.bitwize-music/config.yaml`:
+Add to `~/.maxinger15-music/config.yaml`:
 
 ```yaml
 cloud:
@@ -203,13 +203,13 @@ Public URL format: `https://{bucket}.s3.{region}.amazonaws.com/{path}`
 ### 1. Verify Config
 
 ```bash
-cat ~/.bitwize-music/config.yaml | grep -A 15 "cloud:"
+cat ~/.maxinger15-music/config.yaml | grep -A 15 "cloud:"
 ```
 
 ### 2. Test Connection (Dry Run)
 
 ```bash
-cd /path/to/claude-ai-music-skills
+cd /path/to/chatgpt-ai-music-skills
 python3 tools/cloud/upload_to_cloud.py test-album --dry-run
 ```
 
@@ -282,12 +282,12 @@ cloud:
 ### Credential Storage
 
 1. **Never commit credentials to git**
-   - `.bitwize-music/` is in your home directory (not in repo)
+   - `.maxinger15-music/` is in your home directory (not in repo)
    - If you put config elsewhere, ensure it's gitignored
 
 2. **Restrict file permissions**
    ```bash
-   chmod 600 ~/.bitwize-music/config.yaml
+   chmod 600 ~/.maxinger15-music/config.yaml
    ```
 
 3. **Use minimal permissions**
@@ -333,7 +333,7 @@ cloud:
 
 ### "No such file or directory"
 
-1. Generate promo videos first: `/bitwize-music:promo-director album`
+1. Generate promo videos first: `$maxinger15-music:promo-director album`
 2. Check album path: `{audio_root}/artists/{artist}/albums/{genre}/{album}/`
 3. Verify artist name in config
 
@@ -350,29 +350,29 @@ cloud:
 ### Basic Upload
 
 ```bash
-/bitwize-music:cloud-uploader my-album
+$maxinger15-music:cloud-uploader my-album
 ```
 
 ### Preview First (Recommended)
 
 ```bash
-/bitwize-music:cloud-uploader my-album --dry-run
+$maxinger15-music:cloud-uploader my-album --dry-run
 ```
 
 ### Upload with Public Access
 
 ```bash
-/bitwize-music:cloud-uploader my-album --public
+$maxinger15-music:cloud-uploader my-album --public
 ```
 
 ### Upload Only Specific Content
 
 ```bash
 # Just track promos
-/bitwize-music:cloud-uploader my-album --type promos
+$maxinger15-music:cloud-uploader my-album --type promos
 
 # Just album sampler
-/bitwize-music:cloud-uploader my-album --type sampler
+$maxinger15-music:cloud-uploader my-album --type sampler
 ```
 
 ---

@@ -1,4 +1,4 @@
--- bitwize-music Plugin — Database Schema
+-- maxinger15-music Plugin — Database Schema
 --
 -- PostgreSQL schema for social media post management.
 -- Run manually:   psql -h HOST -U USER -d DBNAME -f tools/database/schema.sql

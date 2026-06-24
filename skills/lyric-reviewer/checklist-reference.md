@@ -355,7 +355,7 @@ Detailed criteria for each lyric review checkpoint.
 
 **What to scan:**
 - Scan lyrics AND style prompt for real artist/band names
-- Cross-reference against `${CLAUDE_PLUGIN_ROOT}/reference/suno/artist-blocklist.md`
+- Cross-reference against `{plugin_root}/reference/suno/artist-blocklist.md`
 
 **Severity:**
 - **Critical**: Any artist name in the style prompt will cause Suno to fail or produce unexpected results

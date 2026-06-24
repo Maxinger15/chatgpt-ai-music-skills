@@ -4,7 +4,7 @@
 research/
 IDEAS.md
 
-# User configuration lives at ~/.bitwize-music/config.yaml (outside repo)
+# User configuration lives at ~/.maxinger15-music/config.yaml (outside repo)
 
 # Generated files
 *.pyc
@@ -36,9 +36,10 @@ dist/
 *.egg-info/
 TESTING.md
 .coverage
+.coverage.*
 TODO.md
-.claude/worktrees/
 .worktrees/
+.kilo/
 
 # Superpowers planning/spec docs - kept local, not committed
 docs/superpowers/

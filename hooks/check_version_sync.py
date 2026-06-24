@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
-"""PostToolUse hook: Check plugin.json and marketplace.json versions stay in sync.
+"""PostToolUse hook: Check Codex plugin metadata stays coherent.
 
-Only activates when editing plugin.json or marketplace.json.
+Only activates when editing .codex-plugin/plugin.json or the Codex marketplace.
 """
 import json
 import os
-import subprocess
+import re
 import sys
 
 
 MANIFEST_FILES = {"plugin.json", "marketplace.json"}
+SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
 
 
 def is_manifest_file(file_path: str) -> bool:
-    return os.path.basename(file_path) in MANIFEST_FILES and ".claude-plugin" in file_path
+    return (
+        os.path.basename(file_path) in MANIFEST_FILES
+        and (".codex-plugin" in file_path or ".agents/plugins" in file_path)
+    )
 
 
 def check_sync(data: dict) -> list[str]:
@@ -23,9 +27,13 @@ def check_sync(data: dict) -> list[str]:
     if not is_manifest_file(file_path):
         return []
 
-    plugin_dir = os.path.dirname(file_path)
-    plugin_path = os.path.join(plugin_dir, "plugin.json")
-    marketplace_path = os.path.join(plugin_dir, "marketplace.json")
+    if ".codex-plugin" in file_path:
+        root_dir = os.path.dirname(os.path.dirname(file_path))
+    else:
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(file_path)))
+
+    plugin_path = os.path.join(root_dir, ".codex-plugin", "plugin.json")
+    marketplace_path = os.path.join(root_dir, ".agents", "plugins", "marketplace.json")
 
     if not os.path.exists(plugin_path) or not os.path.exists(marketplace_path):
         return []
@@ -38,35 +46,23 @@ def check_sync(data: dict) -> list[str]:
     except (json.JSONDecodeError, OSError):
         return []
 
+    issues = []
+
+    plugin_name = plugin_data.get("name", "")
     plugin_version = plugin_data.get("version", "")
-    marketplace_version = ""
+    if not plugin_name:
+        issues.append("plugin.json is missing name.")
+    if not isinstance(plugin_version, str) or not SEMVER_RE.match(plugin_version):
+        issues.append(f"plugin.json version must be semver, got {plugin_version!r}.")
+
     plugins = marketplace_data.get("plugins", [])
-    if plugins:
-        marketplace_version = plugins[0].get("version", "")
+    if plugin_name and not any(
+        isinstance(entry, dict) and entry.get("name") == plugin_name
+        for entry in plugins
+    ):
+        issues.append(f"marketplace.json has no entry for {plugin_name!r}.")
 
-    if plugin_version and marketplace_version and plugin_version != marketplace_version:
-        # If the other file is also modified in the working tree, this is
-        # a mid-edit pair (user updating both files sequentially). Skip.
-        try:
-            result = subprocess.run(
-                ["git", "diff", "--name-only"],
-                capture_output=True, text=True, timeout=5,
-                cwd=plugin_dir,
-            )
-            modified = set(result.stdout.strip().splitlines())
-            other_file = "marketplace.json" if file_path.endswith("plugin.json") else "plugin.json"
-            if other_file in modified or os.path.join(".claude-plugin", other_file) in modified:
-                return []
-        except (subprocess.TimeoutExpired, OSError):
-            pass
-
-        return [
-            f"Version mismatch: plugin.json has '{plugin_version}' "
-            f"but marketplace.json has '{marketplace_version}'. "
-            f"These must stay in sync."
-        ]
-
-    return []
+    return issues
 
 
 def main():
@@ -77,7 +73,7 @@ def main():
 
     issues = check_sync(data)
     if issues:
-        msg = "Version sync check failed:\n" + "\n".join(f"  - {i}" for i in issues)
+        msg = "Codex plugin metadata check failed:\n" + "\n".join(f"  - {i}" for i in issues)
         print(msg, file=sys.stderr)
         sys.exit(2)
 

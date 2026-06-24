@@ -54,7 +54,7 @@ Custom QA requirements and platform priorities.
 | 3 | Spotify/Apple | Via DistroKid, 1 week after |
 
 ## Metadata Standards
-- Artist name format: lowercase (bitwize not Bitwize)
+- Artist name format: lowercase (maxinger15 not Maxinger15)
 - Album title format: Title Case
 - Tags to always include: ai-music, suno, electronic
 

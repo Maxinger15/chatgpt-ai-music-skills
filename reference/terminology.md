@@ -1,6 +1,6 @@
 # Terminology Glossary
 
-Comprehensive reference for terms used in the bitwize-music plugin. Alphabetized within categories.
+Comprehensive reference for terms used in the maxinger15-music plugin. Alphabetized within categories.
 
 ---
 
@@ -8,14 +8,14 @@ Comprehensive reference for terms used in the bitwize-music plugin. Alphabetized
 
 | Term | Definition | Example |
 |------|------------|---------|
-| **Audio Root** | Directory where mastered audio files are stored. Mirrors the content structure with artist and genre folders. | `~/bitwize-music/audio/artists/bitwize/albums/electronic/sample-album/` |
-| **Config File** | The YAML configuration file that stores all paths and artist settings. Always located at `~/.bitwize-music/config.yaml`. | `paths.content_root: ~/bitwize-music` |
-| **Content Root** | Directory where albums, artists, research files, and markdown content live. Has genre-based folder structure. | `~/bitwize-music/artists/bitwize/albums/electronic/sample-album/` |
-| **Documents Root** | Directory for PDFs and primary source documents too large for git. Mirrors content root structure. | `~/bitwize-music/documents/artists/bitwize/albums/electronic/sample-album/` |
-| **Override** | User-created file that customizes plugin behavior without modifying plugin files. Survives plugin updates. | `{overrides}/CLAUDE.md`, `{overrides}/pronunciation-guide.md` |
-| **Plugin Root** | Directory where the plugin code lives. Contains skills, templates, reference docs, and tools. | `~/.claude/plugins/bitwize-music` |
-| **Skill** | A slash command that invokes specialized functionality. Each skill has its own SKILL.md documentation. | `/bitwize-music:lyric-writer`, `/bitwize-music:researcher` |
-| **Tools Root** | Directory for shared tools, virtual environments, and cache. Always at `~/.bitwize-music`. | `~/.bitwize-music/venv/` |
+| **Audio Root** | Directory where mastered audio files are stored. Mirrors the content structure with artist and genre folders. | `~/maxinger15-music/audio/artists/maxinger15/albums/electronic/sample-album/` |
+| **Config File** | The YAML configuration file that stores all paths and artist settings. Always located at `~/.maxinger15-music/config.yaml`. | `paths.content_root: ~/maxinger15-music` |
+| **Content Root** | Directory where albums, artists, research files, and markdown content live. Has genre-based folder structure. | `~/maxinger15-music/artists/maxinger15/albums/electronic/sample-album/` |
+| **Documents Root** | Directory for PDFs and primary source documents too large for git. Mirrors content root structure. | `~/maxinger15-music/documents/artists/maxinger15/albums/electronic/sample-album/` |
+| **Override** | User-created file that customizes plugin behavior without modifying plugin files. Survives plugin updates. | `{overrides}/AGENTS.md`, `{overrides}/pronunciation-guide.md` |
+| **Plugin Root** | Directory where the plugin code lives. Contains skills, templates, reference docs, and tools. | `~/.codex/plugins/maxinger15-music` |
+| **Skill** | A slash command that invokes specialized functionality. Each skill has its own SKILL.md documentation. | `$maxinger15-music:lyric-writer`, `$maxinger15-music:researcher` |
+| **Tools Root** | Directory for shared tools, virtual environments, and cache. Always at `~/.maxinger15-music`. | `~/.maxinger15-music/venv/` |
 
 ---
 
@@ -24,7 +24,7 @@ Comprehensive reference for terms used in the bitwize-music plugin. Alphabetized
 | Term | Definition | Example |
 |------|------------|---------|
 | **7 Planning Phases** | Structured planning process required before writing lyrics: Foundation, Concept Deep Dive, Sonic Direction, Structure Planning, Album Art, Practical Details, Confirmation. | "Phase 3: What are the sonic inspirations?" |
-| **Album Completion Checklist** | Final checklist before release covering all tracks Final, album art, mastering, metadata, and platform uploads. | See CLAUDE.md "Album Completion Checklist" |
+| **Album Completion Checklist** | Final checklist before release covering all tracks Final, album art, mastering, metadata, and platform uploads. | See AGENTS.md "Album Completion Checklist" |
 | **Album Status** | Lifecycle state of an album: Concept, Research Complete, Sources Verified, In Progress, Complete, Released. | `Status: In Progress` in album README |
 | **Generation Log** | Table in each track file logging Suno generation attempts with date, model, result URL, notes, and keeper rating. | `| 2 | 2025-12-03 | V5 | [Listen](url) | Boosted vocals | ✓ |` |
 | **Human Verification** | Required manual review confirming captured sources are accurate before using them in lyrics. For true-story albums only. | Status changes from `Pending` to `Verified (2025-01-15)` |
@@ -87,13 +87,13 @@ Comprehensive reference for terms used in the bitwize-music plugin. Alphabetized
 | Term | Definition | Example |
 |------|------------|---------|
 | **Citation** | Reference to a source with clickable URL. Required for all claims in true-story albums. | `[PBS Documentary](https://pbs.org/...)` |
-| **Document Hunter** | Skill for automated browser-based document search from free public archives using Playwright. | `/bitwize-music:document-hunter "SEC filing Tesla 2020"` |
+| **Document Hunter** | Skill for automated browser-based document search from free public archives using Playwright. | `$maxinger15-music:document-hunter "SEC filing Tesla 2020"` |
 | **Primary Source** | Direct evidence: court documents, official statements, subject's own words. Highest reliability. | Indictment, tweet from subject, press release |
 | **RESEARCH.md** | File in album directory containing detailed research notes and findings for true-story albums. | `{album}/RESEARCH.md` |
 | **Secondary Source** | Reporting about primary sources: journalism, analysis, Wikipedia summaries. Lower reliability. | News article, book about the event |
 | **Source Hierarchy** | Priority order for source trustworthiness: Court documents > Government > Journalism > News > Wikipedia. | Court docs carry more weight than news |
 | **SOURCES.md** | File in album directory listing all sources with URLs and verification status for true-story albums. | `{album}/SOURCES.md` |
-| **Specialized Researcher** | Domain-specific research skills for deep investigation: legal, gov, tech, journalism, security, financial, historical, biographical, primary-source, verifier. | `/bitwize-music:researchers-legal` |
+| **Specialized Researcher** | Domain-specific research skills for deep investigation: legal, gov, tech, journalism, security, financial, historical, biographical, primary-source, verifier. | `$maxinger15-music:researchers-legal` |
 | **Verification Status** | Whether a source has been confirmed by human review: Pending or Verified (with date). | `Status: Verified (2025-01-15)` |
 
 ---
@@ -145,13 +145,13 @@ Variables used in documentation that resolve from config:
 
 | Variable | Source | Example |
 |----------|--------|---------|
-| `{audio_root}` | `paths.audio_root` | `~/bitwize-music/audio` |
-| `{content_root}` | `paths.content_root` | `~/bitwize-music` |
-| `{documents_root}` | `paths.documents_root` | `~/bitwize-music/documents` |
-| `{overrides}` | `paths.overrides` | `~/bitwize-music/overrides` |
-| `{plugin_root}` | Location of plugin repo | `~/.claude/plugins/bitwize-music` |
-| `{tools_root}` | Always `~/.bitwize-music` | `~/.bitwize-music` |
-| `[artist]` | `artist.name` | `bitwize` |
+| `{audio_root}` | `paths.audio_root` | `~/maxinger15-music/audio` |
+| `{content_root}` | `paths.content_root` | `~/maxinger15-music` |
+| `{documents_root}` | `paths.documents_root` | `~/maxinger15-music/documents` |
+| `{overrides}` | `paths.overrides` | `~/maxinger15-music/overrides` |
+| `{plugin_root}` | Location of plugin repo | `~/.codex/plugins/maxinger15-music` |
+| `{tools_root}` | Always `~/.maxinger15-music` | `~/.maxinger15-music` |
+| `[artist]` | `artist.name` | `maxinger15` |
 | `[genre]` | Album's genre category | `electronic`, `rock`, `hip-hop` |
 | `[album]` | Album directory name | `sample-album`, `my-album` |
 
@@ -175,7 +175,7 @@ Variables used in documentation that resolve from config:
 
 ## See Also
 
-- [CLAUDE.md](/CLAUDE.md) - Main workflow instructions
+- [AGENTS.md](/AGENTS.md) - Main workflow instructions
 - [skills/help/SKILL_GLOSSARY.md](/skills/help/SKILL_GLOSSARY.md) - Quick glossary in help skill
 - [reference/suno/v5-best-practices.md](/reference/suno/v5-best-practices.md) - Suno prompting guide
 - [reference/mastering/mastering-workflow.md](/reference/mastering/mastering-workflow.md) - Audio mastering details

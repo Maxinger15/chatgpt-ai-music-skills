@@ -24,7 +24,7 @@ Apple Music: [Link]
 SoundCloud: [Link]
 
 CREDITS:
-Produced with Claude AI Music Skills
+Produced with ChatGPT AI Music Skills
 Generated on Suno
 
 #[Genre] #NewMusic #[AlbumSpecific]

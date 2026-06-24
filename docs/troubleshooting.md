@@ -2,34 +2,34 @@
 
 ## Config Not Found
 
-**Problem:** "Config not found at ~/.bitwize-music/config.yaml"
+**Problem:** "Config not found at ~/.maxinger15-music/config.yaml"
 
 **Solution:**
 ```bash
-mkdir -p ~/.bitwize-music
-cp config/config.example.yaml ~/.bitwize-music/config.yaml
-nano ~/.bitwize-music/config.yaml  # edit with your settings
+mkdir -p ~/.maxinger15-music
+cp config/config.example.yaml ~/.maxinger15-music/config.yaml
+nano ~/.maxinger15-music/config.yaml  # edit with your settings
 ```
 
 Or use the interactive config tool:
 ```
-/bitwize-music:configure
+$maxinger15-music:configure
 ```
 
 ## Album Not Found When Resuming
 
-**Problem:** `/bitwize-music:resume my-album` can't find the album
+**Problem:** `$maxinger15-music:resume my-album` can't find the album
 
 **Possible causes:**
-1. **Wrong album name** — album names are case-sensitive. Try `/bitwize-music:resume` (without name) to see all albums
-2. **Wrong path in config** — check `paths.content_root` in `~/.bitwize-music/config.yaml`
+1. **Wrong album name** — album names are case-sensitive. Try `$maxinger15-music:resume` (without name) to see all albums
+2. **Wrong path in config** — check `paths.content_root` in `~/.maxinger15-music/config.yaml`
 3. **Album in wrong location** — albums must be in: `{content_root}/artists/{artist}/albums/{genre}/{album}/`
 
 ## Path Resolution Issues
 
 **Problem:** Files created in wrong locations, "path not found" errors
 
-**The rule:** Always read `~/.bitwize-music/config.yaml` first to get paths. Never assume or hardcode.
+**The rule:** Always read `~/.maxinger15-music/config.yaml` first to get paths. Never assume or hardcode.
 
 ```
 {content_root}/artists/{artist}/albums/{genre}/{album}/    # Content
@@ -43,13 +43,13 @@ Or use the interactive config tool:
 
 **Solution:**
 ```bash
-python3 -m venv ~/.bitwize-music/venv
-~/.bitwize-music/venv/bin/pip install -r requirements.txt
+python3 -m venv ~/.maxinger15-music/venv
+~/.maxinger15-music/venv/bin/pip install -r requirements.txt
 ```
 
 ## Playwright Setup (Document Hunter)
 
-**Problem:** `/bitwize-music:document-hunter` fails with browser errors
+**Problem:** `$maxinger15-music:document-hunter` fails with browser errors
 
 **Solution:**
 ```bash
@@ -67,14 +67,14 @@ playwright install chromium
 ## Skills Not Showing Up
 
 **Check:**
-1. Plugin installed correctly: `/plugin list`
-2. Skill files exist: `ls ~/.claude/plugins/bitwize-music@claude-ai-music-skills/skills/`
-3. Try restarting Claude Code
+1. Plugin installed correctly: `codex plugin list`
+2. Skill files exist in the installed Codex plugin cache or in your local checkout under `skills/`
+3. Try restarting Codex
 
 ## Still Stuck?
 
-[Open an issue](https://github.com/bitwize-music-studio/claude-ai-music-skills/issues) with:
+[Open an issue](https://github.com/Maxinger15/chatgpt-ai-music-skills/issues) with:
 - What you tried to do
 - What happened (error messages, unexpected behavior)
-- Your OS and Claude Code version
+- Your OS and Codex version
 - Relevant config (redact personal info)

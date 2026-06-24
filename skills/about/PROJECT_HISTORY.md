@@ -1,12 +1,12 @@
 # Project History
 
-Brief history and design philosophy of the bitwize-music plugin.
+Brief history and design philosophy of the maxinger15-music plugin.
 
 ---
 
 ## Origins
 
-The bitwize-music plugin started as a personal workflow for creating AI-generated music albums using Suno and Claude. What began as a collection of prompts and templates evolved into a structured system for managing the entire album creation process.
+The maxinger15-music plugin started as a personal workflow for creating AI-generated music albums using Suno and Codex. What began as a collection of prompts and templates evolved into a structured system for managing the entire album creation process.
 
 The core insight: AI music generation isn't just about prompting - it's about workflow. Managing concepts, research, lyrics, generation attempts, mastering, and release requires organization that scales.
 
@@ -19,7 +19,7 @@ Initial release with core skills: lyric-writer, researcher, suno-engineer, album
 
 ### v0.5.0 - Infrastructure
 Major infrastructure additions:
-- Config system (`~/.bitwize-music/config.yaml`)
+- Config system (`~/.maxinger15-music/config.yaml`)
 - Path separation (content, audio, documents)
 - Import skills (audio, track, art)
 - Test framework
@@ -32,7 +32,7 @@ Override system introduced:
 - 10 skills support overrides
 
 ### v0.8.0 - Workflow Polish
-Album ideas tracking, clipboard skill, workflow documentation extracted to reference files. CLAUDE.md refactored for performance.
+Album ideas tracking, clipboard skill, workflow documentation extracted to reference files. AGENTS.md refactored for performance.
 
 ### v0.12.0 - Onboarding
 Focus on new user experience:
@@ -58,7 +58,7 @@ Markdown is:
 - Human-readable without special tools
 - Version-controllable with git
 - Editable in any text editor
-- Parseable by Claude
+- Parseable by Codex
 
 Track files as markdown means your lyrics and prompts are never locked in a proprietary format.
 
@@ -73,7 +73,7 @@ The current architecture keeps plugin code in one place and user content in anot
 
 ### Why Config Outside Plugin Directory?
 
-`~/.bitwize-music/config.yaml` lives outside the plugin because:
+`~/.maxinger15-music/config.yaml` lives outside the plugin because:
 - Same location whether plugin is installed or cloned
 - Plugin updates can't overwrite config
 - Easy to back up separately

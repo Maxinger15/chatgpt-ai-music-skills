@@ -1,14 +1,6 @@
 ---
 name: test
-description: Runs automated tests to validate plugin integrity across 14 categories. Use before creating PRs, after making changes to skills or templates, or to verify plugin health.
-argument-hint: [all | config | skills | templates | workflow | suno | research | mastering | sheet-music | release | consistency | terminology | behavior | quality | quick]
-model: haiku
-context: fork
-allowed-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
+description: "Runs automated tests to validate plugin integrity across 14 categories. Use before creating PRs, after making changes to skills or templates, or to verify plugin health."
 ---
 
 ## Your Task
@@ -30,7 +22,7 @@ You are the plugin's automated test runner. Execute each test, track pass/fail, 
 For fast automated validation, run the pytest suite:
 
 ```bash
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/ -v
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/ -v
 ```
 
 This covers:
@@ -39,10 +31,10 @@ This covers:
 
 Run specific categories:
 ```bash
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/plugin/test_skills.py -v       # Skills only
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/plugin/ -v                      # All plugin tests
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/unit/ -v                        # All unit tests
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/ -m "not slow" -v               # Skip slow tests
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/plugin/test_skills.py -v       # Skills only
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/plugin/ -v                      # All plugin tests
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/unit/ -v                        # All unit tests
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/ -m "not slow" -v               # Skip slow tests
 ```
 
 Pytest catches common issues fast. For deep behavioral tests, use the full test suite below.
@@ -121,16 +113,16 @@ For rapid validation during development, use pytest directly:
 
 ```bash
 # Run all tests
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/ -v
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/ -v
 
 # Run specific test modules
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/plugin/test_skills.py ${CLAUDE_PLUGIN_ROOT}/tests/plugin/test_templates.py -v
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/plugin/test_skills.py {plugin_root}/tests/plugin/test_templates.py -v
 
 # Verbose with short tracebacks
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/ -v --tb=short
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/ -v --tb=short
 
 # Quiet mode (for CI/logs)
-~/.bitwize-music/venv/bin/python3 -m pytest ${CLAUDE_PLUGIN_ROOT}/tests/ -q --tb=line
+~/.maxinger15-music/venv/bin/python3 -m pytest {plugin_root}/tests/ -q --tb=line
 ```
 
 Test modules in `tests/plugin/`:

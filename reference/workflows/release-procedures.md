@@ -14,11 +14,11 @@ Generate album art when tracks are complete and you're preparing for release.
 
 **Step 1: Verify Prompt Exists**
 - Album README should have ChatGPT/DALL-E prompt in "Album Art" section
-- If missing, use `/bitwize-music:album-art-director` to create prompt
+- If missing, use `$maxinger15-music:album-art-director` to create prompt
 
 **Step 2: Generate with User**
 
-Since Claude Code cannot directly generate images:
+Since Codex cannot directly generate images:
 
 1. **Tell user**: "The album art prompt is ready. I'll copy it for you to use with ChatGPT/DALL-E."
 2. **Show the prompt** from the album README
@@ -30,10 +30,10 @@ Since Claude Code cannot directly generate images:
 
 **Step 3: Save to Standard Locations**
 
-Once user has generated and downloaded the image, use the `/bitwize-music:import-art` skill:
+Once user has generated and downloaded the image, use the `$maxinger15-music:import-art` skill:
 
 ```
-/bitwize-music:import-art ~/Downloads/album-art.jpg sample-album
+$maxinger15-music:import-art ~/Downloads/album-art.jpg sample-album
 ```
 
 The skill:
@@ -61,7 +61,7 @@ Mark album art as complete in Album Completion Checklist.
 - Adjust prompt for that tool's syntax
 
 **Need prompt revisions:**
-- Use `/bitwize-music:album-art-director` to refine visual concept
+- Use `$maxinger15-music:album-art-director` to refine visual concept
 - Iterate on prompt based on generation results
 
 ---

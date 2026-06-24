@@ -19,7 +19,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 import pytest
 from tools.state.parsers import (
-    _derive_model_tier,
+    _derive_complexity_tier,
     _extract_bold_field,
     _extract_genre_from_path,
     _extract_table_value,
@@ -817,27 +817,27 @@ class TestIdeasEdgeCases:
 
 
 class TestDeriveModelTier:
-    """Tests for _derive_model_tier()."""
+    """Tests for _derive_complexity_tier()."""
 
     def test_opus(self):
-        assert _derive_model_tier('claude-opus-4-6') == 'opus'
+        assert _derive_complexity_tier('codex-opus-4-6') == 'opus'
 
     def test_sonnet(self):
-        assert _derive_model_tier('claude-sonnet-4-5-20250929') == 'sonnet'
+        assert _derive_complexity_tier('codex-sonnet-4-5-20250929') == 'sonnet'
 
     def test_haiku(self):
-        assert _derive_model_tier('claude-haiku-4-5-20251001') == 'haiku'
+        assert _derive_complexity_tier('codex-haiku-4-5-20251001') == 'haiku'
 
     def test_unknown(self):
-        assert _derive_model_tier('gpt-4o') == 'unknown'
+        assert _derive_complexity_tier('gpt-4o') == 'unknown'
 
     def test_empty_string(self):
-        assert _derive_model_tier('') == 'unknown'
+        assert _derive_complexity_tier('') == 'unknown'
 
     def test_case_insensitive(self):
-        assert _derive_model_tier('CLAUDE-OPUS-4-6') == 'opus'
-        assert _derive_model_tier('Claude-Sonnet-4-5') == 'sonnet'
-        assert _derive_model_tier('Claude-Haiku-4-5') == 'haiku'
+        assert _derive_complexity_tier('CLAUDE-OPUS-4-6') == 'opus'
+        assert _derive_complexity_tier('Codex-Sonnet-4-5') == 'sonnet'
+        assert _derive_complexity_tier('Codex-Haiku-4-5') == 'haiku'
 
 
 class TestParseSkillFile:
@@ -850,7 +850,7 @@ class TestParseSkillFile:
 name: lyric-writer
 description: Writes or reviews lyrics with professional prosody.
 argument-hint: <track-file-path>
-model: claude-opus-4-6
+model: codex-opus-4-6
 prerequisites:
   - album-conceptualizer
 allowed-tools:
@@ -867,8 +867,8 @@ Content here.
         assert '_error' not in result
         assert result['name'] == 'lyric-writer'
         assert result['description'] == 'Writes or reviews lyrics with professional prosody.'
-        assert result['model'] == 'claude-opus-4-6'
-        assert result['model_tier'] == 'opus'
+        assert result['model'] == 'codex-opus-4-6'
+        assert result['complexity_tier'] == 'opus'
         assert result['argument_hint'] == '<track-file-path>'
         assert result['allowed_tools'] == ['Read', 'Edit', 'Write']
         assert result['prerequisites'] == ['album-conceptualizer']
@@ -883,14 +883,14 @@ Content here.
         skill.write_text("""---
 name: help
 description: Shows help information.
-model: claude-haiku-4-5-20251001
+model: codex-haiku-4-5-20251001
 allowed-tools: []
 ---
 """)
         result = parse_skill_file(skill)
         assert '_error' not in result
         assert result['name'] == 'help'
-        assert result['model_tier'] == 'haiku'
+        assert result['complexity_tier'] == 'haiku'
         assert result['allowed_tools'] == []
         assert result['prerequisites'] == []
         assert result['requirements'] == {}
@@ -901,7 +901,7 @@ allowed-tools: []
         skill.write_text("""---
 name: researchers-legal
 description: Researches court documents.
-model: claude-sonnet-4-5-20250929
+model: codex-sonnet-4-5-20250929
 user-invocable: false
 context: fork
 allowed-tools:
@@ -917,14 +917,14 @@ requirements:
         assert result['user_invocable'] is False
         assert result['context'] == 'fork'
         assert result['requirements'] == {'python': ['playwright']}
-        assert result['model_tier'] == 'sonnet'
+        assert result['complexity_tier'] == 'sonnet'
 
     def test_missing_name(self, tmp_path):
         """Missing required name field returns error."""
         skill = tmp_path / "SKILL.md"
         skill.write_text("""---
 description: Some skill
-model: claude-opus-4-6
+model: codex-opus-4-6
 allowed-tools: []
 ---
 """)
@@ -937,7 +937,7 @@ allowed-tools: []
         skill = tmp_path / "SKILL.md"
         skill.write_text("""---
 name: broken-skill
-model: claude-opus-4-6
+model: codex-opus-4-6
 allowed-tools: []
 ---
 """)
@@ -989,7 +989,7 @@ allowed-tools: []
         result = parse_skill_file(skill)
         assert '_error' not in result
         assert result['model'] == ''
-        assert result['model_tier'] == 'unknown'
+        assert result['complexity_tier'] == 'unknown'
 
     def test_hyphen_to_underscore_normalization(self, tmp_path):
         """Frontmatter keys with hyphens are normalized to underscores."""
@@ -998,7 +998,7 @@ allowed-tools: []
 name: test-skill
 description: Test hyphen normalization.
 argument-hint: <arg>
-model: claude-opus-4-6
+model: codex-opus-4-6
 allowed-tools:
   - Read
 user-invocable: false
@@ -1284,35 +1284,35 @@ class TestExtractTableValueEdgeCases:
 
 
 class TestDeriveModelTierComplete:
-    """Complete coverage for _derive_model_tier."""
+    """Complete coverage for _derive_complexity_tier."""
 
     def test_all_known_tiers(self):
-        assert _derive_model_tier('claude-opus-4-6') == 'opus'
-        assert _derive_model_tier('claude-sonnet-4-5-20250929') == 'sonnet'
-        assert _derive_model_tier('claude-haiku-4-5-20251001') == 'haiku'
+        assert _derive_complexity_tier('codex-opus-4-6') == 'opus'
+        assert _derive_complexity_tier('codex-sonnet-4-5-20250929') == 'sonnet'
+        assert _derive_complexity_tier('codex-haiku-4-5-20251001') == 'haiku'
 
     def test_unknown_model(self):
-        assert _derive_model_tier('gpt-4o') == 'unknown'
-        assert _derive_model_tier('llama-3') == 'unknown'
+        assert _derive_complexity_tier('gpt-4o') == 'unknown'
+        assert _derive_complexity_tier('llama-3') == 'unknown'
 
     def test_none_input(self):
-        assert _derive_model_tier(None) == 'unknown'
+        assert _derive_complexity_tier(None) == 'unknown'
 
     def test_empty_string(self):
-        assert _derive_model_tier('') == 'unknown'
+        assert _derive_complexity_tier('') == 'unknown'
 
     def test_case_insensitive_mixed(self):
-        assert _derive_model_tier('CLAUDE-OPUS-4-6') == 'opus'
-        assert _derive_model_tier('Claude-Sonnet-Latest') == 'sonnet'
+        assert _derive_complexity_tier('CLAUDE-OPUS-4-6') == 'opus'
+        assert _derive_complexity_tier('Codex-Sonnet-Latest') == 'sonnet'
 
     def test_tier_keyword_in_model_name(self):
         """Tier keyword embedded in model name is detected."""
-        assert _derive_model_tier('my-custom-opus-model') == 'opus'
-        assert _derive_model_tier('fine-tuned-haiku') == 'haiku'
+        assert _derive_complexity_tier('my-custom-opus-model') == 'opus'
+        assert _derive_complexity_tier('fine-tuned-haiku') == 'haiku'
 
     def test_precedence_opus_before_sonnet(self):
         """If model contains multiple tier keywords, opus wins (checked first)."""
-        assert _derive_model_tier('opus-sonnet-hybrid') == 'opus'
+        assert _derive_complexity_tier('opus-sonnet-hybrid') == 'opus'
 
 
 class TestParseTrackFileFrontmatter:
@@ -1738,7 +1738,7 @@ allowed-tools: []
         # yaml.safe_load('null') returns None; model defaults via .get('model', '')
         # But since None is present, it's used as-is (not the default '')
         assert result['model'] is None or result['model'] == ''
-        assert result['model_tier'] == 'unknown'
+        assert result['complexity_tier'] == 'unknown'
 
     def test_integer_model_value(self, tmp_path):
         """Model field set to an integer is handled gracefully."""
@@ -1753,7 +1753,7 @@ allowed-tools: []
         result = parse_skill_file(skill)
         assert '_error' not in result
         assert result['model'] == 42
-        assert result['model_tier'] == 'unknown'
+        assert result['complexity_tier'] == 'unknown'
 
     def test_empty_name_is_falsy(self, tmp_path):
         """Empty string name is considered missing (falsy check)."""
@@ -1761,7 +1761,7 @@ allowed-tools: []
         skill.write_text("""---
 name: ""
 description: Has description.
-model: claude-opus-4-6
+model: codex-opus-4-6
 allowed-tools: []
 ---
 """)
@@ -1787,7 +1787,7 @@ allowed-tools: []
         skill.write_text("""---
 name: extra-keys
 description: Has extra keys.
-model: claude-opus-4-6
+model: codex-opus-4-6
 allowed-tools: []
 custom-field: custom-value
 ---

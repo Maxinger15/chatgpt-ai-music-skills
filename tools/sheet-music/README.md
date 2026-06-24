@@ -56,7 +56,7 @@ python3 transcribe.py sample-album --dry-run       # Preview only
 **Features**:
 - Cross-platform OS detection (macOS, Linux, Windows)
 - Auto-detects AnthemScore installation
-- Config-aware (resolves album names via ~/.bitwize-music/config.yaml)
+- Config-aware (resolves album names via ~/.maxinger15-music/config.yaml)
 - Batch processing (all WAVs in directory)
 - Progress reporting
 - Graceful error handling with install instructions
@@ -122,9 +122,9 @@ python3 create_songbook.py /path/to/sheet-music/ \
 # Full options
 python3 create_songbook.py /path/to/sheet-music/ \
   --title "Sample Album Songbook" \
-  --artist "bitwize" \
+  --artist "maxinger15" \
   --cover /path/to/album.png \
-  --website "bitwizemusic.com" \
+  --website "your-artist-site.com" \
   --page-size letter \
   --year 2025 \
   --section-headers
@@ -167,24 +167,24 @@ Example: `/path/to/sheet-music/Sample_Album_Songbook.pdf`
 ### Step 1: Transcribe
 ```bash
 python3 transcribe.py sample-album
-# Output: 10 PDFs + 10 XMLs in {audio_root}/artists/bitwize/albums/electronic/sample-album/sheet-music/
+# Output: 10 PDFs + 10 XMLs in {audio_root}/artists/maxinger15/albums/electronic/sample-album/sheet-music/
 ```
 
 ### Step 2: Polish (Optional)
 ```bash
 # Open XMLs in MuseScore, manually fix errors, add dynamics
-open -a "MuseScore 4" {audio_root}/artists/bitwize/albums/electronic/sample-album/sheet-music/*.xml
+open -a "MuseScore 4" {audio_root}/artists/maxinger15/albums/electronic/sample-album/sheet-music/*.xml
 ```
 
 ### Step 3: Clean Titles
 ```bash
-python3 fix_titles.py {audio_root}/artists/bitwize/albums/electronic/sample-album/sheet-music/
+python3 fix_titles.py {audio_root}/artists/maxinger15/albums/electronic/sample-album/sheet-music/
 # Updates XML titles, re-exports PDFs
 ```
 
 ### Step 4: Create Songbook
 ```bash
-python3 create_songbook.py {audio_root}/artists/bitwize/albums/electronic/sample-album/sheet-music/ \
+python3 create_songbook.py {audio_root}/artists/maxinger15/albums/electronic/sample-album/sheet-music/ \
   --title "Sample Album Songbook"
 # Output: Sample_Album_Songbook.pdf
 ```
@@ -193,7 +193,7 @@ python3 create_songbook.py {audio_root}/artists/bitwize/albums/electronic/sample
 
 ## Integration with Skill
 
-These scripts are called by the `/bitwize-music:sheet-music-publisher` skill, which:
+These scripts are called by the `$maxinger15-music:sheet-music-publisher` skill, which:
 1. Verifies software installation
 2. Guides user through track selection
 3. Runs transcribe.py
@@ -266,7 +266,7 @@ pip install pypdf reportlab pyyaml
 ### Album Name Not Resolved
 ```bash
 # Make sure config exists
-cat ~/.bitwize-music/config.yaml
+cat ~/.maxinger15-music/config.yaml
 
 # Verify paths
 # Check: paths.audio_root, artist.name

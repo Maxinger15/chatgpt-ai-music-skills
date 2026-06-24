@@ -1,6 +1,6 @@
 # Git Hooks
 
-This directory contains git hooks for the bitwize-music plugin.
+This directory contains git hooks for the maxinger15-music plugin.
 
 ## Installation
 
@@ -24,7 +24,7 @@ Runs 11 validation checks before allowing commits:
 
 1. **Ruff linter** - Code style and quality
 2. **JSON/YAML validation** - Config file syntax
-3. **CLAUDE.md size** - Keep under 40K characters
+3. **AGENTS.md size** - Keep under 40K characters
 4. **Version sync** - plugin.json and marketplace.json match
 5. **Skill frontmatter** - All skills have valid YAML frontmatter
 6. **CHANGELOG format** - Has [Unreleased] section

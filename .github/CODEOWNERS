@@ -1,15 +1,15 @@
-# Code Owners for claude-ai-music-skills
+# Code Owners for chatgpt-ai-music-skills
 #
 # These owners will be automatically requested for review when someone
 # opens a pull request that modifies files matching the patterns below.
 
 # Workflow files require manual security review
 # These files execute code in CI/CD and must be carefully reviewed
-.github/workflows/* @bitwize-music
+.github/workflows/* @maxinger15-music
 
 # Plugin manifest files (version changes trigger releases)
-.claude-plugin/plugin.json @bitwize-music
-.claude-plugin/marketplace.json @bitwize-music
+.codex-plugin/plugin.json @maxinger15-music
+.agents/plugins/marketplace.json @maxinger15-music
 
 # Core documentation that defines workflow behavior
-CLAUDE.md @bitwize-music
+AGENTS.md @maxinger15-music

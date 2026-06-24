@@ -1,14 +1,6 @@
 ---
 name: resume
-description: Finds an album by name and shows detailed status with next steps. Use when the user mentions an album name or wants to continue previous work.
-argument-hint: <album-name>
-model: sonnet
-effort: low
-allowed-tools:
-  - Read
-  - Glob
-  - Bash
-  - bitwize-music-mcp
+description: "Finds an album by name and shows detailed status with next steps. Use when the user mentions an album name or wants to continue previous work."
 ---
 
 # Resume Album Work
@@ -17,9 +9,9 @@ allowed-tools:
 
 **Usage**:
 ```
-/bitwize-music:resume <album-name>
-/bitwize-music:resume my-album
-/bitwize-music:resume "demo album"
+$maxinger15-music:resume <album-name>
+$maxinger15-music:resume my-album
+$maxinger15-music:resume "demo album"
 ```
 
 **When to use**: When user wants to continue working on an existing album.
@@ -33,7 +25,7 @@ When this skill is invoked with an album name:
 ### Step 1: Find the Album via MCP
 
 1. Call `find_album(name)` — fuzzy match by name, slug, or partial (case-insensitive)
-2. If not found: MCP returns available albums — suggest closest match or `/bitwize-music:new-album`
+2. If not found: MCP returns available albums — suggest closest match or `$maxinger15-music:new-album`
 3. If multiple matches: list all with paths, ask user which one
 4. If MCP returns stale/missing cache error: call `rebuild_state()` then retry
 
@@ -100,44 +92,44 @@ Pick ONE clear recommendation from the decision tree below. Don't list 5 options
 
 **Decision Tree** (evaluate top-to-bottom, first match wins):
 
-**Instrumental detection**: Check each track's frontmatter for `instrumental: true` or Track Details table for `**Instrumental** | Yes`. Instrumental tracks skip the lyrics workflow entirely and go straight to `/bitwize-music:suno-engineer`.
+**Instrumental detection**: Check each track's frontmatter for `instrumental: true` or Track Details table for `**Instrumental** | Yes`. Instrumental tracks skip the lyrics workflow entirely and go straight to `$maxinger15-music:suno-engineer`.
 
 ```
 Album Status = "Concept"
-  → "Define the album concept. Run /bitwize-music:album-conceptualizer"
+  → "Define the album concept. Run $maxinger15-music:album-conceptualizer"
 
 Album Status = "Research Complete"
   → Any tracks Sources Pending?
-    YES → "Sources need verification. Run /bitwize-music:verify-sources [album]"
+    YES → "Sources need verification. Run $maxinger15-music:verify-sources [album]"
     NO  → Any "Not Started" tracks instrumental?
-      YES → "Create Style Box for instrumental track [name]. Use /bitwize-music:suno-engineer"
-      NO  → "Ready to write! Pick a track and use /bitwize-music:lyric-writer"
+      YES → "Create Style Box for instrumental track [name]. Use $maxinger15-music:suno-engineer"
+      NO  → "Ready to write! Pick a track and use $maxinger15-music:lyric-writer"
 
 Album has tracks with "Not Started"
   → Is the first not-started track instrumental?
-    YES → "Create Style Box for [track]. Use /bitwize-music:suno-engineer directly (instrumental track)"
-    NO  → "Write lyrics for [first not-started track]. Use /bitwize-music:lyric-writer"
+    YES → "Create Style Box for [track]. Use $maxinger15-music:suno-engineer directly (instrumental track)"
+    NO  → "Write lyrics for [first not-started track]. Use $maxinger15-music:lyric-writer"
 
 Album has tracks with "In Progress" (lyrics partially written)
-  → "Finish lyrics for [first in-progress track]. Use /bitwize-music:lyric-writer"
+  → "Finish lyrics for [first in-progress track]. Use $maxinger15-music:lyric-writer"
 
 Album has tracks with "Sources Pending"
-  → "Verify sources for [track]. Run /bitwize-music:verify-sources [album]"
+  → "Verify sources for [track]. Run $maxinger15-music:verify-sources [album]"
 
 All tracks have lyrics (or Style Box for instrumentals), none generated
   → Mixed album (vocal + instrumental)?
-    YES → "All tracks ready! Run /bitwize-music:pronunciation-specialist on vocal tracks, then /bitwize-music:lyric-reviewer, then /bitwize-music:pre-generation-check to validate all gates (instrumental tracks auto-skip lyrics gates)."
-    NO  → "All lyrics complete! Style prompts should be ready. Run /bitwize-music:pronunciation-specialist to check for pronunciation risks, then /bitwize-music:lyric-reviewer for final QC, then /bitwize-music:pre-generation-check to validate all gates before generating on Suno."
+    YES → "All tracks ready! Run $maxinger15-music:pronunciation-specialist on vocal tracks, then $maxinger15-music:lyric-reviewer, then $maxinger15-music:pre-generation-check to validate all gates (instrumental tracks auto-skip lyrics gates)."
+    NO  → "All lyrics complete! Style prompts should be ready. Run $maxinger15-music:pronunciation-specialist to check for pronunciation risks, then $maxinger15-music:lyric-reviewer for final QC, then $maxinger15-music:pre-generation-check to validate all gates before generating on Suno."
 
 Some tracks generated, some not
   → Any Generated tracks without ✓ in Generation Log Rating?
     YES → "Track [name] was generated but not approved. Listen and decide:
            - Happy? Mark ✓ in Generation Log and set Status: Final
            - Not happy? Log the reason, then:
-             Style issue → /bitwize-music:suno-engineer to revise Style Box
-             Lyrics issue → /bitwize-music:lyric-writer to fix, then regenerate
+             Style issue → $maxinger15-music:suno-engineer to revise Style Box
+             Lyrics issue → $maxinger15-music:lyric-writer to fix, then regenerate
              Bad luck → Regenerate on Suno with same settings (it's non-deterministic)"
-    NO  → "Generate [first un-generated track] on Suno. Use /bitwize-music:suno-engineer"
+    NO  → "Generate [first un-generated track] on Suno. Use $maxinger15-music:suno-engineer"
 
 All tracks generated, none Final
   → "All tracks generated! Listen to each track and approve:
@@ -151,17 +143,17 @@ All tracks generated, some Final
   → Any Generated (non-Final) tracks without ✓?
     YES → "Review track [name] — listen and approve (✓) or regenerate"
     NO  → "All tracks approved! Batch-approve: update_track_field(album_slug, track_slug, 'status', 'Final') for each.
-           Then import audio with /bitwize-music:import-audio, then master with /bitwize-music:mastering-engineer"
+           Then import audio with $maxinger15-music:import-audio, then master with $maxinger15-music:mastering-engineer"
 
 All tracks Final
-  → "All tracks approved! Import audio with /bitwize-music:import-audio, then master with /bitwize-music:mastering-engineer"
+  → "All tracks approved! Import audio with $maxinger15-music:import-audio, then master with $maxinger15-music:mastering-engineer"
 
 Album Status = "Complete"
-  → "Album is complete! Release with /bitwize-music:release-director"
+  → "Album is complete! Release with $maxinger15-music:release-director"
 
 Album Status = "Released"
-  → "This album is released! Consider /bitwize-music:promo-director for promotional content"
-  → Also suggest: "Start a new album? Check /bitwize-music:album-ideas list"
+  → "This album is released! Consider $maxinger15-music:promo-director for promotional content"
+  → Also suggest: "Start a new album? Check $maxinger15-music:album-ideas list"
 ```
 
 **Format the recommendation as:**
@@ -179,7 +171,7 @@ If invoked without an album name:
 1. Call `get_session()` — check `last_album` from session context, resume that album
 2. If no session context, call `list_albums()` to find all in-progress albums
 3. Prioritize: closest to completion > unblocked work > last worked on
-4. If no albums exist, suggest `/bitwize-music:new-album`
+4. If no albums exist, suggest `$maxinger15-music:new-album`
 
 Present a multi-album summary if multiple are in progress:
 ```
@@ -200,10 +192,10 @@ Also in progress:
 ### Example 1: Album in Writing Phase
 
 ```
-/bitwize-music:resume my-album
+$maxinger15-music:resume my-album
 
 📁 Album: My Album
-   Location: ~/bitwize-music/artists/bitwize/albums/rock/my-album/
+   Location: ~/maxinger15-music/artists/maxinger15/albums/rock/my-album/
    Status: In Progress
 
 📊 Progress:
@@ -229,10 +221,10 @@ Ready to continue? Tell me which track you'd like to work on.
 ### Example 2: Album Ready for Generation
 
 ```
-/bitwize-music:resume demo-album
+$maxinger15-music:resume demo-album
 
 📁 Album: Demo Album
-   Location: ~/bitwize-music/artists/bitwize/albums/electronic/demo-album/
+   Location: ~/maxinger15-music/artists/maxinger15/albums/electronic/demo-album/
    Status: In Progress
 
 📊 Progress:
@@ -257,7 +249,7 @@ Shall I run the Ready to Generate checkpoint now?
 ### Example 3: Album Not Found
 
 ```
-/bitwize-music:resume my-album
+$maxinger15-music:resume my-album
 
 ❌ Album 'my-album' not found.
 
@@ -265,7 +257,7 @@ Available albums:
 - demo-album (electronic) - In Progress
 - example-tracks (hip-hop) - Complete
 
-Did you mean one of these? Or use /bitwize-music:new-album to create a new album.
+Did you mean one of these? Or use $maxinger15-music:new-album to create a new album.
 ```
 
 ---

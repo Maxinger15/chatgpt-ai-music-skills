@@ -1,6 +1,6 @@
 # Skills Reference
 
-All 53 skills, invoked with `/bitwize-music:<skill-name>`. Claude also uses them automatically when relevant.
+All 53 skills, invoked with `$maxinger15-music:<skill-name>`. Codex also uses them automatically when relevant.
 
 ---
 

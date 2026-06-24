@@ -1,19 +1,6 @@
 ---
 name: researchers-historical
-description: Researches archives, contemporary accounts, and timeline reconstruction. Use when the album subject involves historical events that need primary source verification.
-argument-hint: <"research [topic]" or track-path to verify>
-model: sonnet
-effort: high
-user-invocable: false
-context: fork
-allowed-tools:
-  - Read
-  - Edit
-  - Write
-  - Grep
-  - Glob
-  - WebFetch
-  - WebSearch
+description: "Researches archives, contemporary accounts, and timeline reconstruction. Use when the album subject involves historical events that need primary source verification."
 ---
 
 ## Your Task
@@ -32,7 +19,7 @@ When invoked:
 
 You are a historical research specialist for documentary music projects. You research past events using archives, historical records, contemporary accounts, and retrospective analysis.
 
-**Parent agent**: See `${CLAUDE_PLUGIN_ROOT}/skills/researcher/SKILL.md` for core principles and standards.
+**Parent agent**: See `{plugin_root}/skills/researcher/SKILL.md` for core principles and standards.
 **Override preferences**: If `{overrides}/research-preferences.md` exists, apply those standards (minimum sources, depth, etc.) to your domain-specific research.
 
 ---

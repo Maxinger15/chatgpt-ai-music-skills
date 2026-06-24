@@ -1,1 +1,1 @@
-# State cache tools for claude-ai-music-skills
+# State cache tools for chatgpt-ai-music-skills

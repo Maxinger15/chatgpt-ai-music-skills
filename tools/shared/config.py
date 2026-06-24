@@ -1,4 +1,4 @@
-"""Configuration loading and override validation for bitwize-music tools."""
+"""Configuration loading and override validation for maxinger15-music tools."""
 
 from __future__ import annotations
 
@@ -12,13 +12,13 @@ try:
 except ImportError:
     yaml = None  # type: ignore[assignment]
 
-CONFIG_PATH = Path.home() / ".bitwize-music" / "config.yaml"
+CONFIG_PATH = Path.home() / ".maxinger15-music" / "config.yaml"
 
 logger = logging.getLogger(__name__)
 
 # Known override files and their expected format
 OVERRIDE_FILES: dict[str, dict[str, Any]] = {
-    'CLAUDE.md': {
+    'AGENTS.md': {
         'extension': '.md',
         'must_contain': None,  # Free-form markdown instructions
         'max_size_kb': 500,
@@ -35,7 +35,7 @@ def load_config(
     required: bool = False,
     fallback: dict[str, Any] | None = None
 ) -> dict[str, Any] | None:
-    """Load ~/.bitwize-music/config.yaml.
+    """Load ~/.maxinger15-music/config.yaml.
 
     Args:
         required: If True, exit with error when config is missing.
@@ -48,7 +48,7 @@ def load_config(
         if required:
             import sys
             logger.error("Config file not found at %s", CONFIG_PATH)
-            logger.error("Run /bitwize-music:configure to set up your configuration.")
+            logger.error("Run $maxinger15-music:configure to set up your configuration.")
             sys.exit(1)
         return fallback
 
