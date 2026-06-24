@@ -2,8 +2,8 @@
   "mcpServers": {
     "maxinger15-music-mcp": {
       "type": "stdio",
-      "command": "${HOME}/.maxinger15-music/venv/bin/python3",
-      "args": ["servers/maxinger15-music-server/run.py"]
+      "command": "/Users/max/.maxinger15-music/venv/bin/python3",
+      "args": ["/Users/max/Documents/develop/chatgpt-ai-music-skills/servers/maxinger15-music-server/run.py"]
     }
   }
 }
